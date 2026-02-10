@@ -1,0 +1,2183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Directorio de Negocios LIFE TIMES - General</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            background-color: #f5f7fa;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        /* Barra lateral con menú fijo */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(to bottom, #c90f0f, #a00c0c);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 20px 0;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            text-align: center;
+            padding: 20px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #fff;
+            transition: transform 0.3s;
+        }
+
+        .logo h1:hover {
+            transform: scale(1.05);
+        }
+
+        .logo span {
+            color: #ffffff;
+        }
+
+        .logo p {
+            margin-top: 5px;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .menu-categorias {
+            padding: 0 15px;
+            flex: 1;
+        }
+
+        .categoria-item {
+            padding: 15px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            text-decoration: none;
+            color: white;
+        }
+
+        .categoria-item:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateX(5px);
+        }
+
+        .categoria-item.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-left: 4px solid #ffffff;
+        }
+
+        .categoria-item i {
+            margin-right: 12px;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Botón para subir negocio */
+        .btn-subir-negocio {
+            margin: 20px 15px;
+            padding: 15px;
+            background-color: rgba(128, 128, 128, 0.3);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-align: center;
+            width: calc(100% - 30px);
+        }
+
+        .btn-subir-negocio:hover {
+            background-color: rgba(128, 128, 128, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-subir-negocio i {
+            font-size: 18px;
+        }
+
+        /* Contenido principal */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        /* Navegación superior */
+        .top-nav {
+            background-color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #000000;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 5px 0;
+        }
+
+        .nav-links a:hover {
+            color: #c90f0f;
+        }
+
+        /* Contenedor de tarjetas - FONDO BLANCO */
+        .negocios-container {
+            padding: 30px;
+            flex: 1;
+            background: white;
+        }
+
+        /* BANNER DEL TÍTULO CON IMAGEN PROFESIONAL - SOLO SE CAMBIA LA IMAGEN */
+        .titulo-banner {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            padding: 40px 50px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            border: none;
+            position: relative;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .titulo-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(201, 15, 15, 0.1), rgba(0, 0, 0, 0.3));
+            z-index: 1;
+        }
+
+        .titulo-banner h2 {
+            color: white;
+            font-size: 42px;
+            margin-bottom: 15px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 2;
+        }
+
+        .titulo-banner p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 18px;
+            font-weight: 500;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* NEGOCIOS PRINCIPALES - DOS BOXES LADO A LADO */
+        .negocios-principales-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        /* NEGOCIOS PRINCIPALES - DISEÑO SIMILAR A DESTACADOS PERO MEJORADO */
+        .negocio-principal-box {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: row;
+            height: 420px; /* Altura fija para consistencia */
+            position: relative;
+            border: 1px solid #eee;
+        }
+
+        .negocio-principal-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        /* ETIQUETA PARA CADA NEGOCIO PRINCIPAL */
+        .principal-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #c90f0f;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            z-index: 10;
+            border: none;
+            text-transform: uppercase;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* CONTENIDO DEL NEGOCIO PRINCIPAL */
+        .negocio-principal-contenido {
+            flex: 1.2;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            order: 1; /* Coloca el contenido a la izquierda */
+            height: 100%; /* Ocupa toda la altura del contenedor padre */
+            overflow: hidden; /* Previene desbordamiento */
+        }
+
+        /* TÍTULO */
+        .negocio-principal-contenido h2 {
+            color: #000000;
+            font-size: 22px;
+            margin-bottom: 10px;
+            line-height: 1.3;
+            font-weight: 700;
+        }
+
+        /* CATEGORÍA */
+        .negocio-principal-categoria {
+            color: #c90f0f;
+            font-size: 13px;
+            display: inline-block;
+            padding: 4px 12px;
+            background-color: #ffe6e6;
+            border-radius: 15px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        /* DESCRIPCIÓN */
+        .negocio-principal-descripcion {
+            color: #555;
+            line-height: 1.6;
+            font-size: 14px;
+            margin-bottom: 20px;
+            flex: 1;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            max-height: 90px;
+        }
+
+        /* MAPA MEJORADO - AHORA CUADRADO */
+        .negocio-principal-mapa {
+            margin: 15px 0;
+            width: 100%;
+        }
+
+        .mapa-titulo-principal {
+            color: #000000;
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            padding-bottom: 6px;
+            border-bottom: 2px solid #c90f0f;
+        }
+
+        .mapa-titulo-principal i {
+            color: #c90f0f;
+            font-size: 16px;
+        }
+
+        .mapa-container-principal {
+            width: 100%;
+            height: 140px; /* Altura fija para hacerlo cuadrado */
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #eaeaea;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .mapa-container-principal:hover {
+            border-color: #c90f0f;
+            box-shadow: 0 6px 20px rgba(201, 15, 15, 0.15);
+        }
+
+        .mapa-container-principal iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* BOTÓN VER GALERÍA */
+        .btn-ver-galeria-principal {
+            background-color: #c90f0f;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            box-shadow: 0 3px 8px rgba(201, 15, 15, 0.2);
+            margin-top: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-ver-galeria-principal:hover {
+            background-color: #a00c0c;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(201, 15, 15, 0.3);
+        }
+
+        /* BOTÓN VER MÁS - NEGRO CON LETRAS BLANCAS (AGREGADO) */
+        .btn-ver-mas-principal {
+            background-color: #000000;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 15px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-ver-mas-principal:hover {
+            background-color: #333;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* INFORMACIÓN DE CONTACTO PRINCIPAL - MODIFICADO */
+        .negocio-principal-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            padding: 15px 0 0 0;
+            border-top: 1px solid #f0f0f0;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        .info-item-principal {
+            color: #666;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            overflow: hidden;
+        }
+
+        .info-item-principal i {
+            color: #c90f0f;
+            width: 12px;
+            text-align: center;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .info-item-principal span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 11px;
+        }
+
+        /* IMAGEN PRINCIPAL A LA DERECHA - CONTENEDOR FIJADO */
+        .negocio-principal-imagen {
+            flex: 1;
+            height: 100%; /* Ocupa toda la altura del contenedor padre */
+            overflow: hidden;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            order: 2; /* Coloca la imagen a la derecha */
+        }
+
+        .negocio-principal-imagen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to left, rgba(0,0,0,0.1), transparent);
+            z-index: 1;
+        }
+
+        .negocio-principal-imagen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Mantiene la proporción y cubre el contenedor */
+            transition: transform 0.5s ease;
+        }
+
+        .negocio-principal-box:hover .negocio-principal-imagen img {
+            transform: scale(1.1);
+        }
+
+        /* GRID DE DESTACADOS - 6 NEGOCIOS EN 3x2 */
+        .grid-destacados {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        /* TARJETAS DE NEGOCIOS DESTACADOS - ESTILO ORIGINAL (IMAGEN IZQUIERDA, CONTENIDO DERECHA) */
+        .negocio-destacado-card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: row;
+            min-height: 220px;
+            height: auto;
+            position: relative;
+            border: 1px solid #eee;
+        }
+
+        .negocio-destacado-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        /* ETIQUETA NEGRA CON LETRAS BLANCAS */
+        .destacado-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #000000;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: 700;
+            z-index: 2;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border: 1px solid #333;
+        }
+
+        /* IMAGEN A LA IZQUIERDA - ESTILO ORIGINAL */
+        .negocio-destacado-card .card-imagen {
+            flex: 1;
+            height: auto;
+            min-height: 220px;
+            overflow: hidden;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .negocio-destacado-card .card-imagen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to right, rgba(0,0,0,0.1), transparent);
+            z-index: 1;
+        }
+
+        .negocio-destacado-card .card-imagen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .negocio-destacado-card:hover .card-imagen img {
+            transform: scale(1.1);
+        }
+
+        /* CONTENIDO A LA DERECHA - ESTILO ORIGINAL */
+        .negocio-destacado-card .card-contenido {
+            flex: 1.2;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            background: white;
+        }
+
+        .negocio-destacado-card .card-header {
+            padding: 0 0 12px 0;
+        }
+
+        .negocio-destacado-card .card-header h3 {
+            color: #000000;
+            font-size: 20px;
+            margin-bottom: 8px;
+            line-height: 1.3;
+            font-weight: 700;
+        }
+
+        .card-categoria {
+            color: #c90f0f;
+            font-size: 13px;
+            display: inline-block;
+            padding: 4px 12px;
+            background-color: #ffe6e6;
+            border-radius: 15px;
+            font-weight: 600;
+        }
+
+        .negocio-destacado-card .card-body {
+            padding: 0 0 15px 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* DESCRIPCIÓN MÁS CORTA */
+        .card-descripcion {
+            color: #555;
+            line-height: 1.6;
+            font-size: 14px;
+            margin-bottom: 15px;
+            flex: 1;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            height: 66px;
+        }
+
+        /* BOTÓN VER MÁS - NEGRO CON LETRAS BLANCAS */
+        .btn-ver-mas {
+            background-color: #000000;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 15px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-ver-mas:hover {
+            background-color: #333;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* ESPACIO DE CONTACTO MÁS PEQUEÑO Y MINIMALISTA - SOLO WHATSAPP Y TELÉFONO */
+        .negocio-destacado-card .card-footer {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            padding: 15px 0 0 0;
+            border-top: 1px solid #f0f0f0;
+            font-size: 12px;
+        }
+
+        .card-contacto {
+            color: #666;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            overflow: hidden;
+        }
+
+        .card-contacto i {
+            color: #c90f0f;
+            width: 12px;
+            text-align: center;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .card-contacto span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 11px;
+        }
+
+        /* MODAL - Galería de Imágenes SIN VIDEO */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-galeria {
+            background-color: white;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 1200px;
+            max-height: 90vh;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-header {
+            padding: 25px 30px 15px;
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .modal-header h2 {
+            color: #000000;
+            font-size: 28px;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        /* ETIQUETA DE CATEGORÍA EN MODAL */
+        .modal-categoria {
+            display: inline-block;
+            background-color: #000000;
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* TACHÉ MÁS MINIMALISTA */
+        .btn-cerrar-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 8px;
+            line-height: 1;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .btn-cerrar-modal:hover {
+            color: #c90f0f;
+            background-color: #f8f8f8;
+        }
+
+        /* CONTENEDOR PRINCIPAL CON SCROLL */
+        .modal-content-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* COLUMNA IZQUIERDA - GALERÍA DE IMÁGENES */
+        .modal-galeria-columna {
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            background: #fafafa;
+            overflow-y: auto;
+            height: calc(100% - 25px);
+        }
+
+        /* BOX GRANDE PARA IMAGEN */
+        .imagen-box-grande {
+            width: 100%;
+            height: 400px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 2px solid #e0e0e0;
+            margin-bottom: 20px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .imagen-box-grande img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .imagen-box-grande:hover img {
+            transform: scale(1.02);
+        }
+
+        /* CONTENEDOR DE MINIATURAS - AHORA 3x2 */
+        .todas-imagenes-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 columnas */
+            grid-template-rows: repeat(2, 1fr); /* 2 filas */
+            gap: 12px; /* Espacio entre imágenes */
+            margin-top: 20px;
+            flex-shrink: 0;
+        }
+
+        .imagen-miniatura {
+            height: 100px;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            background-color: #f8f9fa;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            position: relative;
+        }
+
+        .imagen-miniatura:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
+        }
+
+        .imagen-miniatura.active {
+            border-color: #c90f0f;
+            box-shadow: 0 5px 15px rgba(201, 15, 15, 0.2);
+        }
+
+        .imagen-miniatura img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* COLUMNA DERECHA - DESCRIPCIÓN Y CONTACTO */
+        .modal-descripcion-columna {
+            padding: 25px;
+            background: white;
+            border-left: 1px solid #f0f0f0;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .descripcion-titulo {
+            color: #000000;
+            font-size: 22px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #c90f0f;
+            font-weight: 700;
+        }
+
+        /* DESCRIPCIÓN ESTRUCTURADA Y MÁS CORTA */
+        .descripcion-texto {
+            color: #444;
+            line-height: 1.7;
+            font-size: 15px;
+            margin-bottom: 25px;
+            overflow-y: visible;
+            padding: 0;
+            background: transparent;
+        }
+
+        .descripcion-texto p {
+            margin-bottom: 12px;
+            text-align: justify;
+        }
+
+        .descripcion-texto strong {
+            color: #000;
+            font-weight: 700;
+        }
+
+        .descripcion-texto ul {
+            margin: 12px 0;
+            padding-left: 20px;
+        }
+
+        .descripcion-texto li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+            position: relative;
+        }
+
+        .descripcion-texto li:before {
+            content: "•";
+            color: #c90f0f;
+            font-weight: bold;
+            position: absolute;
+            left: -12px;
+        }
+
+        .caracteristicas-negocio {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 3px solid #c90f0f;
+        }
+
+        .caracteristicas-negocio h4 {
+            color: #000000;
+            font-size: 16px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        /* REDES SOCIALES MINIMALISTAS - SIN BOX, SOLO RECTÁNGULOS */
+        .redes-sociales {
+            padding: 15px 0;
+            margin-bottom: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .redes-sociales h4 {
+            color: #000000;
+            font-size: 16px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .redes-sociales h4 i {
+            color: #c90f0f;
+        }
+
+        .redes-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        .red-social-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .red-social-item:hover {
+            transform: translateY(-2px);
+            background-color: #f8f8f8;
+            border-radius: 6px;
+        }
+
+        .red-social-item.facebook:hover {
+            background-color: #1877f2;
+            color: white;
+        }
+
+        .red-social-item.instagram:hover {
+            background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
+            color: white;
+        }
+
+        .red-social-item.tiktok:hover {
+            background-color: #000000;
+            color: white;
+        }
+
+        .red-social-item i {
+            width: 18px;
+            text-align: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .facebook i {
+            color: #1877f2;
+        }
+
+        .instagram i {
+            color: #E1306C;
+        }
+
+        .tiktok i {
+            color: #000000;
+        }
+
+        .red-social-item:hover i {
+            color: white;
+        }
+
+        .red-social-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .red-social-nombre {
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .red-social-usuario {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .red-social-item:hover .red-social-usuario {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* SECCIÓN DE CONTACTO EN EL MODAL - SIN COSTOS, CORREO Y WEB - MODIFICADO SIN BOX */
+        .modal-contacto {
+            padding: 15px 0;
+            border-top: 1px solid #eee;
+        }
+
+        .modal-contacto h4 {
+            color: #000000;
+            font-size: 16px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-contacto h4 i {
+            color: #c90f0f;
+        }
+
+        .contacto-modal-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .contacto-modal-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .contacto-modal-item i {
+            color: #c90f0f;
+            width: 16px;
+            text-align: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        /* Responsividad */
+        @media (max-width: 1200px) {
+            .negocios-principales-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .negocio-principal-box {
+                height: 400px;
+            }
+
+            .grid-destacados {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .negocio-destacado-card {
+                flex-direction: row;
+                min-height: 220px;
+            }
+            
+            .negocio-destacado-card .card-imagen {
+                height: auto;
+                min-height: 220px;
+            }
+
+            .modal-content-container {
+                grid-template-columns: 1fr;
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+
+            .modal-galeria-columna {
+                border-bottom: 1px solid #eee;
+                border-left: none;
+                padding: 20px;
+                height: auto;
+            }
+
+            .modal-descripcion-columna {
+                border-left: none;
+                padding: 20px;
+                height: auto;
+            }
+            
+            .imagen-box-grande {
+                height: 350px;
+            }
+            
+            .card-descripcion {
+                height: 63px;
+            }
+            
+            .negocio-principal-descripcion {
+                max-height: 85px;
+            }
+            
+            .todas-imagenes-container {
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-rows: repeat(2, 1fr);
+                height: auto;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .grid-destacados {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .negocio-principal-box {
+                flex-direction: column;
+                height: auto;
+                min-height: 600px;
+            }
+            
+            .negocio-principal-imagen {
+                order: 1;
+                height: 250px;
+            }
+            
+            .negocio-principal-contenido {
+                order: 2;
+                height: auto;
+            }
+            
+            .titulo-banner h2 {
+                font-size: 36px;
+            }
+            
+            .negocio-principal-contenido h2 {
+                font-size: 20px;
+            }
+            
+            .todas-imagenes-container {
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-rows: repeat(2, 1fr);
+                height: auto;
+            }
+            
+            .imagen-box-grande {
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            body {
+                flex-direction: column;
+            }
+            
+            .top-nav {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+                justify-content: center;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+
+            .negocio-principal-info {
+                grid-template-columns: 1fr;
+            }
+
+            .grid-destacados {
+                grid-template-columns: 1fr;
+            }
+
+            .negocio-destacado-card {
+                flex-direction: row;
+                min-height: 220px;
+            }
+
+            .modal-content-container {
+                grid-template-columns: 1fr;
+                max-height: 75vh;
+            }
+
+            .modal-galeria-columna, .modal-descripcion-columna {
+                padding: 20px;
+            }
+
+            .modal-header {
+                padding: 20px 20px 15px;
+            }
+
+            .modal-header h2 {
+                font-size: 24px;
+            }
+
+            .titulo-banner {
+                padding: 30px;
+                min-height: 150px;
+            }
+
+            .titulo-banner h2 {
+                font-size: 30px;
+            }
+            
+            .titulo-banner p {
+                font-size: 16px;
+            }
+            
+            .negocio-principal-contenido {
+                padding: 20px;
+            }
+            
+            .negocio-principal-contenido h2 {
+                font-size: 18px;
+            }
+            
+            .mapa-container-principal {
+                height: 120px;
+            }
+            
+            .negocio-destacado-card .card-footer {
+                grid-template-columns: 1fr;
+            }
+            
+            .card-descripcion {
+                height: 60px;
+            }
+            
+            .negocio-principal-descripcion {
+                max-height: 80px;
+            }
+            
+            .imagen-box-grande {
+                height: 250px;
+            }
+            
+            .todas-imagenes-container {
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-rows: repeat(2, 1fr);
+                height: auto;
+                min-height: 180px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .negocio-destacado-card {
+                flex-direction: column;
+                min-height: 350px;
+            }
+            
+            .negocio-destacado-card .card-imagen {
+                height: 140px;
+                min-height: auto;
+            }
+
+            .imagen-miniatura {
+                height: 70px;
+            }
+
+            .modal-header h2 {
+                font-size: 22px;
+            }
+
+            .modal-categoria {
+                font-size: 12px;
+                padding: 4px 10px;
+            }
+
+            .btn-ver-galeria-principal {
+                padding: 8px 14px;
+                font-size: 12px;
+            }
+
+            .titulo-banner {
+                padding: 25px 20px;
+            }
+
+            .titulo-banner h2 {
+                font-size: 26px;
+            }
+            
+            .titulo-banner p {
+                font-size: 15px;
+            }
+            
+            .negocio-principal-contenido {
+                padding: 15px;
+            }
+            
+            .negocio-principal-contenido h2 {
+                font-size: 18px;
+            }
+            
+            .negocio-destacado-card .card-imagen {
+                height: 140px;
+            }
+            
+            .negocio-principal-imagen {
+                height: 200px;
+            }
+            
+            .mapa-container-principal {
+                height: 100px;
+            }
+            
+            .todas-imagenes-container {
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-rows: repeat(2, 1fr);
+                height: auto;
+                min-height: 150px;
+                gap: 8px;
+            }
+            
+            .card-descripcion {
+                height: 57px;
+                font-size: 13px;
+            }
+            
+            .negocio-principal-descripcion {
+                max-height: 75px;
+                font-size: 13px;
+            }
+            
+            .principal-badge {
+                padding: 6px 12px;
+                font-size: 11px;
+            }
+            
+            .imagen-box-grande {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Menú lateral fijo -->
+    <aside class="sidebar">
+        <div class="logo">
+            <a href="Index.html" style="text-decoration: none; color: inherit;">
+                <h1>LIFE <span>TIMES</span></h1>
+            </a>
+            <p>Directorio de Negocios</p>
+        </div>
+        
+        <div class="menu-categorias">
+            <a href="General.html" class="categoria-item active">
+                <i class="fas fa-home"></i>
+                <span>General</span>
+            </a>
+            <a href="Servicio Minoritario.html" class="categoria-item">
+                <i class="fas fa-handshake"></i>
+                <span>Servicio minoritario</span>
+            </a>
+            <a href="Comercio.html" class="categoria-item">
+                <i class="fas fa-store"></i>
+                <span>Comercio</span>
+            </a>
+            <a href="Alimentos y bebidas.html" class="categoria-item">
+                <i class="fas fa-utensils"></i>
+                <span>Alimentos y bebidas</span>
+            </a>
+            <a href="Servicios-general.html" class="categoria-item">
+                <i class="fas fa-concierge-bell"></i>
+                <span>Servicios</span>
+            </a>
+        </div>
+        
+        <!-- Botón para subir negocio -->
+        <a href="Servicios.html" style="text-decoration: none;">
+            <button class="btn-subir-negocio">
+                <i class="fas fa-plus-circle"></i>
+                <span>¿Cómo puedo subir mi negocio?</span>
+            </button>
+        </a>
+    </aside>
+
+    <!-- Contenido principal -->
+    <main class="main-content">
+        <!-- Navegación superior -->
+        <nav class="top-nav">
+            <ul class="nav-links">
+                <li><a href="Terminos y Condiciones.html" id="terminos-link">Términos y Condiciones</a></li>
+                <li><a href="Index.html" id="historia-link">La Historia</a></li>
+                <li><a href="Servicios.html" id="servicios-link">Servicios</a></li>
+            </ul>
+        </nav>
+
+        <!-- Contenedor de negocios -->
+        <section class="negocios-container">
+            <!-- BANNER DEL TÍTULO CON IMAGEN PROFESIONAL -->
+            <div class="titulo-banner">
+                <h2>Directorio General de Negocios</h2>
+                <p>Descubre los negocios principales y los establecimientos más destacados de la ciudad</p>
+            </div>
+            
+            <!-- NEGOCIOS PRINCIPALES - DOS BOXES LADO A LADO -->
+            <div class="negocios-principales-container">
+                <!-- SE ELIMINARON LOS DOS PRIMEROS NEGOCIOS PRINCIPALES -->
+            </div>
+            
+            <!-- SECCIÓN DE NEGOCIOS DESTACADOS - 6 NEGOCIOS EN 3x2 -->
+            <div class="seccion-destacados">
+                <!-- EL TÍTULO SE HA ELIMINADO -->
+                
+                <!-- Grid de 3x2 -->
+                <div class="grid-destacados" id="grid-destacados">
+                    <!-- Los 6 negocios destacados se cargarán aquí -->
+                </div>
+            </div>
+            
+            <!-- LA SECCIÓN DE PATROCINADORES SE HA ELIMINADO -->
+            
+        </section>
+    </main>
+
+    <!-- Modal - Galería de Imágenes SIN VIDEO -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal-galeria">
+            <div class="modal-header">
+                <div>
+                    <h2 id="modal-nombre">Nombre del Negocio</h2>
+                    <span class="modal-categoria" id="modal-categoria">Categoría</span>
+                </div>
+                <button class="btn-cerrar-modal" id="btn-cerrar-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <!-- CONTENEDOR PRINCIPAL CON SCROLL SEPARADO -->
+            <div class="modal-content-container">
+                <!-- COLUMNA IZQUIERDA - GALERÍA DE IMÁGENES -->
+                <div class="modal-galeria-columna">
+                    <!-- BOX GRANDE PARA IMAGEN -->
+                    <div class="imagen-box-grande" id="imagen-box-grande">
+                        <img id="imagen-grande" src="" alt="">
+                    </div>
+                    
+                    <!-- CONTENEDOR DE MINIATURAS - AHORA 3x2 -->
+                    <div class="todas-imagenes-container" id="todas-imagenes-container">
+                        <!-- Las imágenes se cargarán dinámicamente aquí -->
+                    </div>
+                </div>
+                
+                <!-- COLUMNA DERECHA - DESCRIPCIÓN Y CONTACTO -->
+                <div class="modal-descripcion-columna">
+                    <h3 class="descripcion-titulo">Descripción del Negocio</h3>
+                    <div class="descripcion-texto" id="descripcion-contenido">
+                        <!-- La descripción se cargará dinámicamente aquí -->
+                    </div>
+                    
+                    <!-- REDES SOCIALES MINIMALISTAS - SIN BOX, SOLO RECTÁNGULOS -->
+                    <div class="redes-sociales" id="redes-sociales">
+                        <h4><i class="fas fa-hashtag"></i> Redes Sociales</h4>
+                        <div class="redes-grid" id="redes-grid">
+                            <!-- Las redes sociales se cargarán dinámicamente -->
+                        </div>
+                    </div>
+                    
+                    <!-- SECCIÓN DE CONTACTO EN EL MODAL - SIN COSTOS, CORREO Y WEB - MODIFICADO SIN BOX -->
+                    <div class="modal-contacto" id="modal-contacto">
+                        <h4><i class="fas fa-address-card"></i> Información de Contacto</h4>
+                        <div class="contacto-modal-grid" id="contacto-modal-grid">
+                            <!-- La información de contacto se cargará dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // =============================================
+        // AQUÍ MODIFICAS LOS DATOS DE LOS NEGOCIOS
+        // =============================================
+        // Datos de los 9 negocios destacados - ¡ACTUALIZA ESTAS URLS!
+        const negociosDestacados = [
+            { 
+                nombre: "Gourmet Delights", 
+                categoria: "Restaurante Gourmet", 
+                descripcion: "Experiencia gastronómica única con menús estacionales creados por chef internacional. Bodega exclusiva con más de 500 etiquetas.", 
+                descripcion_larga: `
+                    <div class="caracteristicas-negocio">
+                        <h4>Nuestra propuesta</h4>
+                        <ul>
+                            <li><strong>Menú degustación:</strong> Experiencia de 7 tiempos</li>
+                            <li><strong>Bodega exclusiva:</strong> Más de 500 etiquetas</li>
+                            <li><strong>Chef internacional:</strong> Tres estrellas Michelin</li>
+                            <li><strong>Ingredientes locales:</strong> Proveedores certificados</li>
+                            <li><strong>Ambiente íntimo:</strong> Capacidad para 40 personas</li>
+                        </ul>
+                    </div>
+                    
+                    <p>En Gourmet Delights, la cocina es un arte que se renueva constantemente. Nuestro equipo, liderado por un chef con tres estrellas Michelin, investiga constantemente ingredientes olvidados y técnicas ancestrales.</p>
+                    
+                    <p>Ofrecemos una experiencia gastronómica completa donde cada detalle ha sido cuidadosamente diseñado para estimular todos los sentidos.</p>
+                `,
+                contacto: [
+                    { tipo: "whatsapp", valor: "+1 (555) 345-6789", icono: "fab fa-whatsapp" },
+                    { tipo: "telefono", valor: "+1 (555) 345-6790", icono: "fas fa-phone" },
+                    { tipo: "ubicacion", valor: "Av. Gourmet 789", icono: "fas fa-map-marker-alt" },
+                    { tipo: "horario", valor: "Martes a Domingo: 19:00 - 23:00", icono: "fas fa-clock" }
+                ],
+                // ¡CAMBIAR ESTA URL! (Imagen principal)
+                imagen: "https://lh3.googleusercontent.com/pw/AP1GczNFnOFCpgCcIKs-ZrkLJS6disTjiQUoEHn2ejSAmZWFjjptOdW6zhHMYQgKvORjSPrOm9ZtwW6dbVoPbYA52jtm8Q5oWzcXy4-FP5gf4q7hkOhTFPFMBGJuhtAQ5arOcrQc45hze6mylomecaQp3-1gSQ=w1430-h957-s-no-gm?authuser=4",
+                // ¡CAMBIAR ESTAS URLS! (Imágenes adicionales)
+                imagenes_adicionales: [
+                    "https://lh3.googleusercontent.com/pw/AP1GczNFnOFCpgCcIKs-ZrkLJS6disTjiQUoEHn2ejSAmZWFjjptOdW6zhHMYQgKvORjSPrOm9ZtwW6dbVoPbYA52jtm8Q5oWzcXy4-FP5gf4q7hkOhTFPFMBGJuhtAQ5arOcrQc45hze6mylomecaQp3-1gSQ=w1430-h957-s-no-gm?authuser=4",
+                    "https://ejemplo.com/mi-imagen-3.jpg", 
+                    "https://ejemplo.com/mi-imagen-4.jpg",
+                    "https://ejemplo.com/mi-imagen-5.jpg",
+                    "https://ejemplo.com/mi-imagen-6.jpg"
+                ],
+                redes_sociales: [
+                    { 
+                        plataforma: "facebook", 
+                        nombre: "Gourmet Delights", 
+                        usuario: "@GourmetDelightsRest",
+                        url: "https://facebook.com/GourmetDelightsRest"
+                    },
+                    { 
+                        plataforma: "instagram", 
+                        nombre: "Gourmet Delights", 
+                        usuario: "@gourmetdelights.official",
+                        url: "https://instagram.com/gourmetdelights.official"
+                    },
+                    { 
+                        plataforma: "tiktok", 
+                        nombre: "Gourmet Delights", 
+                        usuario: "@gourmetdelights.official",
+                        url: "https://tiktok.com/gourmetdelights.official"
+                    }
+                ]
+            },
+            { 
+                nombre: "Cine Paradiso", 
+                categoria: "Complejo Cinematográfico", 
+                descripcion: "Tecnología cinematográfica de vanguardia en 8 salas especializadas. Sala 4DX con efectos multisensoriales únicos.", 
+                descripcion_larga: `
+                    <div class="caracteristicas-negocio">
+                        <h4>Características técnicas</h4>
+                        <ul>
+                            <li><strong>8 salas especializadas:</strong> Tecnología de última generación</li>
+                            <li><strong>Sala 4DX única:</strong> Butacas hidráulicas de 6 ejes</li>
+                            <li><strong>Sonido Dolby Atmos:</strong> Sistema de 64 canales</li>
+                            <li><strong>Pantallas IMAX:</strong> La más grande de la ciudad</li>
+                        </ul>
+                    </div>
+                    
+                    <p>Cine Paradiso no es solo un lugar para ver películas; es un santuario para los amantes del séptimo arte. Nuestras 8 salas han sido diseñadas acústicamente por expertos para ofrecer la mejor experiencia audiovisual.</p>
+                    
+                    <p>Contamos con la única sala 4DX de la región, donde las butacas se mueven en 6 ejes diferentes y se sincronizan con efectos especiales para sumergirte completamente en la película.</p>
+                `,
+                contacto: [
+                    { tipo: "whatsapp", valor: "+1 (555) 789-0123", icono: "fab fa-whatsapp" },
+                    { tipo: "telefono", valor: "+1 (555) 789-0124", icono: "fas fa-phone" },
+                    { tipo: "ubicacion", valor: "Centro Entretenimiento 2727", icono: "fas fa-map-marker-alt" },
+                    { tipo: "horario", valor: "Todos los días: 12:00 - 01:00", icono: "fas fa-clock" }
+                ],
+                // ¡CAMBIAR ESTA URL! (Imagen principal)
+                imagen: "https://ejemplo.com/mi-cine-1.jpg",
+                // ¡CAMBIAR ESTAS URLS! (Imágenes adicionales)
+                imagenes_adicionales: [
+                    "https://ejemplo.com/mi-cine-2.jpg",
+                    "https://ejemplo.com/mi-cine-3.jpg",
+                    "https://ejemplo.com/mi-cine-4.jpg",
+                    "https://ejemplo.com/mi-cine-5.jpg",
+                    "https://ejemplo.com/mi-cine-6.jpg"
+                ],
+                redes_sociales: [
+                    { 
+                        plataforma: "facebook", 
+                        nombre: "Cine Paradiso", 
+                        usuario: "@CineParadisoOficial",
+                        url: "https://facebook.com/CineParadisoOficial"
+                    },
+                    { 
+                        plataforma: "instagram", 
+                        nombre: "Cine Paradiso", 
+                        usuario: "@cineparadiso.oficial",
+                        url: "https://instagram.com/cineparadiso.oficial"
+                    }
+                ]
+            },
+            { 
+                nombre: "Moda Elegante", 
+                categoria: "Ropa y Accesorios", 
+                descripcion: "Curated fashion experience con marcas de diseñador y talento emergente. Servicio de personal shopper y análisis de colorimetría.", 
+                descripcion_larga: `
+                    <div class="caracteristicas-negocio">
+                        <h4>Servicios exclusivos</h4>
+                        <ul>
+                            <li><strong>Personal shopper:</strong> Servicio individualizado</li>
+                            <li><strong>Análisis de colorimetría:</strong> Estudio personal</li>
+                            <li><strong>Diseñadores emergentes:</strong> 40% del inventario</li>
+                            <li><strong>Alteraciones in situ:</strong> Taller propio</li>
+                            <li><strong>Eventos exclusivos:</strong> Presentaciones privadas</li>
+                        </ul>
+                    </div>
+                    
+                    <p>Moda Elegante trasciende el concepto tradicional de tienda de ropa para convertirse en un estudio de estilo personal. Trabajamos con marcas que priorizan la sostenibilidad y la calidad artesanal.</p>
+                    
+                    <p>Más del 40% de nuestro inventario proviene de diseñadores emergentes, ofreciendo piezas únicas y limitadas. Nuestro servicio de personal shopper incluye análisis de colorimetría para identificar las tonalidades que mejor se adaptan a cada persona.</p>
+                `,
+                contacto: [
+                    { tipo: "whatsapp", valor: "+1 (555) 456-7890", icono: "fab fa-whatsapp" },
+                    { tipo: "telefono", valor: "+1 (555) 456-7891", icono: "fas fa-phone" },
+                    { tipo: "ubicacion", valor: "Centro Comercial Moda", icono: "fas fa-map-marker-alt" },
+                    { tipo: "horario", valor: "Lunes a Sábado: 10:00 - 21:00", icono: "fas fa-clock" }
+                ],
+                // ¡CAMBIAR ESTA URL! (Imagen principal)
+                imagen: "https://ejemplo.com/mi-moda-1.jpg",
+                // ¡CAMBIAR ESTAS URLS! (Imágenes adicionales)
+                imagenes_adicionales: [
+                    "https://ejemplo.com/mi-moda-2.jpg",
+                    "https://ejemplo.com/mi-moda-3.jpg",
+                    "https://ejemplo.com/mi-moda-4.jpg",
+                    "https://ejemplo.com/mi-moda-5.jpg",
+                    "https://ejemplo.com/mi-moda-6.jpg"
+                ],
+                redes_sociales: [
+                    { 
+                        plataforma: "facebook", 
+                        nombre: "Moda Elegante", 
+                        usuario: "@ModaEleganteShop",
+                        url: "https://facebook.com/ModaEleganteShop"
+                    },
+                    { 
+                        plataforma: "instagram", 
+                        nombre: "Moda Elegante", 
+                        usuario: "@modaelegante.style",
+                        url: "https://instagram.com/modaelegante.style"
+                    }
+                ]
+            },
+            { 
+                nombre: "Tech Solutions", 
+                categoria: "Tecnología y Electrónica", 
+                descripcion: "Soluciones tecnológicas integrales para hogares y empresas. Asesoramiento personalizado y servicio técnico especializado.", 
+                descripcion_larga: `
+                    <div class="caracteristicas-negocio">
+                        <h4>Nuestros servicios</h4>
+                        <ul>
+                            <li><strong>Domótica integral:</strong> Hogares inteligentes</li>
+                            <li><strong>Redes empresariales:</strong> Configuración y seguridad</li>
+                            <li><strong>Soporte técnico:</strong> 24/7 para empresas</li>
+                            <li><strong>Asesoramiento personalizado:</strong> Soluciones a medida</li>
+                            <li><strong>Venta de equipos:</strong> Tecnología de última generación</li>
+                        </ul>
+                    </div>
+                    
+                    <p>Tech Solutions se especializa en implementar soluciones tecnológicas que optimizan procesos y mejoran la calidad de vida. Nuestro equipo de ingenieros certificados está siempre actualizado con las últimas tendencias del mercado.</p>
+                    
+                    <p>Ofrecemos desde sistemas de domótica para hogares inteligentes hasta configuraciones de redes complejas para empresas. Nuestro servicio técnico está disponible 24/7 para garantizar el funcionamiento continuo de sus sistemas.</p>
+                `,
+                contacto: [
+                    { tipo: "whatsapp", valor: "+1 (555) 234-5678", icono: "fab fa-whatsapp" },
+                    { tipo: "telefono", valor: "+1 (555) 234-5679", icono: "fas fa-phone" },
+                    { tipo: "ubicacion", valor: "Parque Tecnológico 456", icono: "fas fa-map-marker-alt" },
+                    { tipo: "horario", valor: "Lunes a Viernes: 9:00 - 19:00", icono: "fas fa-clock" }
+                ],
+                imagen: "https://ejemplo.com/mi-tecno-1.jpg",
+                imagenes_adicionales: [
+                    "https://ejemplo.com/mi-tecno-2.jpg",
+                    "https://ejemplo.com/mi-tecno-3.jpg",
+                    "https://ejemplo.com/mi-tecno-4.jpg",
+                    "https://ejemplo.com/mi-tecno-5.jpg",
+                    "https://ejemplo.com/mi-tecno-6.jpg"
+                ],
+                redes_sociales: [
+                    { 
+                        plataforma: "facebook", 
+                        nombre: "Tech Solutions", 
+                        usuario: "@TechSolutionsOfficial",
+                        url: "https://facebook.com/TechSolutionsOfficial"
+                    },
+                    { 
+                        plataforma: "instagram", 
+                        nombre: "Tech Solutions", 
+                        usuario: "@techsolutions.tech",
+                        url: "https://instagram.com/techsolutions.tech"
+                    },
+                    { 
+                        plataforma: "tiktok", 
+                        nombre: "Tech Solutions", 
+                        usuario: "@techsolutions.tips",
+                        url: "https://tiktok.com/techsolutions.tips"
+                    }
+                ]
+            },
+            { 
+                nombre: "Belleza Natural", 
+                categoria: "Estética y Bienestar", 
+                descripcion: "Spa y centro de estética especializado en tratamientos naturales y orgánicos. Experiencia holística para el cuidado integral.", 
+                descripcion_larga: `
+                    <div class="caracteristicas-negocio">
+                        <h4>Tratamientos especializados</h4>
+                        <ul>
+                            <li><strong>Terapias holísticas:</strong> Enfoque mente-cuerpo</li>
+                            <li><strong>Productos orgánicos:</strong> 100% naturales certificados</li>
+                            <li><strong>Masajes terapéuticos:</strong> Diferentes técnicas especializadas</li>
+                            <li><strong>Faciales personalizados:</strong> Diagnóstico de piel</li>
+                            <li><strong>Tratamientos corporales:</strong> Reducción y tonificación</li>
+                        </ul>
+                    </div>
+                    
+                    <p>Belleza Natural nace de la convicción de que la verdadera belleza viene de dentro. Nuestros tratamientos combinan técnicas ancestrales con tecnología de vanguardia, siempre respetando la naturaleza.</p>
+                    
+                    <p>Todos nuestros productos son orgánicos, certificados y libres de crueldad animal. Nuestro equipo de terapeutas está capacitado en diferentes disciplinas para ofrecer un servicio integral que cuida tanto el aspecto físico como el bienestar emocional.</p>
+                `,
+                contacto: [
+                    { tipo: "whatsapp", valor: "+1 (555) 567-8901", icono: "fab fa-whatsapp" },
+                    { tipo: "telefono", valor: "+1 (555) 567-8902", icono: "fas fa-phone" },
+                    { tipo: "ubicacion", valor: "Calle Bienestar 123", icono: "fas fa-map-marker-alt" },
+                    { tipo: "horario", valor: "Lunes a Sábado: 9:00 - 21:00", icono: "fas fa-clock" }
+                ],
+                imagen: "https://ejemplo.com/mi-spa-1.jpg",
+                imagenes_adicionales: [
+                    "https://ejemplo.com/mi-spa-2.jpg",
+                    "https://ejemplo.com/mi-spa-3.jpg",
+                    "https://ejemplo.com/mi-spa-4.jpg",
+                    "https://ejemplo.com/mi-spa-5.jpg",
+                    "https://ejemplo.com/mi-spa-6.jpg"
+                ],
+                redes_sociales: [
+                    { 
+                        plataforma: "facebook", 
+                        nombre: "Belleza Natural Spa", 
+                        usuario: "@BellezaNaturalSpa",
+                        url: "https://facebook.com/BellezaNaturalSpa"
+                    },
+                    { 
+                        plataforma: "instagram", 
+                        nombre: "Belleza Natural", 
+                        usuario: "@bellezanatural.spa",
+                        url: "https://instagram.com/bellezanatural.spa"
+                    }
+                ]
+            },
+            { 
+                nombre: "Auto Expert", 
+                categoria: "Taller Mecánico", 
+                descripcion: "Servicio mecánico especializado en todas las marcas. Diagnóstico computarizado y garantía en todos los trabajos.", 
+                descripcion_larga: `
+                    <div class="caracteristicas-negocio">
+                        <h4>Nuestros servicios mecánicos</h4>
+                        <ul>
+                            <li><strong>Diagnóstico computarizado:</strong> Tecnología de última generación</li>
+                            <li><strong>Mecánica general:</strong> Todas las marcas y modelos</li>
+                            <li><strong>Electricidad automotriz:</strong> Especialistas certificados</li>
+                            <li><strong>Servicio express:</strong> Reparaciones rápidas</li>
+                            <li><strong>Garantía extendida:</strong> 12 meses en todas las reparaciones</li>
+                        </ul>
+                    </div>
+                    
+                    <p>Auto Expert cuenta con más de 20 años de experiencia en el sector automotriz. Nuestro taller está equipado con la última tecnología para diagnóstico y reparación de vehículos de todas las marcas.</p>
+                    
+                    <p>Nuestros mecánicos están constantemente capacitados en las nuevas tecnologías vehiculares. Ofrecemos servicio de grúa las 24 horas y garantizamos todos nuestros trabajos por 12 meses, demostrando nuestro compromiso con la calidad.</p>
+                `,
+                contacto: [
+                    { tipo: "whatsapp", valor: "+1 (555) 678-9012", icono: "fab fa-whatsapp" },
+                    { tipo: "telefono", valor: "+1 (555) 678-9013", icono: "fas fa-phone" },
+                    { tipo: "ubicacion", valor: "Av. Automotriz 789", icono: "fas fa-map-marker-alt" },
+                    { tipo: "horario", valor: "Lunes a Sábado: 8:00 - 20:00", icono: "fas fa-clock" }
+                ],
+                imagen: "https://ejemplo.com/mi-taller-1.jpg",
+                imagenes_adicionales: [
+                    "https://ejemplo.com/mi-taller-2.jpg",
+                    "https://ejemplo.com/mi-taller-3.jpg",
+                    "https://ejemplo.com/mi-taller-4.jpg",
+                    "https://ejemplo.com/mi-taller-5.jpg",
+                    "https://ejemplo.com/mi-taller-6.jpg"
+                ],
+                redes_sociales: [
+                    { 
+                        plataforma: "facebook", 
+                        nombre: "Auto Expert Taller", 
+                        usuario: "@AutoExpertTaller",
+                        url: "https://facebook.com/AutoExpertTaller"
+                    },
+                    { 
+                        plataforma: "instagram", 
+                        nombre: "Auto Expert", 
+                        usuario: "@autoexpert.taller",
+                        url: "https://instagram.com/autoexpert.taller"
+                    }
+                ]
+            },
+            { 
+                nombre: "Librería El Saber", 
+                categoria: "Librería y Papelería", 
+                descripcion: "Libros especializados, bestsellers y literatura clásica. Espacio de lectura y eventos culturales.", 
+                descripcion_larga: `
+                    <div class="caracteristicas-negocio">
+                        <h4>Nuestra oferta literaria</h4>
+                        <ul>
+                            <li><strong>Libros especializados:</strong> Más de 50 categorías</li>
+                            <li><strong>Clubes de lectura:</strong> Grupos temáticos semanales</li>
+                            <li><strong>Eventos culturales:</strong> Presentaciones de autores</li>
+                            <li><strong>Espacio infantil:</strong> Zona para niños</li>
+                            <li><strong>Cafetería literaria:</strong> Ambiente para lectura</li>
+                        </ul>
+                    </div>
+                    
+                    <p>Librería El Saber es más que una tienda de libros; es un espacio cultural donde las ideas se encuentran. Contamos con una cuidadosa selección de títulos que abarcan desde literatura clásica hasta las últimas novedades editoriales.</p>
+                    
+                    <p>Nuestro espacio incluye una cafetería donde puedes disfrutar de una buena lectura acompañado de un café de especialidad. Organizamos eventos culturales semanales, incluyendo presentaciones de libros, clubes de lectura y talleres de escritura creativa.</p>
+                `,
+                contacto: [
+                    { tipo: "whatsapp", valor: "+1 (555) 901-2345", icono: "fab fa-whatsapp" },
+                    { tipo: "telefono", valor: "+1 (555) 901-2346", icono: "fas fa-phone" },
+                    { tipo: "ubicacion", valor: "Calle Cultura 456", icono: "fas fa-map-marker-alt" },
+                    { tipo: "horario", valor: "Lunes a Domingo: 10:00 - 22:00", icono: "fas fa-clock" }
+                ],
+                imagen: "https://ejemplo.com/mi-libreria-1.jpg",
+                imagenes_adicionales: [
+                    "https://ejemplo.com/mi-libreria-2.jpg",
+                    "https://ejemplo.com/mi-libreria-3.jpg",
+                    "https://ejemplo.com/mi-libreria-4.jpg",
+                    "https://ejemplo.com/mi-libreria-5.jpg",
+                    "https://ejemplo.com/mi-libreria-6.jpg"
+                ],
+                redes_sociales: [
+                    { 
+                        plataforma: "facebook", 
+                        nombre: "Librería El Saber", 
+                        usuario: "@LibreriaElSaber",
+                        url: "https://facebook.com/LibreriaElSaber"
+                    },
+                    { 
+                        plataforma: "instagram", 
+                        nombre: "Librería El Saber", 
+                        usuario: "@libreriaelsaber.cultura",
+                        url: "https://instagram.com/libreriaelsaber.cultura"
+                    }
+                ]
+            },
+            { 
+                nombre: "Fitness Center", 
+                categoria: "Gimnasio y Deportes", 
+                descripcion: "Instalaciones de primer nivel con entrenadores personales certificados. Clases grupales y equipamiento de última generación.", 
+                descripcion_larga: `
+                    <div class="caracteristicas-negocio">
+                        <h4>Instalaciones y servicios</h4>
+                        <ul>
+                            <li><strong>Área de cardio:</strong> Equipos de última generación</li>
+                            <li><strong>Sala de pesas:</strong> Más de 100 máquinas</li>
+                            <li><strong>Clases grupales:</strong> Más de 20 disciplinas diferentes</li>
+                            <li><strong>Entrenadores certificados:</strong> Planes personalizados</li>
+                            <li><strong>Piscina semiolímpica:</strong> Clases de natación</li>
+                        </ul>
+                    </div>
+                    
+                    <p>Fitness Center es un espacio diseñado para ayudarte a alcanzar tus objetivos de salud y bienestar. Nuestras instalaciones de más de 2,000 m² cuentan con tecnología de punta en cada área.</p>
+                    
+                    <p>Ofrecemos más de 20 tipos diferentes de clases grupales, desde yoga y pilates hasta spinning y cross training. Nuestros entrenadores personales están certificados internacionalmente y diseñan planes personalizados según tus necesidades específicas.</p>
+                `,
+                contacto: [
+                    { tipo: "whatsapp", valor: "+1 (555) 012-3456", icono: "fab fa-whatsapp" },
+                    { tipo: "telefono", valor: "+1 (555) 012-3457", icono: "fas fa-phone" },
+                    { tipo: "ubicacion", valor: "Centro Deportivo 789", icono: "fas fa-map-marker-alt" },
+                    { tipo: "horario", valor: "Lunes a Viernes: 5:00 - 23:00", icono: "fas fa-clock" }
+                ],
+                imagen: "https://ejemplo.com/mi-gym-1.jpg",
+                imagenes_adicionales: [
+                    "https://ejemplo.com/mi-gym-2.jpg",
+                    "https://ejemplo.com/mi-gym-3.jpg",
+                    "https://ejemplo.com/mi-gym-4.jpg",
+                    "https://ejemplo.com/mi-gym-5.jpg",
+                    "https://ejemplo.com/mi-gym-6.jpg"
+                ],
+                redes_sociales: [
+                    { 
+                        plataforma: "facebook", 
+                        nombre: "Fitness Center", 
+                        usuario: "@FitnessCenterOfficial",
+                        url: "https://facebook.com/FitnessCenterOfficial"
+                    },
+                    { 
+                        plataforma: "instagram", 
+                        nombre: "Fitness Center", 
+                        usuario: "@fitnesscenter.gym",
+                        url: "https://instagram.com/fitnesscenter.gym"
+                    },
+                    { 
+                        plataforma: "tiktok", 
+                        nombre: "Fitness Center", 
+                        usuario: "@fitnesscenter.tips",
+                        url: "https://tiktok.com/fitnesscenter.tips"
+                    }
+                ]
+            },
+            { 
+                nombre: "Café Aromas", 
+                categoria: "Cafetería", 
+                descripcion: "Café de especialidad tostado artesanalmente. Ambiente acogedor ideal para trabajo y encuentros.", 
+                descripcion_larga: `
+                    <div class="caracteristicas-negocio">
+                        <h4>Nuestra propuesta cafetera</h4>
+                        <ul>
+                            <li><strong>Café de especialidad:</strong> Granos de origen único</li>
+                            <li><strong>Tostado artesanal:</strong> Proceso controlado diariamente</li>
+                            <li><strong>Baristas certificados:</strong> Técnicas profesionales</li>
+                            <li><strong>Menú saludable:</strong> Opciones para todos los gustos</li>
+                            <li><strong>WiFi de alta velocidad:</strong> Ideal para trabajo remoto</li>
+                        </ul>
+                    </div>
+                    
+                    <p>Café Aromas nace de la pasión por el buen café. Trabajamos directamente con productores de diferentes regiones del mundo para seleccionar los mejores granos de origen único.</p>
+                    
+                    <p>Nuestro proceso de tostado artesanal resalta las características únicas de cada café. Además de nuestras especialidades cafeteras, ofrecemos un menú saludable con opciones para vegetarianos, veganos y personas con restricciones alimentarias.</p>
+                `,
+                contacto: [
+                    { tipo: "whatsapp", valor: "+1 (555) 345-6780", icono: "fab fa-whatsapp" },
+                    { tipo: "telefono", valor: "+1 (555) 345-6781", icono: "fas fa-phone" },
+                    { tipo: "ubicacion", valor: "Plaza Central 123", icono: "fas fa-map-marker-alt" },
+                    { tipo: "horario", valor: "Lunes a Domingo: 7:00 - 22:00", icono: "fas fa-clock" }
+                ],
+                imagen: "https://ejemplo.com/mi-cafe-1.jpg",
+                imagenes_adicionales: [
+                    "https://ejemplo.com/mi-cafe-2.jpg",
+                    "https://ejemplo.com/mi-cafe-3.jpg",
+                    "https://ejemplo.com/mi-cafe-4.jpg",
+                    "https://ejemplo.com/mi-cafe-5.jpg",
+                    "https://ejemplo.com/mi-cafe-6.jpg"
+                ],
+                redes_sociales: [
+                    { 
+                        plataforma: "facebook", 
+                        nombre: "Café Aromas", 
+                        usuario: "@CafeAromasSpecialty",
+                        url: "https://facebook.com/CafeAromasSpecialty"
+                    },
+                    { 
+                        plataforma: "instagram", 
+                        nombre: "Café Aromas", 
+                        usuario: "@cafearomas.specialty",
+                        url: "https://instagram.com/cafearomas.specialty"
+                    }
+                ]
+            }
+        ];
+
+        // Elementos DOM
+        const gridDestacados = document.getElementById('grid-destacados');
+        const modalOverlay = document.getElementById('modal-overlay');
+        const btnCerrarModal = document.getElementById('btn-cerrar-modal');
+        const modalNombre = document.getElementById('modal-nombre');
+        const modalCategoria = document.getElementById('modal-categoria');
+        const imagenGrande = document.getElementById('imagen-grande');
+        const todasImagenesContainer = document.getElementById('todas-imagenes-container');
+        const descripcionContenido = document.getElementById('descripcion-contenido');
+        const contactoModalGrid = document.getElementById('contacto-modal-grid');
+        const redesGrid = document.getElementById('redes-grid');
+        
+        // Función para mostrar imagen en el box grande
+        function showImageInBox(imageUrl) {
+            imagenGrande.style.display = 'block';
+            imagenGrande.src = imageUrl;
+        }
+
+        // Función para cargar los 9 negocios destacados
+        function cargarDestacados() {
+            gridDestacados.innerHTML = '';
+            
+            negociosDestacados.forEach(negocio => {
+                const tarjeta = document.createElement('div');
+                tarjeta.className = `negocio-destacado-card`;
+                
+                tarjeta.innerHTML = `
+                    <div class="destacado-badge">DESTACADO</div>
+                    <div class="card-imagen">
+                        <img src="${negocio.imagen}" alt="${negocio.nombre}" loading="lazy">
+                    </div>
+                    <div class="card-contenido">
+                        <div class="card-header">
+                            <h3>${negocio.nombre}</h3>
+                            <span class="card-categoria">${negocio.categoria}</span>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-descripcion">${negocio.descripcion}</p>
+                            <button class="btn-ver-mas" data-negocio-id="${negocio.nombre}">
+                                <i class="fas fa-eye"></i>
+                                Ver más
+                            </button>
+                        </div>
+                        <div class="card-footer">
+                            <div class="card-contacto">
+                                <i class="fab fa-whatsapp"></i>
+                                <span>${negocio.contacto[0].valor}</span>
+                            </div>
+                            <div class="card-contacto">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>${negocio.contacto[2].valor}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                gridDestacados.appendChild(tarjeta);
+                
+                const btnVerMas = tarjeta.querySelector('.btn-ver-mas');
+                btnVerMas.addEventListener('click', function() {
+                    abrirGaleriaNegocio(negocio);
+                });
+            });
+        }
+
+        // Función para cargar información de contacto en el modal (SOLO WHATSAPP, UBICACIÓN Y HORARIO)
+        function cargarContactoModal(contactoArray) {
+            contactoModalGrid.innerHTML = '';
+            
+            // Filtrar SOLO los tipos de contacto que queremos mostrar
+            const contactosFiltrados = contactoArray.filter(contacto => 
+                contacto.tipo === "whatsapp" || 
+                contacto.tipo === "ubicacion" || 
+                contacto.tipo === "horario"
+            );
+            
+            contactosFiltrados.forEach(contacto => {
+                const contactoItem = document.createElement('div');
+                contactoItem.className = 'contacto-modal-item';
+                
+                contactoItem.innerHTML = `
+                    <i class="${contacto.icono}"></i>
+                    <span>${contacto.valor}</span>
+                `;
+                
+                contactoModalGrid.appendChild(contactoItem);
+            });
+        }
+
+        // Función para abrir el modal con la galería del negocio
+        function abrirGaleriaNegocio(negocio) {
+            todasImagenesContainer.innerHTML = '';
+            redesGrid.innerHTML = '';
+            
+            modalNombre.textContent = negocio.nombre;
+            modalCategoria.textContent = negocio.categoria;
+            
+            // Mostrar imagen principal
+            showImageInBox(negocio.imagen);
+            
+            descripcionContenido.innerHTML = negocio.descripcion_larga;
+            
+            // Cargar información de contacto
+            if (negocio.contacto) {
+                cargarContactoModal(negocio.contacto);
+            }
+            
+            // Crear todas las imágenes
+            const todasImagenes = [
+                negocio.imagen,
+                ...negocio.imagenes_adicionales
+            ];
+            
+            // Limitar a 6 imágenes máximo para la cuadrícula 3x2
+            const imagenesLimitadas = todasImagenes.slice(0, 6);
+            
+            imagenesLimitadas.forEach((imagenUrl, index) => {
+                const miniatura = document.createElement('div');
+                miniatura.className = `imagen-miniatura ${index === 0 ? 'active' : ''}`;
+                miniatura.dataset.index = index;
+                miniatura.dataset.imagen = imagenUrl;
+                
+                miniatura.innerHTML = `
+                    <img src="${imagenUrl}" alt="${negocio.nombre} - Imagen ${index + 1}" loading="lazy">
+                `;
+                
+                miniatura.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    showImageInBox(this.dataset.imagen);
+                    document.querySelectorAll('.imagen-miniatura').forEach(m => {
+                        m.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                });
+                
+                todasImagenesContainer.appendChild(miniatura);
+            });
+            
+            if (negocio.redes_sociales && negocio.redes_sociales.length > 0) {
+                negocio.redes_sociales.forEach(red => {
+                    const redItem = document.createElement('a');
+                    redItem.href = red.url || '#';
+                    redItem.target = "_blank";
+                    redItem.className = `red-social-item ${red.plataforma}`;
+                    
+                    let iconClass = '';
+                    switch(red.plataforma) {
+                        case 'facebook':
+                            iconClass = 'fab fa-facebook-f';
+                            break;
+                        case 'instagram':
+                            iconClass = 'fab fa-instagram';
+                            break;
+                        case 'tiktok':
+                            iconClass = 'fab fa-tiktok';
+                            break;
+                        default:
+                            iconClass = 'fas fa-share-alt';
+                    }
+                    
+                    redItem.innerHTML = `
+                        <i class="${iconClass}"></i>
+                        <div class="red-social-info">
+                            <div class="red-social-nombre">${red.nombre}</div>
+                            <div class="red-social-usuario">${red.usuario}</div>
+                        </div>
+                    `;
+                    
+                    redesGrid.appendChild(redItem);
+                });
+            }
+            
+            modalOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Función para cerrar el modal
+        function cerrarModal() {
+            modalOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Event listeners
+        btnCerrarModal.addEventListener('click', cerrarModal);
+        modalOverlay.addEventListener('click', function(event) {
+            if (event.target === modalOverlay) {
+                cerrarModal();
+            }
+        });
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && modalOverlay.classList.contains('active')) {
+                cerrarModal();
+            }
+        });
+
+        // Cargar página inicial
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarDestacados();
+        });
+    </script>
+</body>
+</html>

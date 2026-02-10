@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIFE TIMES - Descubre lo que la gente tiene para ofrecer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            background-color: #000;
+            color: white;
+            min-height: 100vh;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Barra lateral con menú fijo */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(to bottom, rgba(201, 15, 15, 0.9), rgba(160, 12, 12, 0.9));
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 20px 0;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: transparent;
+            border-radius: 10px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .logo {
+            text-align: center;
+            padding: 20px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #fff;
+            transition: transform 0.3s;
+        }
+
+        .logo h1:hover {
+            transform: scale(1.05);
+        }
+
+        .logo span {
+            color: #ffffff;
+        }
+
+        .logo p {
+            margin-top: 5px;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .menu-categorias {
+            padding: 0 15px;
+            flex: 1;
+        }
+
+        .categoria-item {
+            padding: 15px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        .categoria-item:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateX(5px);
+        }
+
+        .categoria-item.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-left: 4px solid #ffffff;
+        }
+
+        .categoria-item i {
+            margin-right: 12px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .subcategorias {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 8px 8px;
+            margin-top: -8px;
+            margin-bottom: 8px;
+        }
+
+        .subcategorias.show {
+            max-height: 300px;
+        }
+
+        .subcategoria-item {
+            padding: 12px 15px 12px 45px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: white;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            border-left: 2px solid transparent;
+        }
+
+        .subcategoria-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 2px solid #ffffff;
+            padding-left: 50px;
+        }
+
+        .subcategoria-item i {
+            margin-right: 10px;
+            font-size: 12px;
+        }
+
+        /* ================================ */
+        /* CONTENEDOR PARA BOTONES LATERALES */
+        /* ================================ */
+        .botones-lateral {
+            display: flex;
+            flex-direction: column;
+            margin: 20px 15px;
+            gap: 15px;
+        }
+
+        /* Botón "Incrementar ventas" - FONDO GRIS TRANSPARENTE */
+        .btn-incrementar-ventas {
+            margin: 0;
+            padding: 15px;
+            background-color: rgba(128, 128, 128, 0.3); /* FONDO GRIS TRANSPARENTE */
+            color: white; /* TEXTO BLANCO */
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .btn-incrementar-ventas:hover {
+            background-color: rgba(128, 128, 128, 0.5); /* GRIS MÁS OSCURO AL HACER HOVER */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-incrementar-ventas i {
+            font-size: 18px;
+        }
+
+        /* ================================ */
+        /* NAVBAR EXACTAMENTE IGUAL AL CÓDIGO QUE ME DISTE */
+        /* ================================ */
+        .top-nav {
+            background-color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #000000;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 5px 0;
+        }
+
+        .nav-links a:hover {
+            color: #C90F0F;
+        }
+
+        /* Contenido principal - Sin scroll, imagen de fondo completa */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Fondo de pantalla completa */
+        .fullscreen-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://lh3.googleusercontent.com/pw/AP1GczM4jas1VN-vCCU3YgIxUlFAf53kkreK6hA5DCaJnVz-qN7dYFtC74w0SNekWQZwps4F4GEmqpeWUQlmt2ARG_Vjuca7kehtcSH4WCdPH1ZIjGoqS2gbgnCQ8kCFUrXTFzkRliPbQIMZZHiLQhIEO5pOxg=w1430-h957-s-no-gm?authuser=4');
+            background-size: cover;
+            background-position: center;
+            z-index: 1;
+        }
+
+        /* Contenido sobre el fondo */
+        .content-overlay {
+            position: relative;
+            z-index: 10;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 60px;
+        }
+
+        /* Contenedor para el contenido centrado */
+        .contenido-centrado {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Texto principal - CENTRADO */
+        .main-text {
+            text-align: center;
+            max-width: 900px;
+            animation: fadeInUp 1s ease-out;
+            width: 100%;
+            margin-bottom: 40px;
+        }
+
+        .main-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: white;
+            text-shadow: 3px 3px 20px rgba(0, 0, 0, 0.8);
+            text-align: center;
+            width: 100%;
+        }
+
+        /* Nueva descripción - CENTRADA */
+        .descripcion-categorias {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.4rem;
+            margin-bottom: 40px;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 1px 1px 10px rgba(0, 0, 0, 0.5);
+            max-width: 700px;
+            line-height: 1.5;
+            text-align: center;
+            opacity: 0.9;
+        }
+
+        /* Mensaje "Abre el menú" - MENOS PEGADO A LA IZQUIERDA, SIN BORDE */
+        .mensaje-menu {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.3rem;
+            margin-top: 30px;
+            color: rgba(255, 255, 255, 0.95);
+            padding: 18px 35px;
+            background: rgba(201, 15, 15, 0.5);
+            border-radius: 15px;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 
+                0 6px 20px rgba(0, 0, 0, 0.3),
+                0 0 20px rgba(201, 15, 15, 0.3);
+            animation: pulse 2s infinite;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            /* Centrado con margen izquierdo para que no esté pegado al borde */
+            margin-left: 40px; /* Menos pegado a la izquierda */
+            align-self: flex-start; /* Mantiene alineación izquierda pero con margen */
+        }
+
+        .mensaje-menu:hover {
+            background: rgba(201, 15, 15, 0.6);
+            transform: translateY(-3px);
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.4),
+                0 0 25px rgba(201, 15, 15, 0.4);
+        }
+
+        .mensaje-menu:active {
+            transform: translateY(-1px);
+        }
+
+        .mensaje-menu i {
+            margin-right: 12px;
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.4rem;
+        }
+
+        /* BOTONES SIMPLIFICADOS - SOLO NOMBRE */
+        .categorias-buttons {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .categoria-btn {
+            padding: 35px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.2),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+            outline: none !important;
+        }
+
+        /* Efecto de borde luminoso */
+        .categoria-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 15px;
+            padding: 2px;
+            background: linear-gradient(45deg, 
+                rgba(201, 15, 15, 0.8), 
+                rgba(255, 255, 255, 0.4), 
+                rgba(201, 15, 15, 0.8));
+            -webkit-mask: 
+                linear-gradient(#fff 0 0) content-box, 
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: -1;
+        }
+
+        /* Efecto de brillo interior */
+        .categoria-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: -1;
+        }
+
+        .categoria-btn:hover::before {
+            opacity: 1;
+        }
+
+        .categoria-btn:hover::after {
+            opacity: 1;
+        }
+
+        .categoria-btn:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 
+                0 15px 50px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .categoria-btn:active {
+            transform: translateY(-4px) scale(1.02);
+        }
+
+        /* Texto simplificado - SOLO NOMBRE */
+        .categoria-btn span {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            text-shadow: 
+                2px 2px 8px rgba(0, 0, 0, 0.5),
+                0 0 10px rgba(255, 255, 255, 0.2);
+            z-index: 2;
+            position: relative;
+        }
+
+        /* Animación de brillo pulsante */
+        @keyframes glow-pulse {
+            0%, 100% {
+                box-shadow: 
+                    0 8px 32px rgba(0, 0, 0, 0.2),
+                    0 0 0 1px rgba(255, 255, 255, 0.1);
+            }
+            50% {
+                box-shadow: 
+                    0 8px 32px rgba(201, 15, 15, 0.15),
+                    0 0 0 1px rgba(255, 255, 255, 0.15);
+            }
+        }
+
+        .categoria-btn {
+            animation: glow-pulse 4s infinite;
+        }
+
+        /* Animación para el mensaje del menú - MÁS PRONUNCIADA */
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 
+                    0 6px 20px rgba(0, 0, 0, 0.3),
+                    0 0 20px rgba(201, 15, 15, 0.3);
+            }
+            50% {
+                box-shadow: 
+                    0 6px 25px rgba(0, 0, 0, 0.4),
+                    0 0 30px rgba(201, 15, 15, 0.5);
+            }
+        }
+
+        /* Elementos decorativos */
+        .floating-icons {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .floating-icon {
+            position: absolute;
+            font-size: 2.5rem;
+            color: rgba(255, 255, 255, 0.1);
+            animation: float 6s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px rgba(201, 15, 15, 0.2));
+        }
+
+        .floating-icon:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-icon:nth-child(2) {
+            top: 60%;
+            left: 85%;
+            animation-delay: 1s;
+        }
+
+        .floating-icon:nth-child(3) {
+            top: 80%;
+            left: 15%;
+            animation-delay: 2s;
+        }
+
+        .floating-icon:nth-child(4) {
+            top: 40%;
+            left: 90%;
+            animation-delay: 3s;
+        }
+
+        .floating-icon:nth-child(5) {
+            top: 10%;
+            left: 80%;
+            animation-delay: 4s;
+        }
+
+        /* Flecha para menú desplegable */
+        .menu-arrow {
+            margin-left: auto;
+            transition: transform 0.3s ease;
+            font-size: 12px;
+        }
+
+        .menu-arrow.rotated {
+            transform: rotate(180deg);
+        }
+
+        /* Animaciones */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(10deg);
+            }
+        }
+
+        /* RESPONSIVIDAD */
+        @media (max-width: 1200px) {
+            .main-title {
+                font-size: 4rem;
+                margin-bottom: 15px;
+            }
+            
+            .descripcion-categorias {
+                font-size: 1.3rem;
+                margin-bottom: 35px;
+            }
+            
+            .mensaje-menu {
+                font-size: 1.2rem;
+                margin-top: 25px;
+                padding: 16px 30px;
+                max-width: 400px;
+                margin-left: 30px; /* Ajuste responsivo */
+            }
+            
+            .categorias-buttons {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 18px;
+                max-width: 900px;
+            }
+            
+            .categoria-btn {
+                padding: 30px 15px;
+            }
+            
+            .categoria-btn span {
+                font-size: 1.4rem;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .content-overlay {
+                padding: 0 40px;
+            }
+            
+            .main-title {
+                font-size: 3.5rem;
+            }
+            
+            .descripcion-categorias {
+                font-size: 1.2rem;
+                margin-bottom: 30px;
+            }
+            
+            .mensaje-menu {
+                font-size: 1.1rem;
+                padding: 15px 25px;
+                max-width: 350px;
+                margin-left: 20px; /* Ajuste responsivo */
+            }
+            
+            .categorias-buttons {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 16px;
+            }
+            
+            .categoria-btn {
+                padding: 28px 12px;
+            }
+            
+            .categoria-btn span {
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+                max-height: 80vh;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                overflow-y: auto;
+            }
+            
+            body {
+                flex-direction: column;
+                overflow-y: auto;
+            }
+            
+            /* NAVBAR RESPONSIVE */
+            .top-nav {
+                padding: 15px 20px;
+                justify-content: center;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+            
+            .nav-links a {
+                font-size: 14px;
+                padding: 5px 0;
+            }
+            
+            .nav-links a:hover {
+                color: #C90F0F;
+            }
+            
+            /* Botones laterales */
+            .botones-lateral {
+                margin: 15px 15px;
+                gap: 12px;
+            }
+            
+            .btn-incrementar-ventas {
+                padding: 14px;
+                font-size: 15px;
+            }
+            
+            /* Contenido principal */
+            .content-overlay {
+                padding: 30px 20px;
+                justify-content: flex-start;
+                margin-top: 20px;
+            }
+            
+            .contenido-centrado {
+                align-items: center;
+            }
+            
+            .main-text {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                text-align: center;
+                margin-bottom: 30px;
+            }
+            
+            .main-title {
+                font-size: 3rem;
+                margin-bottom: 15px;
+                text-align: center;
+            }
+            
+            .descripcion-categorias {
+                font-size: 1.1rem;
+                margin-bottom: 25px;
+                text-align: center;
+            }
+            
+            .mensaje-menu {
+                font-size: 1rem;
+                margin-top: 20px;
+                padding: 14px 20px;
+                max-width: 320px;
+                margin-left: 0; /* Centrado en móvil */
+                align-self: center; /* Centrado en móvil */
+                text-align: center;
+            }
+            
+            /* BOTONES EN GRID DE 2 COLUMNAS */
+            .categorias-buttons {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+                margin-top: 30px;
+                width: 100%;
+                max-width: 600px;
+            }
+            
+            .categoria-btn {
+                padding: 25px 15px;
+                justify-content: center;
+                align-items: center;
+            }
+            
+            .categoria-btn span {
+                font-size: 1.2rem;
+            }
+            
+            .floating-icon {
+                display: none;
+            }
+            
+            .fullscreen-bg {
+                position: fixed;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-title {
+                font-size: 2.5rem;
+                margin-bottom: 10px;
+            }
+            
+            .descripcion-categorias {
+                font-size: 1rem;
+                margin-bottom: 20px;
+                padding: 0 10px;
+            }
+            
+            .mensaje-menu {
+                font-size: 0.95rem;
+                margin-top: 15px;
+                padding: 12px 18px;
+                max-width: 280px;
+            }
+            
+            .content-overlay {
+                padding: 20px 15px;
+            }
+            
+            .botones-lateral {
+                margin: 12px 10px;
+                gap: 10px;
+            }
+            
+            .btn-incrementar-ventas {
+                padding: 12px;
+                font-size: 14px;
+            }
+            
+            /* BOTONES EN UNA SOLA COLUMNA */
+            .categorias-buttons {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                max-width: 350px;
+            }
+            
+            .categoria-btn {
+                padding: 25px 20px;
+            }
+            
+            .categoria-btn span {
+                font-size: 1.3rem;
+                text-align: center;
+            }
+            
+            .logo h1 {
+                font-size: 22px;
+            }
+            
+            .top-nav {
+                padding: 12px 15px;
+            }
+            
+            .nav-links {
+                gap: 10px;
+                justify-content: center;
+            }
+            
+            .nav-links a {
+                font-size: 13px;
+            }
+        }
+
+        @media (max-height: 700px) {
+            .main-title {
+                font-size: 3rem;
+                margin-bottom: 15px;
+            }
+            
+            .descripcion-categorias {
+                margin-bottom: 20px;
+            }
+            
+            .mensaje-menu {
+                margin-top: 20px;
+            }
+            
+            .categorias-buttons {
+                margin-top: 20px;
+                gap: 15px;
+            }
+            
+            .categoria-btn {
+                padding: 25px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Menú lateral fijo -->
+    <aside class="sidebar">
+        <div class="logo">
+            <a href="index.html" style="text-decoration: none; color: inherit;">
+                <h1>LIFE <span>TIMES</span></h1>
+            </a>
+            <p>Directorio de Negocios</p>
+        </div>
+        
+        <div class="menu-categorias">
+            <a href="General.html" class="categoria-item">
+                <i class="fas fa-home"></i>
+                <span>General</span>
+            </a>
+            
+            <!-- Menú desplegable para Servicio Minoritario -->
+            <div class="categoria-menu-container">
+                <div class="categoria-item active" id="servicioMinoritarioBtn">
+                    <i class="fas fa-handshake"></i>
+                    <span>Servicio minoritario</span>
+                    <i class="fas fa-chevron-down menu-arrow"></i>
+                </div>
+                
+                <div class="subcategorias" id="servicioMinoritarioSubmenu">
+                    <a href="Accesorios-minoritario.html" class="subcategoria-item">
+                        <i class="fas fa-utensils"></i>
+                        <span>Accesorios</span>
+                    </a>
+                    <a href="Artesanias-minoritario.html" class="subcategoria-item">
+                        <i class="fas fa-laptop"></i>
+                        <span>Artesanias</span>
+                    </a>
+                    <a href="Ropa y calzado-minoritario.html" class="subcategoria-item">
+                        <i class="fas fa-tshirt"></i>
+                        <span>Ropa y calzado</span>
+                    </a>
+                    <a href="Articulos-minoritario.html" class="subcategoria-item">
+                        <i class="fas fa-briefcase"></i>
+                        <span>Artículos</span>
+                    </a>
+                    <a href="Otros-minoritario.html" class="subcategoria-item">
+                        <i class="fas fa-ellipsis-h"></i>
+                        <span>Otros</span>
+                    </a>
+                </div>
+            </div>
+            
+            <a href="Comercio.html" class="categoria-item">
+                <i class="fas fa-store"></i>
+                <span>Comercio</span>
+            </a>
+            <a href="Alimentos y bebidas.html" class="categoria-item">
+                <i class="fas fa-utensils"></i>
+                <span>Alimentos y bebidas</span>
+            </a>
+            <a href="Servicios-general.html" class="categoria-item">
+                <i class="fas fa-concierge-bell"></i>
+                <span>Servicios</span>
+            </a>
+        </div>
+        
+        <!-- CONTENEDOR PARA LOS BOTONES LATERALES -->
+        <div class="botones-lateral">
+            <!-- Botón "Incrementar ventas" - GRIS TRANSPARENTE -->
+            <a href="Servicios-auto-minoritario.html" style="text-decoration: none;">
+                <button class="btn-incrementar-ventas">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Incrementar ventas</span>
+                </button>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Contenido principal -->
+    <main class="main-content">
+        <!-- Fondo de pantalla completa -->
+        <div class="fullscreen-bg" id="fullscreenBg"></div>
+        
+        <!-- Elementos decorativos flotantes -->
+        <div class="floating-icons">
+            <div class="floating-icon"><i class="fas fa-star"></i></div>
+            <div class="floating-icon"><i class="fas fa-circle"></i></div>
+            <div class="floating-icon"><i class="fas fa-heart"></i></div>
+            <div class="floating-icon"><i class="fas fa-bullseye"></i></div>
+            <div class="floating-icon"><i class="fas fa-gem"></i></div>
+        </div>
+        
+        <!-- NAVBAR SUPERIOR -->
+        <nav class="top-nav">
+            <ul class="nav-links">
+                <li><a href="Terminos y Condiciones.html" id="terminos-link">Términos y Condiciones</a></li>
+                <li><a href="Index.html" id="historia-link">La Historia</a></li>
+                <li><a href="Servicios.html" id="servicios-link">Servicios</a></li>
+            </ul>
+        </nav>
+        
+        <!-- Contenido sobre el fondo -->
+        <div class="content-overlay">
+            <div class="contenido-centrado">
+                <div class="main-text">
+                    <h1 class="main-title">¡Descubre todo lo que la gente tiene para ofrecer!</h1>
+                    
+                    <!-- Nueva descripción - CENTRADA -->
+                    <p class="descripcion-categorias">
+                        Descubre las siguientes categorías para encontrar exactamente lo que necesitas
+                    </p>
+                </div>
+                
+                <!-- BOTONES SIMPLIFICADOS - ELIMINADOS SEGÚN SOLICITUD -->
+                <!-- Se han eliminado los botones: Ropa y calzado, Otros, Accesorios, Artículos, Artesanías -->
+                
+                <!-- Nuevo mensaje "Abre el menú" - MENOS PEGADO A LA IZQUIERDA, SIN BORDE -->
+                <div class="mensaje-menu" id="mensajeMenu">
+                    <i class="fas fa-bars"></i>
+                    <span>Abre el menú lateral para explorar todas las categorías</span>
+                </div>
+                
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Elementos del menú desplegable
+        const servicioMinoritarioBtn = document.getElementById('servicioMinoritarioBtn');
+        const servicioMinoritarioSubmenu = document.getElementById('servicioMinoritarioSubmenu');
+        const menuArrow = servicioMinoritarioBtn.querySelector('.menu-arrow');
+        const mensajeMenu = document.getElementById('mensajeMenu');
+
+        // Toggle del menú desplegable
+        servicioMinoritarioBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            
+            servicioMinoritarioSubmenu.classList.toggle('show');
+            menuArrow.classList.toggle('rotated');
+        });
+
+        // Cerrar menú al hacer clic fuera
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.categoria-menu-container')) {
+                servicioMinoritarioSubmenu.classList.remove('show');
+                menuArrow.classList.remove('rotated');
+            }
+        });
+
+        // Evitar que el clic dentro del submenú lo cierre
+        servicioMinoritarioSubmenu.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+
+        // Hacer clic en el mensaje para abrir el menú lateral
+        mensajeMenu.addEventListener('click', function() {
+            // Simular clic en el botón de servicio minoritario para abrirlo
+            servicioMinoritarioBtn.click();
+            
+            // Animar el mensaje para dar feedback
+            this.style.transform = 'translateY(-1px) scale(0.98)';
+            setTimeout(() => {
+                this.style.transform = 'translateY(-3px)';
+            }, 200);
+        });
+
+        // Asegurar que el fondo ocupe toda la pantalla en móvil
+        function adjustBackground() {
+            const bg = document.getElementById('fullscreenBg');
+            
+            if (window.innerWidth <= 768) {
+                // En móvil, permitir scroll pero mantener fondo fijo
+                document.body.style.overflowY = 'auto';
+                bg.style.position = 'fixed';
+                bg.style.height = '100%';
+            } else {
+                // En escritorio, sin scroll
+                document.body.style.overflowY = 'hidden';
+                bg.style.position = 'absolute';
+            }
+        }
+
+        // Ajustar al cargar y al redimensionar
+        window.addEventListener('load', adjustBackground);
+        window.addEventListener('resize', adjustBackground);
+
+        // Efecto de aparición para el texto
+        document.addEventListener('DOMContentLoaded', function() {
+            const mainText = document.querySelector('.main-text');
+            mainText.style.opacity = '0';
+            mainText.style.transform = 'translateY(30px)';
+            
+            setTimeout(() => {
+                mainText.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                mainText.style.opacity = '1';
+                mainText.style.transform = 'translateY(0)';
+            }, 300);
+            
+            // Efecto para la descripción
+            const descripcion = document.querySelector('.descripcion-categorias');
+            descripcion.style.opacity = '0';
+            descripcion.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                descripcion.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
+                descripcion.style.opacity = '1';
+                descripcion.style.transform = 'translateY(0)';
+            }, 600);
+            
+            // Efecto para el mensaje del menú
+            mensajeMenu.style.opacity = '0';
+            mensajeMenu.style.transform = 'translateY(20px) scale(0.9)';
+            
+            setTimeout(() => {
+                mensajeMenu.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                mensajeMenu.style.opacity = '1';
+                mensajeMenu.style.transform = 'translateY(0) scale(1)';
+            }, 900);
+            
+            // Efecto para los botones laterales
+            const lateralButtons = document.querySelectorAll('.btn-incrementar-ventas');
+            lateralButtons.forEach(button => {
+                button.style.opacity = '0';
+                button.style.transform = 'translateY(10px)';
+                
+                setTimeout(() => {
+                    button.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    button.style.opacity = '1';
+                    button.style.transform = 'translateY(0)';
+                }, 1200);
+            });
+            
+            // Efecto interactivo para el mensaje del menú
+            mensajeMenu.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-3px) scale(1.02)';
+                this.style.transition = 'all 0.3s ease';
+            });
+            
+            mensajeMenu.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>

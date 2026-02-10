@@ -1,0 +1,1967 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Directorio de Negocios LIFE TIMES - Alimentos y Bebidas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ESTILOS OPTIMIZADOS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            background-color: #f5f7fa;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(to bottom, #C90F0F, #A00C0C);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 20px 0;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            text-align: center;
+            padding: 20px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #fff;
+            transition: transform 0.3s;
+        }
+
+        .logo h1:hover {
+            transform: scale(1.05);
+        }
+
+        .logo span {
+            color: #ffffff;
+        }
+
+        .logo p {
+            margin-top: 5px;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .menu-categorias {
+            padding: 0 15px;
+            flex: 1;
+        }
+
+        .categoria-item {
+            padding: 15px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            text-decoration: none;
+            color: white;
+        }
+
+        .categoria-item:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateX(5px);
+        }
+
+        .categoria-item.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-left: 4px solid #ffffff;
+        }
+
+        .categoria-item i {
+            margin-right: 12px;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* ================================ */
+        /* CONTENEDOR PARA BOTONES LATERALES */
+        /* ================================ */
+        .botones-lateral {
+            display: flex;
+            flex-direction: column;
+            margin: 20px 15px;
+            gap: 15px;
+        }
+
+        /* Botón "Publicar mi negocio aquí" - FONDO NEGRO CON LETRAS BLANCAS */
+        .btn-subir-negocio {
+            margin: 0;
+            padding: 15px;
+            background-color: #000000; /* FONDO NEGRO */
+            color: #ffffff; /* TEXTO BLANCO */
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .btn-subir-negocio:hover {
+            background-color: #333333; /* NEGRO MÁS CLARO AL HACER HOVER */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Botón "Incrementar ventas" - FONDO GRIS TRANSPARENTE */
+        .btn-incrementar-ventas {
+            margin: 0;
+            padding: 15px;
+            background-color: rgba(128, 128, 128, 0.3); /* FONDO GRIS TRANSPARENTE */
+            color: white; /* TEXTO BLANCO */
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .btn-incrementar-ventas:hover {
+            background-color: rgba(128, 128, 128, 0.5); /* GRIS MÁS OSCURO AL HACER HOVER */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-subir-negocio i,
+        .btn-incrementar-ventas i {
+            font-size: 18px;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .top-nav {
+            background-color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #000000;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 5px 0;
+        }
+
+        .nav-links a:hover {
+            color: #C90F0F;
+        }
+
+        .negocios-container {
+            padding: 30px;
+            flex: 1;
+            background: white;
+        }
+
+        .titulo-banner {
+            background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), 
+                        url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            padding: 25px 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid #eaeaea;
+            position: relative;
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .titulo-banner h2 {
+            color: #000000;
+            font-size: 32px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .titulo-banner p {
+            color: #444;
+            font-size: 16px;
+            font-weight: 500;
+            padding-left: 5px;
+        }
+
+        .menu-desplazamiento {
+            position: absolute;
+            bottom: 15px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            padding: 8px 12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .menu-desplazamiento.oculto {
+            display: none;
+        }
+
+        .pagina-btn {
+            width: 35px;
+            height: 35px;
+            background: #f8f9fa;
+            color: #555;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pagina-btn:hover {
+            background: #f0f0f0;
+            color: #333;
+            border-color: #ccc;
+        }
+
+        .pagina-btn.active {
+            background: #C90F0F;
+            color: white;
+            border-color: #C90F0F;
+        }
+
+        .pagina-btn.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            background: #f8f9fa;
+            border-color: #e0e0e0;
+            color: #999;
+        }
+
+        .pagina-info {
+            font-size: 13px;
+            color: #777;
+            font-weight: 500;
+            margin-left: 8px;
+            padding-left: 8px;
+            border-left: 1px solid #e0e0e0;
+            white-space: nowrap;
+        }
+
+        .pagina-actual {
+            font-size: 14px;
+            font-weight: 600;
+            color: #C90F0F;
+            margin-right: 5px;
+        }
+
+        /* GRID DE NEGOCIOS - 3x3 CON TAMAÑO AUTOMÁTICO */
+        .grid-negocios {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 40px;
+            /* ELIMINAMOS min-height para que sea automático */
+            height: auto;
+            min-height: 0; /* Importante para que no se expanda */
+        }
+
+        /* TARJETA DE NEGOCIO CON TAMAÑO ORIGINAL */
+        .negocio-card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: row;
+            /* MANTENEMOS el tamaño original */
+            min-height: 220px;
+            height: auto;
+            max-height: none;
+            position: relative;
+            border: 1px solid #eee;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeInCard 0.4s ease forwards;
+        }
+
+        @keyframes fadeInCard {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .negocio-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .destacado-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #000000;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: 700;
+            z-index: 2;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border: 1px solid #333;
+        }
+
+        /* IMAGEN CON TAMAÑO ORIGINAL */
+        .card-imagen {
+            flex: 1;
+            /* MANTENEMOS el tamaño original */
+            height: auto;
+            min-height: 220px;
+            max-height: none;
+            overflow: hidden;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .card-imagen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to right, rgba(0,0,0,0.1), transparent);
+            z-index: 1;
+        }
+
+        .card-imagen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .negocio-card:hover .card-imagen img {
+            transform: scale(1.1);
+        }
+
+        /* CONTENIDO CON ESTRUCTURA ORIGINAL */
+        .card-contenido {
+            flex: 1.2;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            /* Volvemos al original */
+            overflow: visible;
+            height: auto;
+        }
+
+        .card-header {
+            padding: 0 0 12px 0;
+        }
+
+        .card-header h3 {
+            color: #000000;
+            font-size: 18px;
+            margin-bottom: 8px;
+            line-height: 1.3;
+            font-weight: 700;
+        }
+
+        .card-categoria {
+            color: #C90F0F;
+            font-size: 13px;
+            display: inline-block;
+            padding: 4px 12px;
+            background-color: #ffe6e6;
+            border-radius: 15px;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 0 0 15px 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            /* Volvemos al original */
+            overflow: visible;
+        }
+
+        /* DESCRIPCIÓN ORIGINAL - SIN SCROLL */
+        .card-descripcion {
+            color: #555;
+            line-height: 1.6;
+            font-size: 14px;
+            margin-bottom: 15px;
+            flex: 1;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            height: 66px;
+            /* Eliminamos estilos de scroll */
+            max-height: none;
+            padding-right: 0;
+            scrollbar-width: none;
+        }
+
+        /* BOTÓN VER MÁS - COLOR ROJO COMO EL SEGUNDO CÓDIGO */
+        .card-botones {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-ver-mas {
+            background-color: #C90F0F;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 15px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex: 1;
+            min-width: 120px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-ver-mas:hover {
+            background-color: #A00C0C;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(201, 15, 15, 0.3);
+        }
+
+        /* BOTÓN ORDENAR - VERDE */
+        .btn-ordenar {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 15px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex: 1;
+            min-width: 120px;
+            text-decoration: none;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-ordenar:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-footer {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 15px 0 0 0;
+            border-top: 1px solid #f0f0f0;
+            font-size: 12px;
+        }
+
+        .card-contacto {
+            color: #666;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            overflow: hidden;
+            min-height: 16px;
+        }
+
+        .card-contacto.oculto {
+            display: none;
+        }
+
+        .card-contacto i {
+            color: #C90F0F;
+            width: 12px;
+            text-align: center;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .card-contacto span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 11px;
+        }
+
+        /* CONTADOR DE NEGOCIOS */
+        .contador-negocios {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
+
+        /* SUBMENÚ DE ZONAS */
+        .categoria-item.with-submenu {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .submenu-arrow {
+            margin-left: auto;
+            font-size: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .categoria-item.with-submenu.active .submenu-arrow {
+            transform: rotate(180deg);
+        }
+
+        .submenu-zonas {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease, opacity 0.3s ease;
+            opacity: 0;
+            background-color: rgba(0, 0, 0, 0.1);
+            margin-left: 15px;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .submenu-zonas.active {
+            max-height: 300px;
+            opacity: 1;
+            padding: 10px 0;
+        }
+
+        .submenu-item {
+            display: block;
+            padding: 12px 15px 12px 40px;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .submenu-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding-left: 45px;
+        }
+
+        .submenu-item:before {
+            content: "-";
+            position: absolute;
+            left: 25px;
+            color: white;
+        }
+
+        /* MODAL - RESTAURADO ESTILOS COMPLETOS DEL SEGUNDO CÓDIGO */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-galeria {
+            background-color: white;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 1200px;
+            max-height: 90vh;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-header {
+            padding: 25px 30px 15px;
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .modal-header h2 {
+            color: #000000;
+            font-size: 28px;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .modal-categoria {
+            display: inline-block;
+            background-color: #000000;
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .btn-cerrar-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 8px;
+            line-height: 1;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .btn-cerrar-modal:hover {
+            color: #C90F0F;
+            background-color: #f8f8f8;
+        }
+
+        .modal-content-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* COLUMNA IZQUIERDA - GALERÍA DE IMÁGENES */
+        .modal-galeria-columna {
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            background: #fafafa;
+            overflow-y: auto;
+            height: calc(100% - 25px);
+        }
+
+        .imagen-box-grande {
+            width: 100%;
+            height: 400px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 2px solid #e0e0e0;
+            margin-bottom: 20px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .imagen-box-grande img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .imagen-box-grande:hover img {
+            transform: scale(1.02);
+        }
+
+        /* CONTENEDOR DE MINIATURAS - 3x2 (6 IMÁGENES) */
+        .todas-imagenes-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+            flex-shrink: 0;
+        }
+
+        .imagen-miniatura {
+            height: 100px;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            background-color: #f8f9fa;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            position: relative;
+        }
+
+        .imagen-miniatura:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
+        }
+
+        .imagen-miniatura.active {
+            border-color: #C90F0F;
+            box-shadow: 0 5px 15px rgba(201, 15, 15, 0.2);
+        }
+
+        .imagen-miniatura img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* COLUMNA DERECHA - DESCRIPCIÓN Y CONTACTO */
+        .modal-descripcion-columna {
+            padding: 25px;
+            background: white;
+            border-left: 1px solid #f0f0f0;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .descripcion-titulo {
+            color: #000000;
+            font-size: 22px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #c90f0f;
+            font-weight: 700;
+        }
+
+        /* DESCRIPCIÓN ESTRUCTURADA - COMO EL SEGUNDO CÓDIGO */
+        .descripcion-texto {
+            color: #444;
+            line-height: 1.7;
+            font-size: 15px;
+            margin-bottom: 25px;
+            overflow-y: visible;
+            padding: 0;
+            background: transparent;
+        }
+
+        .descripcion-texto p {
+            margin-bottom: 12px;
+            text-align: justify;
+        }
+
+        .descripcion-texto strong {
+            color: #000;
+            font-weight: 700;
+        }
+
+        .descripcion-texto ul {
+            margin: 12px 0;
+            padding-left: 20px;
+        }
+
+        .descripcion-texto li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+            position: relative;
+        }
+
+        .descripcion-texto li:before {
+            content: "•";
+            color: #C90F0F;
+            font-weight: bold;
+            position: absolute;
+            left: -12px;
+        }
+
+        /* REDES SOCIALES MINIMALISTAS - COMO EL SEGUNDO CÓDIGO */
+        .redes-sociales {
+            padding: 15px 0;
+            margin-bottom: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .redes-sociales h4 {
+            color: #000000;
+            font-size: 16px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .redes-sociales h4 i {
+            color: #C90F0F;
+        }
+
+        .redes-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        .red-social-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .red-social-item:hover {
+            transform: translateY(-2px);
+            background-color: #f8f8f8;
+            border-radius: 6px;
+        }
+
+        .red-social-item.facebook:hover {
+            background-color: #1877f2;
+            color: white;
+        }
+
+        .red-social-item.instagram:hover {
+            background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
+            color: white;
+        }
+
+        .red-social-item.tiktok:hover {
+            background-color: #000000;
+            color: white;
+        }
+
+        .red-social-item i {
+            width: 18px;
+            text-align: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .facebook i {
+            color: #1877f2;
+        }
+
+        .instagram i {
+            color: #E1306C;
+        }
+
+        .tiktok i {
+            color: #000000;
+        }
+
+        .red-social-item:hover i {
+            color: white;
+        }
+
+        .red-social-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .red-social-nombre {
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .red-social-usuario {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .red-social-item:hover .red-social-usuario {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* SECCIÓN DE CONTACTO EN EL MODAL - COMO EL SEGUNDO CÓDIGO */
+        .modal-contacto {
+            padding: 15px 0;
+            border-top: 1px solid #eee;
+        }
+
+        .modal-contacto h4 {
+            color: #000000;
+            font-size: 16px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-contacto h4 i {
+            color: #C90F0F;
+        }
+
+        .contacto-modal-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .contacto-modal-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .contacto-modal-item i {
+            color: #C90F0F;
+            width: 16px;
+            text-align: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1200px) {
+            .grid-negocios {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .menu-desplazamiento {
+                flex-wrap: wrap;
+                justify-content: center;
+                width: auto;
+            }
+            
+            .modal-content-container {
+                grid-template-columns: 1fr;
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+
+            .modal-galeria-columna {
+                border-bottom: 1px solid #eee;
+                border-left: none;
+                padding: 20px;
+                height: auto;
+            }
+
+            .modal-descripcion-columna {
+                border-left: none;
+                padding: 20px;
+                height: auto;
+            }
+            
+            .imagen-box-grande {
+                height: 350px;
+            }
+            
+            .todas-imagenes-container {
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-rows: repeat(2, 1fr);
+                height: auto;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .grid-negocios {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .todas-imagenes-container {
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-rows: repeat(2, 1fr);
+                height: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            body {
+                flex-direction: column;
+            }
+            
+            .top-nav {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+                justify-content: center;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+
+            .grid-negocios {
+                grid-template-columns: 1fr;
+            }
+
+            .negocio-card {
+                flex-direction: column;
+                min-height: 350px;
+            }
+            
+            .card-imagen {
+                height: 140px;
+                min-height: auto;
+            }
+            
+            .card-botones {
+                flex-direction: column;
+            }
+
+            .titulo-banner {
+                padding: 20px;
+                min-height: 120px;
+            }
+
+            .titulo-banner h2 {
+                font-size: 26px;
+            }
+
+            .menu-desplazamiento {
+                position: relative;
+                bottom: auto;
+                right: auto;
+                margin-top: 15px;
+                width: fit-content;
+                align-self: center;
+            }
+            
+            /* Ajustes para los botones laterales en móvil */
+            .botones-lateral {
+                margin: 15px 15px;
+                gap: 12px;
+            }
+            
+            .btn-subir-negocio,
+            .btn-incrementar-ventas {
+                padding: 14px;
+                font-size: 15px;
+            }
+            
+            .modal-overlay {
+                padding: 0;
+                align-items: flex-start;
+            }
+            
+            .modal-galeria {
+                border-radius: 0;
+                width: 100%;
+                min-height: 100vh;
+                max-height: none;
+            }
+            
+            .modal-content-container {
+                grid-template-columns: 1fr;
+                max-height: 75vh;
+            }
+
+            .modal-galeria-columna, .modal-descripcion-columna {
+                padding: 20px;
+            }
+
+            .modal-header {
+                padding: 20px 20px 15px;
+            }
+
+            .modal-header h2 {
+                font-size: 24px;
+            }
+
+            .imagen-box-grande {
+                height: 250px;
+            }
+            
+            .todas-imagenes-container {
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-rows: repeat(2, 1fr);
+                height: auto;
+                min-height: 180px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .negocio-card {
+                flex-direction: column;
+                min-height: 350px;
+            }
+            
+            .negocio-card .card-imagen {
+                height: 140px;
+                min-height: auto;
+            }
+
+            .imagen-miniatura {
+                height: 70px;
+            }
+
+            .modal-header h2 {
+                font-size: 22px;
+            }
+
+            .modal-categoria {
+                font-size: 12px;
+                padding: 4px 10px;
+            }
+
+            .titulo-banner {
+                padding: 25px 20px;
+            }
+
+            .titulo-banner h2 {
+                font-size: 26px;
+            }
+            
+            .titulo-banner p {
+                font-size: 15px;
+            }
+            
+            .card-imagen {
+                height: 140px;
+            }
+            
+            .todas-imagenes-container {
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-rows: repeat(2, 1fr);
+                height: auto;
+                min-height: 150px;
+                gap: 8px;
+            }
+            
+            .card-descripcion {
+                height: 57px;
+                font-size: 13px;
+            }
+            
+            .imagen-box-grande {
+                height: 200px;
+            }
+            
+            /* Ajustes para botones laterales en móvil pequeño */
+            .botones-lateral {
+                margin: 12px 10px;
+                gap: 10px;
+            }
+            
+            .btn-subir-negocio,
+            .btn-incrementar-ventas {
+                padding: 12px;
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            .imagen-miniatura {
+                height: 60px;
+            }
+            
+            .todas-imagenes-container {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(3, 1fr);
+                min-height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- MENÚ LATERAL -->
+    <aside class="sidebar">
+        <div class="logo">
+            <a href="Index.html" style="text-decoration: none; color: inherit;">
+                <h1>LIFE <span>TIMES</span></h1>
+            </a>
+            <p>Directorio de Negocios</p>
+        </div>
+        
+        <div class="menu-categorias">
+            <a href="General.html" class="categoria-item">
+                <i class="fas fa-home"></i>
+                <span>General</span>
+            </a>
+            <a href="Servicio Minoritario.html" class="categoria-item">
+                <i class="fas fa-handshake"></i>
+                <span>Servicio minoritario</span>
+            </a>
+            <a href="Comercio.html" class="categoria-item">
+                <i class="fas fa-store"></i>
+                <span>Comercio</span>
+            </a>
+            <!-- ALIMENTOS Y BEBIDAS CON SUBMENÚ -->
+            <div class="categoria-item active with-submenu" id="alimentos-menu">
+                <i class="fas fa-utensils"></i>
+                <span>Alimentos y bebidas</span>
+                <i class="fas fa-chevron-down submenu-arrow"></i>
+            </div>
+
+            <div class="submenu-zonas" id="submenu-zonas">
+                <a href="alimentos y bebidas-zona centro.html" class="submenu-item">Zona Centro</a>
+                <a href="alimentos y bebidas-zona norte.html" class="submenu-item">Zona Norte</a>
+                <a href="alimentos y bebidas-zona oriente.html" class="submenu-item">Zona Oriente</a>
+                <a href="alimentos y bebidas-zona poniente.html" class="submenu-item">Zona Poniente</a>
+                <a href="alimentos y bebidas-zona sur.html" class="submenu-item">Zona Sur</a>
+            </div>
+            
+            <a href="Servicios-general.html" class="categoria-item">
+                <i class="fas fa-concierge-bell"></i>
+                <span>Servicios</span>
+            </a>
+        </div>
+        
+        <!-- CONTENEDOR PARA LOS DOS BOTONES LATERALES -->
+        <div class="botones-lateral">
+            <!-- Botón "Publicar mi negocio aquí" - FONDO NEGRO CON LETRAS BLANCAS -->
+            <!-- MODIFICADO: Ahora redirige a WhatsApp con mensaje automático -->
+            <!-- MODIFICACIÓN: Mensaje actualizado a "Quiero publicar mi negocio:(Negocio)" -->
+            <a href="Subir-negocio.html" target="_blank" style="text-decoration: none;">
+                <button class="btn-subir-negocio">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Publicar mi negocio aquí</span>
+                </button>
+            </a>
+            
+            <!-- NUEVO: Botón "Incrementar ventas" - FONDO GRIS TRANSPARENTE -->
+            <!-- MODIFICADO: Ahora redirige a Servicios-Negocios.html -->
+            <a href="Servicios-comision-Negocios.html" style="text-decoration: none;">
+                <button class="btn-incrementar-ventas">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Incrementar ventas</span>
+                </button>
+            </a>
+        </div>
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-content">
+        <nav class="top-nav">
+            <ul class="nav-links">
+                <li><a href="Terminos y Condiciones.html" id="terminos-link">Términos y Condiciones</a></li>
+                <li><a href="Index.html" id="historia-link">La Historia</a></li>
+                <li><a href="Servicios.html" id="servicios-link">Servicios</a></li>
+            </ul>
+        </nav>
+
+        <section class="negocios-container">
+            <div class="titulo-banner" id="titulo-banner">
+                <h2>Negocios Destacados de Alimentos y Bebidas</h2>
+                <p>Los mejores restaurantes, cafeterías, panaderías y establecimientos de comida recomendados</p>
+                
+                <!-- MENÚ DE PAGINACIÓN -->
+                <div class="menu-desplazamiento oculto" id="menu-desplazamiento">
+                </div>
+            </div>
+            
+            <!-- GRID DE NEGOCIOS (9 por página) -->
+            <div class="grid-negocios" id="grid-negocios">
+            </div>
+            
+            <!-- CONTADOR DE NEGOCIOS -->
+            <div class="contador-negocios" id="contador-negocios">
+                Mostrando <span id="negocios-actuales">0</span> de <span id="total-negocios">0</span> negocios destacados
+                | Página <span id="pagina-actual">1</span> de <span id="total-paginas">1</span>
+            </div>
+        </section>
+    </main>
+
+    <!-- MODAL CON LAS 6 IMÁGENES Y ESTILOS COMPLETOS -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal-galeria">
+            <div class="modal-header">
+                <div>
+                    <h2 id="modal-nombre">Nombre del Negocio</h2>
+                    <span class="modal-categoria" id="modal-categoria">Categoría</span>
+                </div>
+                <button class="btn-cerrar-modal" id="btn-cerrar-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <!-- CONTENEDOR PRINCIPAL CON SCROLL SEPARADO -->
+            <div class="modal-content-container">
+                <!-- COLUMNA IZQUIERDA - GALERÍA DE 6 IMÁGENES (3x2) -->
+                <div class="modal-galeria-columna">
+                    <!-- BOX GRANDE PARA IMAGEN PRINCIPAL -->
+                    <div class="imagen-box-grande" id="imagen-box-grande">
+                        <img id="imagen-grande" src="" alt="">
+                    </div>
+                    
+                    <!-- CONTENEDOR DE MINIATURAS - 6 IMÁGENES (3x2) -->
+                    <div class="todas-imagenes-container" id="todas-imagenes-container">
+                        <!-- Las 6 imágenes se cargarán dinámicamente aquí -->
+                    </div>
+                </div>
+                
+                <!-- COLUMNA DERECHA - DESCRIPCIÓN Y CONTACTO -->
+                <div class="modal-descripcion-columna">
+                    <h3 class="descripcion-titulo">Descripción del Negocio</h3>
+                    <div class="descripcion-texto" id="descripcion-contenido">
+                        <!-- La descripción se cargará dinámicamente aquí -->
+                    </div>
+                    
+                    <!-- REDES SOCIALES MINIMALISTAS -->
+                    <div class="redes-sociales" id="redes-sociales">
+                        <h4><i class="fas fa-hashtag"></i> Redes Sociales</h4>
+                        <div class="redes-grid" id="redes-grid">
+                            <!-- Las redes sociales se cargarán dinámicamente -->
+                        </div>
+                    </div>
+                    
+                    <!-- SECCIÓN DE CONTACTO -->
+                    <div class="modal-contacto" id="modal-contacto">
+                        <h4><i class="fas fa-address-card"></i> Información de Contacto</h4>
+                        <div class="contacto-modal-grid" id="contacto-modal-grid">
+                            <!-- La información de contacto se cargará dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==============================================
+        // DATOS DE NEGOCIOS
+        // ==============================================
+        const negociosAlimentos = [
+            {
+                nombre: "Sabor Mexicano - Destacado",
+                categoria: "Restaurante Mexicano",
+                descripcion: "Auténtica comida mexicana con ingredientes frescos y recetas tradicionales familiares. ★★★★☆",
+                descripcion_larga: `
+                    <p><strong>Sabor Mexicano</strong> lleva más de 15 años sirviendo la verdadera comida mexicana en la ciudad. Especializados en tacos al pastor, enchiladas suizas, mole poblano y chiles en nogada.</p>
+                    
+                    <p>Nuestra propuesta incluye:</p>
+                    <ul>
+                        <li><strong>Menú auténtico:</strong> Tacos al pastor, enchiladas suizas, mole poblano</li>
+                        <li><strong>Ingredientes frescos:</strong> Proveedores locales certificados</li>
+                        <li><strong>Ambiente familiar:</strong> Diseño tradicional mexicano</li>
+                        <li><strong>15 años de experiencia:</strong> Recetas familiares tradicionales</li>
+                        <li><strong>Eventos especiales:</strong> Celebraciones y fiestas temáticas</li>
+                    </ul>
+                    
+                    <p>Nuestro ambiente familiar y servicio cálido te harán sentir como en casa. Este negocio ha sido seleccionado como destacado por su excelente servicio y calidad.</p>
+                `,
+                contacto: [
+                    { tipo: "ubicacion", valor: "Avenida México 123, Colonia Centro", icono: "fas fa-map-marker-alt" },
+                    { tipo: "horario", valor: "Lunes a Domingo: 12:00 - 22:00", icono: "fas fa-clock" }
+                ],
+                imagen: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                imagenes_adicionales: [
+                    "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                    "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                    "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                    "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                    "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                    "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                ],
+                redes_sociales: [
+                    { plataforma: "facebook", nombre: "Sabor Mexicano", usuario: "@SaborMexicano", url: "https://facebook.com/SaborMexicano" },
+                    { plataforma: "instagram", nombre: "Sabor Mexicano", usuario: "@sabormexicano", url: "https://instagram.com/sabormexicano" },
+                    { plataforma: "tiktok", nombre: "Sabor Mexicano", usuario: "@sabormexicano", url: "https://tiktok.com/@sabormexicano" }
+                ],
+                url_ordenar: "Negocio 121.html" 
+            },
+            {
+                nombre: "Panadería Dulce Hogar - Destacado",
+                categoria: "Panadería",
+                descripcion: "Panadería tradicional con más de 30 años de experiencia en pan dulce y salado. ★★★★★",
+                descripcion_larga: `
+                    <p><strong>Panadería Dulce Hogar</strong> es un negocio familiar que ha estado sirviendo a la comunidad por más de tres décadas. Especializados en pan tradicional mexicano.</p>
+                    
+                    <p>Nuestros productos incluyen:</p>
+                    <ul>
+                        <li><strong>Pan tradicional:</strong> Conchas, cuernos, orejas, bolillos</li>
+                        <li><strong>Horneado diario:</strong> Productos frescos todos los días</li>
+                        <li><strong>Recetas familiares:</strong> Secretos de tres generaciones</li>
+                        <li><strong>Ingredientes naturales:</strong> Sin conservantes artificiales</li>
+                    </ul>
+                    
+                    <p>Reconocida como 'Mejor Panadería Tradicional 2023'. Nuestros productos son horneados diariamente con ingredientes de la más alta calidad.</p>
+                `,
+                contacto: [
+                    { tipo: "ubicacion", valor: "Calle Panaderos 45, Colonia Centro", icono: "fas fa-map-marker-alt" },
+                    { tipo: "horario", valor: "Martes a Domingo: 6:00 - 21:00", icono: "fas fa-clock" }
+                ],
+                imagen: "https://images.unsplash.com/photo-1509440159596-0249088772ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                imagenes_adicionales: [
+                    "https://images.unsplash.com/photo-1588315029754-2dd089d39a1a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                    "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                    "https://images.unsplash.com/photo-1535141192574-5d4897c12636?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                    "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                    "https://images.unsplash.com/photo-1511018556340-d16986a1c194?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                    "https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                ],
+                redes_sociales: [
+                    { plataforma: "facebook", nombre: "Panadería Dulce Hogar", usuario: "@PanaderiaDulceHogar", url: "https://facebook.com/PanaderiaDulceHogar" },
+                    { plataforma: "instagram", nombre: "Panadería Dulce Hogar", usuario: "@panaderiadulcehogar", url: "https://instagram.com/panaderiadulcehogar" }
+                ],
+                url_ordenar: "Negocio 101.html"
+            },
+            {
+                nombre: "Market Fresh - Destacado",
+                categoria: "Supermercado",
+                descripcion: "Supermercado con productos frescos y orgánicos de alta calidad. Certificación ecológica. ★★★★☆",
+                descripcion_larga: `
+                    <p><strong>Market Fresh</strong> es tu destino para alimentos frescos y orgánicos. Trabajamos directamente con productores locales para ofrecerte las mejores frutas, verduras y productos gourmet.</p>
+                    
+                    <p>Nuestros valores incluyen:</p>
+                    <ul>
+                        <li><strong>Productos orgánicos:</strong> Certificación internacional</li>
+                        <li><strong>Proveedores locales:</strong> Apoyo a productores regionales</li>
+                        <li><strong>Sostenibilidad:</strong> Empaques biodegradables</li>
+                        <li><strong>Calidad premium:</strong> Selección rigurosa de productos</li>
+                    </ul>
+                    
+                    <p>Nuestro ambiente moderno y acogedor está diseñado para una experiencia de compra única. Certificación orgánica internacional y premio a la 'Mejor Cadena de Productos Frescos 2023'.</p>
+                `,
+                contacto: [
+                    { tipo: "ubicacion", valor: "Plaza Comercial 89, Zona Norte", icono: "fas fa-map-marker-alt" },
+                    { tipo: "horario", valor: "Lunes a Sábado: 8:00 - 22:00", icono: "fas fa-clock" }
+                ],
+                imagen: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                imagenes_adicionales: [
+                    "https://images.unsplash.com/photo-1567306301408-9b74779a11af?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                    "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                    "https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                    "https://images.unsplash.com/photo-1579113800032-c38bd7635818?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                    "https://images.unsplash.com/photo-1583258292688-d0213dc5a3a8?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                    "https://images.unsplash.com/photo-1550989460-0adf9ea622e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                ],
+                redes_sociales: [
+                    { plataforma: "facebook", nombre: "Market Fresh", usuario: "@MarketFresh", url: "https://facebook.com/MarketFresh" },
+                    { plataforma: "instagram", nombre: "Market Fresh", usuario: "@marketfresh", url: "https://instagram.com/marketfresh" },
+                    { plataforma: "tiktok", nombre: "Market Fresh", usuario: "@marketfresh", url: "https://tiktok.com/@marketfresh" }
+                ],
+                url_ordenar: "Negocio 101.html"
+            }
+            
+        ];
+
+        // ==============================================
+        // CONFIGURACIÓN DE PAGINACIÓN AUTOMÁTICA
+        // ==============================================
+        const NEGOCIOS_POR_PAGINA = 9; // Exactamente 9 negocios por página
+        let paginaActual = 1;
+        let totalNegocios = negociosAlimentos.length;
+        let totalPaginas = Math.ceil(totalNegocios / NEGOCIOS_POR_PAGINA);
+
+        // ==============================================
+        // ELEMENTOS DOM
+        // ==============================================
+        const gridNegocios = document.getElementById('grid-negocios');
+        const menuDesplazamiento = document.getElementById('menu-desplazamiento');
+        const negociosActualesSpan = document.getElementById('negocios-actuales');
+        const totalNegociosSpan = document.getElementById('total-negocios');
+        const paginaActualSpan = document.getElementById('pagina-actual');
+        const totalPaginasSpan = document.getElementById('total-paginas');
+        const contadorNegociosDiv = document.getElementById('contador-negocios');
+
+        // Elementos del modal
+        const modalOverlay = document.getElementById('modal-overlay');
+        const btnCerrarModal = document.getElementById('btn-cerrar-modal');
+        const modalNombre = document.getElementById('modal-nombre');
+        const modalCategoria = document.getElementById('modal-categoria');
+        const imagenGrande = document.getElementById('imagen-grande');
+        const todasImagenesContainer = document.getElementById('todas-imagenes-container');
+        const descripcionContenido = document.getElementById('descripcion-contenido');
+        const contactoModalGrid = document.getElementById('contacto-modal-grid');
+        const redesGrid = document.getElementById('redes-grid');
+        const redesSocialesSection = document.getElementById('redes-sociales');
+
+        // ==============================================
+        // FUNCIONES OPTIMIZADAS
+        // ==============================================
+
+        // Función para obtener información específica de contacto
+        function obtenerContacto(contactoArray, tipo) {
+            const contacto = contactoArray.find(c => c.tipo === tipo);
+            return contacto ? contacto.valor : null;
+        }
+
+        // Función para crear el HTML de contacto de una tarjeta
+        function crearHTMLContactoTarjeta(contactoArray) {
+            let html = '';
+            const contactosDisponibles = [];
+            
+            // SOLO MOSTRAR ubicación y horario - ELIMINADO WhatsApp
+            const ubicacion = obtenerContacto(contactoArray, "ubicacion");
+            if (ubicacion) {
+                contactosDisponibles.push(`
+                    <div class="card-contacto">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>${ubicacion}</span>
+                    </div>
+                `);
+            }
+            
+            const horario = obtenerContacto(contactoArray, "horario");
+            if (horario) {
+                contactosDisponibles.push(`
+                    <div class="card-contacto">
+                        <i class="fas fa-clock"></i>
+                        <span>${horario}</span>
+                    </div>
+                `);
+            }
+            
+            // Si no hay contactos, mostrar mensaje
+            if (contactosDisponibles.length === 0) {
+                html = `
+                    <div class="card-contacto">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Contactar directamente</span>
+                    </div>
+                `;
+            } else {
+                html = contactosDisponibles.join('');
+            }
+            
+            return html;
+        }
+
+        // Función para actualizar la información del contador
+        function actualizarContador(pagina, negociosMostrados) {
+            paginaActualSpan.textContent = pagina;
+            totalPaginasSpan.textContent = totalPaginas;
+            negociosActualesSpan.textContent = negociosMostrados;
+            totalNegociosSpan.textContent = totalNegocios;
+        }
+
+        // Función para mostrar/ocultar el menú de paginación
+        function actualizarVisibilidadPaginacion() {
+            if (totalPaginas > 1) {
+                menuDesplazamiento.classList.remove('oculto');
+            } else {
+                menuDesplazamiento.classList.add('oculto');
+            }
+        }
+
+        // Función para crear el menú de paginación
+        function crearMenuDesplazamiento() {
+            menuDesplazamiento.innerHTML = '';
+            
+            if (totalPaginas <= 1) return;
+            
+            const paginaActualSpan = document.createElement('span');
+            paginaActualSpan.className = 'pagina-actual';
+            paginaActualSpan.textContent = `Página ${paginaActual}`;
+            menuDesplazamiento.appendChild(paginaActualSpan);
+            
+            // Botón anterior
+            const btnAnterior = document.createElement('button');
+            btnAnterior.className = `pagina-btn ${paginaActual === 1 ? 'disabled' : ''}`;
+            btnAnterior.innerHTML = '<i class="fas fa-chevron-left"></i>';
+            btnAnterior.disabled = paginaActual === 1;
+            btnAnterior.title = "Página anterior";
+            btnAnterior.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (paginaActual > 1) cargarNegociosPagina(paginaActual - 1);
+            });
+            menuDesplazamiento.appendChild(btnAnterior);
+            
+            // Botones de páginas
+            const maxBotonesVisibles = 5;
+            let inicioPagina = Math.max(1, paginaActual - Math.floor(maxBotonesVisibles / 2));
+            let finPagina = Math.min(totalPaginas, inicioPagina + maxBotonesVisibles - 1);
+            
+            // Ajustar si estamos cerca del final
+            if (finPagina - inicioPagina + 1 < maxBotonesVisibles) {
+                inicioPagina = Math.max(1, finPagina - maxBotonesVisibles + 1);
+            }
+            
+            for (let i = inicioPagina; i <= finPagina; i++) {
+                const btnPagina = document.createElement('button');
+                btnPagina.className = `pagina-btn ${paginaActual === i ? 'active' : ''}`;
+                btnPagina.textContent = i;
+                btnPagina.title = `Ir a página ${i}`;
+                btnPagina.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (paginaActual !== i) cargarNegociosPagina(i);
+                });
+                menuDesplazamiento.appendChild(btnPagina);
+            }
+            
+            // Información
+            const info = document.createElement('span');
+            info.className = 'pagina-info';
+            info.textContent = `de ${totalPaginas}`;
+            menuDesplazamiento.appendChild(info);
+            
+            // Botón siguiente
+            const btnSiguiente = document.createElement('button');
+            btnSiguiente.className = `pagina-btn ${paginaActual === totalPaginas ? 'disabled' : ''}`;
+            btnSiguiente.innerHTML = '<i class="fas fa-chevron-right"></i>';
+            btnSiguiente.disabled = paginaActual === totalPaginas;
+            btnSiguiente.title = "Página siguiente";
+            btnSiguiente.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (paginaActual < totalPaginas) cargarNegociosPagina(paginaActual + 1);
+            });
+            menuDesplazamiento.appendChild(btnSiguiente);
+        }
+
+        // Función para cargar negocios de una página específica
+        function cargarNegociosPagina(pagina) {
+            paginaActual = pagina;
+            
+            const inicio = (pagina - 1) * NEGOCIOS_POR_PAGINA;
+            const fin = Math.min(inicio + NEGOCIOS_POR_PAGINA, totalNegocios);
+            const negociosMostrar = negociosAlimentos.slice(inicio, fin);
+            
+            // Actualizar DOM
+            gridNegocios.style.opacity = '0.5';
+            
+            setTimeout(() => {
+                gridNegocios.innerHTML = '';
+                
+                negociosMostrar.forEach((negocio, index) => {
+                    const tarjeta = crearTarjetaNegocio(negocio, index);
+                    gridNegocios.appendChild(tarjeta);
+                });
+                
+                gridNegocios.style.opacity = '1';
+                
+                // Actualizar contadores
+                actualizarContador(pagina, negociosMostrar.length);
+                
+                // Actualizar menú de paginación
+                crearMenuDesplazamiento();
+                actualizarVisibilidadPaginacion();
+                
+                // Scroll suave al inicio de la sección
+                window.scrollTo({
+                    top: document.querySelector('.negocios-container').offsetTop - 20,
+                    behavior: 'smooth'
+                });
+                
+            }, 100);
+        }
+
+        // Función para crear una tarjeta de negocio con estructura consistente
+        function crearTarjetaNegocio(negocio, index) {
+            const tarjeta = document.createElement('div');
+            tarjeta.className = 'negocio-card';
+            tarjeta.style.animationDelay = `${index * 0.1}s`;
+            
+            const botonOrdenarHTML = `
+                <a href="Negocio 101.html" class="btn-ordenar">
+                    <i class="fas fa-shopping-cart"></i>
+                    Ordenar
+                </a>`;
+            
+            // Generar HTML de contacto dinámicamente (sin WhatsApp)
+            const contactoHTML = crearHTMLContactoTarjeta(negocio.contacto);
+            
+            tarjeta.innerHTML = `
+                <div class="destacado-badge">DESTACADO</div>
+                <div class="card-imagen">
+                    <img src="${negocio.imagen}" alt="${negocio.nombre}" loading="lazy">
+                </div>
+                <div class="card-contenido">
+                    <div class="card-header">
+                        <h3>${negocio.nombre}</h3>
+                        <span class="card-categoria">${negocio.categoria}</span>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-descripcion">${negocio.descripcion}</p>
+                        <div class="card-botones">
+                            <button class="btn-ver-mas" data-negocio-id="${negocio.nombre}">
+                                <i class="fas fa-eye"></i>
+                                Ver más
+                            </button>
+                            ${botonOrdenarHTML}
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        ${contactoHTML}
+                    </div>
+                </div>
+            `;
+            
+            const btnVerMas = tarjeta.querySelector('.btn-ver-mas');
+            if (btnVerMas) {
+                btnVerMas.addEventListener('click', () => abrirGaleriaNegocio(negocio));
+            }
+            
+            return tarjeta;
+        }
+
+        // Función para cargar información de contacto en el modal (sin WhatsApp)
+        function cargarContactoModal(contactoArray) {
+            contactoModalGrid.innerHTML = '';
+            
+            // FILTRAR: Solo mostrar ubicación y horario, NO WhatsApp
+            const contactosFiltrados = contactoArray.filter(contacto => 
+                contacto.tipo === "ubicacion" || 
+                contacto.tipo === "horario"
+            );
+            
+            if (contactosFiltrados.length === 0) {
+                contactoModalGrid.innerHTML = `
+                    <div class="contacto-modal-item">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Contactar directamente con el negocio</span>
+                    </div>
+                `;
+                return;
+            }
+            
+            contactosFiltrados.forEach(contacto => {
+                const contactoItem = document.createElement('div');
+                contactoItem.className = 'contacto-modal-item';
+                
+                contactoItem.innerHTML = `
+                    <i class="${contacto.icono}"></i>
+                    <span>${contacto.valor}</span>
+                `;
+                
+                contactoModalGrid.appendChild(contactoItem);
+            });
+        }
+
+        // Función para abrir el modal con la galería del negocio
+        function abrirGaleriaNegocio(negocio) {
+            todasImagenesContainer.innerHTML = '';
+            redesGrid.innerHTML = '';
+            
+            modalNombre.textContent = negocio.nombre;
+            modalCategoria.textContent = negocio.categoria;
+            
+            // Mostrar imagen principal
+            imagenGrande.src = negocio.imagen;
+            imagenGrande.alt = negocio.nombre;
+            
+            // Cargar descripción
+            descripcionContenido.innerHTML = negocio.descripcion_larga;
+            
+            // Cargar información de contacto (sin WhatsApp)
+            if (negocio.contacto) {
+                cargarContactoModal(negocio.contacto);
+            }
+            
+            // Crear todas las imágenes (6 imágenes - 3x2)
+            const todasImagenes = [
+                negocio.imagen,
+                ...negocio.imagenes_adicionales
+            ];
+            
+            // Tomar exactamente 6 imágenes para la cuadrícula 3x2
+            const imagenesLimitadas = todasImagenes.slice(0, 6);
+            
+            imagenesLimitadas.forEach((imagenUrl, index) => {
+                const miniatura = document.createElement('div');
+                miniatura.className = `imagen-miniatura ${index === 0 ? 'active' : ''}`;
+                miniatura.dataset.index = index;
+                miniatura.dataset.imagen = imagenUrl;
+                
+                miniatura.innerHTML = `
+                    <img src="${imagenUrl}" alt="${negocio.nombre} - Imagen ${index + 1}" loading="lazy">
+                `;
+                
+                miniatura.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    imagenGrande.src = this.dataset.imagen;
+                    document.querySelectorAll('.imagen-miniatura').forEach(m => {
+                        m.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                });
+                
+                todasImagenesContainer.appendChild(miniatura);
+            });
+            
+            // Cargar redes sociales (CON ESTILOS RESTAURADOS)
+            if (negocio.redes_sociales && negocio.redes_sociales.length > 0) {
+                redesSocialesSection.style.display = 'block';
+                negocio.redes_sociales.forEach(red => {
+                    const redItem = document.createElement('a');
+                    redItem.href = red.url || '#';
+                    redItem.target = "_blank";
+                    redItem.className = `red-social-item ${red.plataforma}`;
+                    
+                    let iconClass = '';
+                    switch(red.plataforma) {
+                        case 'facebook':
+                            iconClass = 'fab fa-facebook-f';
+                            break;
+                        case 'instagram':
+                            iconClass = 'fab fa-instagram';
+                            break;
+                        case 'tiktok':
+                            iconClass = 'fab fa-tiktok';
+                            break;
+                        default:
+                            iconClass = 'fas fa-share-alt';
+                    }
+                    
+                    redItem.innerHTML = `
+                        <i class="${iconClass}"></i>
+                        <div class="red-social-info">
+                            <div class="red-social-nombre">${red.nombre}</div>
+                            <div class="red-social-usuario">${red.usuario}</div>
+                        </div>
+                    `;
+                    
+                    redesGrid.appendChild(redItem);
+                });
+            } else {
+                redesSocialesSection.style.display = 'none';
+            }
+            
+            modalOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Función para cerrar el modal
+        function cerrarModal() {
+            modalOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // ==============================================
+        // EVENT LISTENERS
+        // ==============================================
+        btnCerrarModal.addEventListener('click', cerrarModal);
+        modalOverlay.addEventListener('click', function(event) {
+            if (event.target === modalOverlay) {
+                cerrarModal();
+            }
+        });
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && modalOverlay.classList.contains('active')) {
+                cerrarModal();
+            }
+        });
+
+        // ==============================================
+        // INICIALIZACIÓN
+        // ==============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            // Calcular totales
+            totalNegocios = negociosAlimentos.length;
+            totalPaginas = Math.ceil(totalNegocios / NEGOCIOS_POR_PAGINA);
+            
+            // Cargar primera página
+            cargarNegociosPagina(1);
+            
+            // Configurar submenú de zonas
+            const alimentosMenu = document.getElementById('alimentos-menu');
+            const submenuZonas = document.getElementById('submenu-zonas');
+            
+            if (alimentosMenu && submenuZonas) {
+                alimentosMenu.addEventListener('click', function(e) {
+                    if (!e.target.closest('a') && e.target !== this.querySelector('.submenu-arrow')) {
+                        submenuZonas.classList.toggle('active');
+                        alimentosMenu.classList.toggle('submenu-active');
+                    }
+                });
+                
+                document.addEventListener('click', function(e) {
+                    if (!alimentosMenu.contains(e.target) && !submenuZonas.contains(e.target)) {
+                        submenuZonas.classList.remove('active');
+                        alimentosMenu.classList.remove('submenu-active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

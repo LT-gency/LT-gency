@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Directorio de Negocios LIFE TIMES - Comercio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            background-color: #f5f7fa;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(to bottom, #C90F0F, #A00C0C);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 20px 0;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            text-align: center;
+            padding: 20px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #fff;
+            transition: transform 0.3s;
+        }
+
+        .logo h1:hover {
+            transform: scale(1.05);
+        }
+
+        .logo span {
+            color: #ffffff;
+        }
+
+        .logo p {
+            margin-top: 5px;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .menu-categorias {
+            padding: 0 15px;
+            flex: 1;
+        }
+
+        .categoria-item {
+            padding: 15px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            text-decoration: none;
+            color: white;
+        }
+
+        .categoria-item:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateX(5px);
+        }
+
+        .categoria-item.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-left: 4px solid #ffffff;
+        }
+
+        .categoria-item i {
+            margin-right: 12px;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* ================================ */
+        /* CONTENEDOR PARA BOTONES LATERALES */
+        /* ================================ */
+        .botones-lateral {
+            display: flex;
+            flex-direction: column;
+            margin: 20px 15px;
+            gap: 15px;
+        }
+
+        /* Botón "Cómo subir mis productos" - FONDO NEGRO CON LETRAS BLANCAS */
+        .btn-subir-negocio {
+            margin: 0;
+            padding: 15px;
+            background-color: #000000; /* FONDO NEGRO */
+            color: #ffffff; /* TEXTO BLANCO */
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .btn-subir-negocio:hover {
+            background-color: #333333; /* NEGRO MÁS CLARO AL HACER HOVER */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Botón "Incrementar ventas" - FONDO GRIS TRANSPARENTE */
+        .btn-incrementar-ventas {
+            margin: 0;
+            padding: 15px;
+            background-color: rgba(128, 128, 128, 0.3); /* FONDO GRIS TRANSPARENTE */
+            color: white; /* TEXTO BLANCO */
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .btn-incrementar-ventas:hover {
+            background-color: rgba(128, 128, 128, 0.5); /* GRIS MÁS OSCURO AL HACER HOVER */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-subir-negocio i,
+        .btn-incrementar-ventas i {
+            font-size: 18px;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .top-nav {
+            background-color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #000000;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 5px 0;
+        }
+
+        .nav-links a:hover {
+            color: #C90F0F;
+        }
+
+        .negocios-container {
+            padding: 30px;
+            flex: 1;
+            background: white;
+        }
+
+        .titulo-banner {
+            background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), 
+                        url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            padding: 25px 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid #eaeaea;
+            position: relative;
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .titulo-banner h2 {
+            color: #000000;
+            font-size: 32px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .titulo-banner p {
+            color: #444;
+            font-size: 16px;
+            font-weight: 500;
+            padding-left: 5px;
+        }
+
+        .comercio-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .comercio-card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            min-height: 300px;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeInCard 0.4s ease forwards;
+            position: relative; /* Necesario para posicionamiento absoluto de los hijos */
+        }
+
+        @keyframes fadeInCard {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .comercio-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        /* MODIFICADO: La imagen abarca toda la box de la tarjeta */
+        .card-imagen {
+            position: absolute; /* Posicionamiento absoluto para cubrir toda la tarjeta */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1; /* La imagen está en el fondo */
+        }
+
+        .card-imagen.loading {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* MODIFICADO: La imagen cubre completamente la tarjeta */
+        .card-imagen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Esto hace que la imagen cubra toda el área */
+            transition: transform 0.5s ease;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card-imagen img.loaded {
+            opacity: 1;
+        }
+
+        .comercio-card:hover .card-imagen img {
+            transform: scale(1.05);
+        }
+
+        /* MODIFICADO: Título centrado y un poco más abajo */
+        .card-header {
+            position: absolute; /* Posicionamiento absoluto para superponer sobre la imagen */
+            top: 30px; /* Bajé el título un poco más */
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            text-align: center; /* Centré el texto */
+            z-index: 2; /* Por encima de la imagen */
+        }
+
+        .card-header h3 {
+            color: #ffffff; /* Texto blanco para contraste sobre la imagen */
+            font-size: 22px; /* Aumenté un poco el tamaño */
+            margin-bottom: 0;
+            line-height: 1.3;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+            font-weight: 700;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.4) 100%);
+            padding: 10px 15px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        /* MODIFICADO: Botón más alargado a los costados - AHORA ES UN ENLACE */
+        .btn-ver-mas {
+            position: absolute; /* Posicionamiento absoluto para superponer sobre la imagen */
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #C90F0F;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 12px 30px; /* Aumenté el padding horizontal para hacerlo más ancho */
+            font-size: 15px; /* Aumenté un poco el tamaño de la fuente */
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            z-index: 2; /* Por encima de la imagen */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            min-width: 160px; /* Ancho mínimo para que sea más alargado */
+            text-decoration: none; /* Para cuando es un enlace */
+        }
+
+        .btn-ver-mas:hover {
+            background-color: #ffffff;
+            color: #C90F0F;
+            transform: translateX(-50%) translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        /* ================================ */
+        /* RESPONSIVE */
+        /* ================================ */
+        @media (max-width: 1200px) {
+            .comercio-card {
+                min-height: 280px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .comercio-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .card-header h3 {
+                font-size: 20px;
+                padding: 8px 12px;
+            }
+            
+            .btn-ver-mas {
+                min-width: 140px;
+                padding: 10px 25px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            body {
+                flex-direction: column;
+            }
+            
+            .top-nav {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+                justify-content: center;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+            
+            /* Ajustes para los botones laterales en móvil */
+            .botones-lateral {
+                margin: 15px 15px;
+                gap: 12px;
+            }
+            
+            .btn-subir-negocio,
+            .btn-incrementar-ventas {
+                padding: 14px;
+                font-size: 15px;
+            }
+            
+            .comercio-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .titulo-banner {
+                padding: 20px;
+                min-height: 120px;
+            }
+
+            .titulo-banner h2 {
+                font-size: 26px;
+            }
+            
+            .card-header {
+                top: 25px;
+            }
+            
+            .card-header h3 {
+                font-size: 18px;
+                padding: 8px 12px;
+            }
+            
+            .btn-ver-mas {
+                min-width: 130px;
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .btn-ver-mas {
+                padding: 10px 20px;
+                font-size: 13px;
+                min-width: 120px;
+            }
+
+            .titulo-banner {
+                padding: 15px;
+                min-height: 110px;
+            }
+
+            .titulo-banner h2 {
+                font-size: 22px;
+            }
+            
+            /* Ajustes para botones laterales en móvil pequeño */
+            .botones-lateral {
+                margin: 12px 10px;
+                gap: 10px;
+            }
+            
+            .btn-subir-negocio,
+            .btn-incrementar-ventas {
+                padding: 12px;
+                font-size: 14px;
+            }
+            
+            .card-header h3 {
+                font-size: 16px;
+                padding: 6px 10px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .card-header h3 {
+                font-size: 15px;
+            }
+            
+            .btn-ver-mas {
+                padding: 8px 16px;
+                font-size: 12px;
+                min-width: 110px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- MENÚ LATERAL -->
+    <aside class="sidebar">
+        <div class="logo">
+            <a href="Index.html" style="text-decoration: none; color: inherit;">
+                <h1>LIFE <span>TIMES</span></h1>
+            </a>
+            <p>Directorio de Negocios</p>
+        </div>
+        
+        <div class="menu-categorias">
+            <a href="General.html" class="categoria-item">
+                <i class="fas fa-home"></i>
+                <span>General</span>
+            </a>
+            <a href="Servicio Minoritario.html" class="categoria-item">
+                <i class="fas fa-handshake"></i>
+                <span>Servicio minoritario</span>
+            </a>
+            <a href="Comercio.html" class="categoria-item active">
+                <i class="fas fa-store"></i>
+                <span>Comercio</span>
+            </a>
+            <a href="Alimentos y bebidas.html" class="categoria-item">
+                <i class="fas fa-utensils"></i>
+                <span>Alimentos y bebidas</span>
+            </a>
+            <a href="Servicios-general.html" class="categoria-item">
+                <i class="fas fa-concierge-bell"></i>
+                <span>Servicios</span>
+            </a>
+        </div>
+        
+        <!-- CONTENEDOR PARA LOS DOS BOTONES LATERALES -->
+        <div class="botones-lateral">
+            <!-- Botón "Cómo subir mis productos" - FONDO NEGRO CON LETRAS BLANCAS -->
+            <a href="Subir-comercio.html" style="text-decoration: none;">
+                <button class="btn-subir-negocio">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Cómo subir mis productos</span>
+                </button>
+            </a>
+            
+            <!-- Botón "Incrementar ventas" - FONDO GRIS TRANSPARENTE -->
+            <a href="Servicios-pago-comercio.html" style="text-decoration: none;">
+                <button class="btn-incrementar-ventas">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Incrementar ventas</span>
+                </button>
+            </a>
+        </div>
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-content">
+        <nav class="top-nav">
+            <ul class="nav-links">
+                <li><a href="Terminos y Condiciones.html" id="terminos-link">Términos y Condiciones</a></li>
+                <li><a href="Index.html" id="historia-link">La Historia</a></li>
+                <li><a href="Servicios.html" id="servicios-link">Servicios</a></li>
+            </ul>
+        </nav>
+
+        <section class="negocios-container">
+            <div class="titulo-banner" id="titulo-banner">
+                <h2>Comercio y Tiendas Especializadas</h2>
+                <p>Descubre las mejores tiendas, boutiques, comercios especializados y establecimientos comerciales de la ciudad</p>
+            </div>
+            
+            <div class="comercio-grid" id="comercio-grid">
+            </div>
+            
+            <div style="text-align: center; color: #666; font-size: 14px; margin-top: 20px;">
+                Mostrando <span id="contador-negocios">4</span> negocios de comercio
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const negociosComercio = [
+          { 
+            nombre: "Muebles Estilo Moderno", 
+            categoria: "Mobiliario", 
+            descripcion: "Amplia variedad de muebles para el hogar y oficina. Diseño, calidad y comodidad en un solo lugar.", 
+            descripcion_larga: "Amplia variedad de muebles para el hogar y oficina. Diseño, calidad y comodidad en un solo lugar. Diseño de interiores incluido en compras mayores. Contamos con más de 500 modelos diferentes y servicio de ensamblaje a domicilio.",
+
+            imagen: "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
+            url_destino: "suplementos.html"  // MODIFICADO: Ahora apunta a suplementos.html
+          },
+          { 
+            nombre: "Boutique de Moda Elegante", 
+            categoria: "Ropa y Accesorios", 
+            descripcion: "Las últimas tendencias en moda para hombre y mujer. Calidad premium y estilo único.", 
+            descripcion_larga: "Las últimas tendencias en moda para hombre y mujer. Calidad premium y estilo único. Contamos con las mejores marcas nacionales e internacionales. Asesoría de imagen personalizada y servicio de tallas especiales.",
+            imagen: "https://images.unsplash.com/photo-1445205170230-053b83016050?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
+            url_destino: "detalle-boutique-moda-elegante.html"
+          },
+          { 
+            nombre: "Electrónica Avanzada", 
+            categoria: "Tecnología", 
+            descripcion: "Lo último en tecnología, electrónica y gadgets. Especialistas en innovación digital.", 
+            descripcion_larga: "Lo último en tecnología, electrónica y gadgets. Especialistas en innovación digital. Ofrecemos asesoría técnica, instalación y soporte post-venta. Amplia gama de productos de las principales marcas mundiales.",
+            imagen: "https://images.unsplash.com/photo-1498049794561-7780e7231661?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w-1200&q=80",
+            url_destino: "detalle-electronica-avanzada.html"
+          },
+          { 
+            nombre: "Libros y Cultura", 
+            categoria: "Librería", 
+            descripcion: "Para los amantes de la lectura. Miles de títulos, eventos culturales y club de lectura.", 
+            descripcion_larga: "Para los amantes de la lectura. Miles de títulos, eventos culturales y club de lectura. Contamos con secciones especializadas en literatura, ciencia, arte y desarrollo personal. Espacio cómodo para lectura en sala.",
+
+            imagen: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
+            url_destino: "detalle-libros-cultura.html"
+          }
+        ];
+
+        // ==============================================
+        // ELEMENTOS DOM
+        // ==============================================
+        const comercioGrid = document.getElementById('comercio-grid');
+        const contadorNegocios = document.getElementById('contador-negocios');
+
+        // ==============================================
+        // FUNCIONES
+        // ==============================================
+
+        function cargarNegocios() {
+            comercioGrid.innerHTML = '';
+            
+            negociosComercio.forEach((negocio, index) => {
+                const tarjeta = document.createElement('div');
+                tarjeta.className = `comercio-card`;
+                tarjeta.style.animationDelay = `${index * 0.1}s`;
+                
+                // Crear tarjeta con imagen, título y botón de enlace
+                tarjeta.innerHTML = `
+                    <div class="card-imagen loading">
+                        <img data-src="${negocio.imagen}" alt="${negocio.nombre}">
+                    </div>
+                    <div class="card-header">
+                        <h3>${negocio.nombre}</h3>
+                    </div>
+                    <a href="${negocio.url_destino}" class="btn-ver-mas">
+                        <i class="fas fa-eye"></i>
+                        Ver más
+                    </a>
+                `;
+                
+                comercioGrid.appendChild(tarjeta);
+                
+                // Cargar imagen con efecto
+                const imgElement = tarjeta.querySelector('img');
+                if (imgElement) {
+                    setTimeout(() => {
+                        imgElement.src = imgElement.getAttribute('data-src');
+                        imgElement.classList.add('loaded');
+                        imgElement.parentElement.classList.remove('loading');
+                    }, 100 + (index * 50));
+                }
+            });
+            
+            // Actualizar contador
+            contadorNegocios.textContent = negociosComercio.length;
+        }
+
+        // ==============================================
+        // INICIALIZACIÓN
+        // ==============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarNegocios();
+        });
+    </script>
+</body>
+</html>

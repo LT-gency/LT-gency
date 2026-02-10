@@ -1,0 +1,4488 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Personaliza Tu Comida - Mercado Pago Marketplace</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- SDK de Mercado Pago -->
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #000;
+            color: #333333;
+            line-height: 1.6;
+            padding: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-text-size-adjust: 100%;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Contenedor principal optimizado para móvil */
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 10px;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        .box {
+            background: white;
+            padding: 15px;
+            max-width: 100%;
+            margin: 15px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .box.active {
+            display: block;
+        }
+
+        input, textarea, button {
+            width: 100%;
+            margin-top: 10px;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            -webkit-appearance: none;
+            touch-action: manipulation;
+        }
+
+        button {
+            background: #27ae60;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            touch-action: manipulation;
+            min-height: 44px; /* Tamaño táctil mínimo */
+        }
+
+        button:hover {
+            background: #219150;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3);
+        }
+
+        /* ============================================
+           PRESENTACIÓN DE INICIO - COMPLETA PANTALLA
+           ============================================ */
+        .welcome-section {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)), 
+                        url('https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            margin: 0;
+            color: white;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        /* Contenedor centrado sin caja negra */
+        .welcome-content {
+            max-width: 100%;
+            width: 100%;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+            animation: fadeInUp 1s ease-out 0.6s both;
+            text-align: center;
+        }
+        
+        .welcome-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255, 69, 0, 0.3), rgba(255, 107, 107, 0.2));
+            z-index: 1;
+        }
+        
+        .welcome-title {
+            font-size: 2.2rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            color: white;
+            text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.8);
+            letter-spacing: 1px;
+            line-height: 1.1;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            word-wrap: break-word;
+        }
+        
+        .welcome-title span {
+            color: #FF4500;
+            display: block;
+            font-size: 2.5rem;
+            margin-top: 15px;
+            text-transform: uppercase;
+            background: linear-gradient(45deg, #FF4500, #FF6347, #FF4500);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: lava-glow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes lava-glow {
+            0% {
+                text-shadow: 0 0 10px rgba(255, 69, 0, 0.7),
+                             0 0 20px rgba(255, 69, 0, 0.5),
+                             0 0 30px rgba(255, 69, 0, 0.3);
+            }
+            100% {
+                text-shadow: 0 0 15px rgba(255, 69, 0, 0.9),
+                             0 0 25px rgba(255, 69, 0, 0.7),
+                             0 0 35px rgba(255, 69, 0, 0.5);
+            }
+        }
+        
+        .welcome-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: #f8f9fa;
+            font-weight: 300;
+            line-height: 1.6;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 0 10px;
+            max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            word-wrap: break-word;
+        }
+        
+        .start-button {
+            background: linear-gradient(135deg, #FF4500 0%, #FF6347 100%);
+            color: white;
+            padding: 18px 40px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 30px rgba(255, 69, 0, 0.4),
+                        0 0 30px rgba(255, 69, 0, 0.3);
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+            max-width: 100%;
+            min-height: 60px;
+            width: 100%;
+            touch-action: manipulation;
+        }
+        
+        .start-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.7s ease;
+        }
+        
+        .start-button:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(255, 69, 0, 0.6),
+                        0 0 40px rgba(255, 69, 0, 0.5);
+            background: linear-gradient(135deg, #FF6347 0%, #FF4500 100%);
+        }
+        
+        .start-button:hover::before {
+            left: 100%;
+        }
+        
+        .start-button:active {
+            transform: translateY(-2px) scale(0.98);
+            box-shadow: 0 5px 20px rgba(255, 69, 0, 0.5);
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px 0;
+            background: linear-gradient(135deg, #2c3e50 0%, #4a6491 100%);
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: none;
+            max-width: 100%;
+        }
+        
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 8px;
+            color: #ffffff;
+            font-weight: 300;
+            letter-spacing: 1px;
+            word-wrap: break-word;
+        }
+        
+        .tagline {
+            font-size: 1rem;
+            opacity: 0.9;
+            color: #e0e0e0;
+            font-weight: 300;
+        }
+        
+        /* Paso a paso de la selección - Responsivo */
+        .steps {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            gap: 10px;
+            max-width: 100%;
+            overflow-x: auto;
+        }
+        
+        .step {
+            display: flex;
+            align-items: center;
+            margin: 0 5px;
+            font-weight: 500;
+            color: #95a5a6;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        
+        .step.active {
+            color: #FF4500;
+        }
+        
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background-color: #ecf0f1;
+            border-radius: 50%;
+            margin-right: 8px;
+            font-weight: 500;
+            color: #7f8c8d;
+            flex-shrink: 0;
+        }
+        
+        .step.active .step-number {
+            background-color: #FF4500;
+            color: white;
+        }
+        
+        /* Mini descripción con imagen antes de productos */
+        .products-intro {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 100%;
+            overflow: hidden;
+        }
+        
+        .products-intro-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-bottom: 15px;
+            border: 4px solid #FF4500;
+            box-shadow: 0 5px 15px rgba(255, 69, 0, 0.3);
+            flex-shrink: 0;
+        }
+        
+        .products-intro-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .products-intro-title {
+            font-size: 1.5rem;
+            color: #000000;
+            margin-bottom: 8px;
+            font-weight: 600;
+            word-wrap: break-word;
+        }
+        
+        .products-intro-subtitle {
+            font-size: 1rem;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            max-width: 100%;
+            word-wrap: break-word;
+        }
+        
+        .products-intro-description {
+            background-color: #fff5f2;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #FF4500;
+            margin-top: 12px;
+            width: 100%;
+            max-width: 100%;
+            word-wrap: break-word;
+        }
+        
+        .products-intro-description p {
+            color: #555;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 0;
+            word-wrap: break-word;
+        }
+        
+        /* SECCIÓN DE PRODUCTOS - RESPONSIVO */
+        .products-section {
+            display: none; /* Oculto inicialmente */
+            max-width: 100%;
+            overflow: hidden;
+        }
+        
+        .section-title {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: #000000;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #FF4500;
+            font-weight: 600;
+            word-wrap: break-word;
+        }
+        
+        /* Subtítulo con estilo descriptivo */
+        .products-subtitle {
+            font-size: 1rem;
+            color: #FF4500;
+            margin-bottom: 20px;
+            font-style: italic;
+            text-align: center;
+            padding: 12px;
+            background-color: #fff5f2;
+            border-radius: 8px;
+            border-left: 3px solid #FF4500;
+            font-weight: 500;
+            line-height: 1.5;
+            max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            word-wrap: break-word;
+        }
+        
+        /* Grid de productos responsivo */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+            max-width: 100%;
+        }
+        
+        .product-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e0e0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            max-width: 100%;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(255, 69, 0, 0.2);
+            border-color: #FF4500;
+        }
+        
+        .product-card.selected {
+            border: 2px solid #FF4500;
+            background-color: #fff5f2;
+            box-shadow: 0 0 20px rgba(255, 69, 0, 0.25);
+        }
+        
+        .product-image-container {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            overflow: hidden;
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+        
+        .product-category {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background-color: rgba(255, 69, 0, 0.9);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            max-width: 80%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .popular-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background-color: #e67e22;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            max-width: 80%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .product-info {
+            padding: 15px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .product-name {
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #2c3e50;
+            font-size: 1.2rem;
+            line-height: 1.3;
+            word-wrap: break-word;
+        }
+        
+        .product-description {
+            color: #7f8c8d;
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+            flex-grow: 1;
+            word-wrap: break-word;
+        }
+        
+        .product-price-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+        
+        .product-price {
+            color: #FF4500;
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+        
+        .add-icon {
+            width: 36px;
+            height: 36px;
+            background-color: #FF4500;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .product-card:hover .add-icon {
+            background-color: #FF4500;
+            transform: scale(1.1);
+        }
+        
+        /* Sección de cantidad optimizada para móvil */
+        .quantity-section {
+            display: none;
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+            border: 1px solid #e0e0e0;
+            max-width: 100%;
+            overflow: hidden;
+        }
+        
+        .quantity-header {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .quantity-header .back-to-products {
+            align-self: flex-start;
+            margin-bottom: 8px;
+            background-color: #f8f9fa;
+            color: #333;
+            border: 1px solid #ddd;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+            width: auto;
+            min-height: 44px;
+        }
+        
+        .quantity-header .back-to-products:hover {
+            background-color: #e9ecef;
+            border-color: #ccc;
+        }
+        
+        .quantity-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        /* IMAGEN RESPONSIVA */
+        .quantity-image-container {
+            width: 100%;
+        }
+        
+        .quantity-image-container .selected-product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 3px solid #FF4500;
+            box-shadow: 0 5px 15px rgba(255, 69, 0, 0.3);
+        }
+        
+        .quantity-controls-container {
+            width: 100%;
+        }
+        
+        .quantity-controls-container .selected-product-info {
+            margin-bottom: 20px;
+        }
+        
+        .selected-product-details h3 {
+            color: #FF4500;
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 1.4rem;
+            word-wrap: break-word;
+        }
+        
+        .selected-product-details .product-price {
+            color: #FF4500;
+            font-weight: 700;
+            font-size: 1.6rem;
+            margin-bottom: 5px;
+        }
+        
+        .selected-product-details .info-text {
+            color: #7f8c8d;
+            font-size: 0.85rem;
+            word-wrap: break-word;
+        }
+        
+        .quantity-minimalist-control {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .minimalist-quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .quantity-control-minimal {
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 10px;
+            padding: 5px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .quantity-btn-minimal {
+            width: 44px;
+            height: 44px;
+            background-color: #ffffff;
+            color: #333;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1.3rem;
+            font-weight: 300;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: manipulation;
+        }
+        
+        .quantity-btn-minimal:hover {
+            background-color: #FF4500;
+            color: white;
+            border-color: #FF4500;
+        }
+        
+        .quantity-display-minimal {
+            min-width: 70px;
+            text-align: center;
+            margin: 0 10px;
+        }
+        
+        .quantity-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        
+        .quantity-label-minimal {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            margin-top: 3px;
+        }
+        
+        /* QUITAR LOS CUADRADOS NUMÉRICOS 1,2,3,4,5,... */
+        .quick-quantities-minimal {
+            display: none;
+        }
+        
+        /* BOTÓN MÁS... */
+        .quick-quantity-more {
+            width: 44px;
+            height: 44px;
+            background: white;
+            color: #333;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: manipulation;
+        }
+        
+        .quick-quantity-more:hover {
+            background: #fff5f2;
+            border-color: #27ae60;
+            color: #27ae60;
+        }
+        
+        /* Sección de personalización optimizada para móvil */
+        .customization-section {
+            display: none;
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+            border: 1px solid #e0e0e0;
+            max-width: 100%;
+            overflow: hidden;
+        }
+        
+        .customization-header {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .product-unit-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .unit-counter {
+            background: linear-gradient(135deg, #FF4500 0%, #FF6347 100%);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            box-shadow: 0 3px 8px rgba(255, 69, 0, 0.3);
+        }
+        
+        /* Ingredientes con botones - RESPONSIVO */
+        .ingredients-section {
+            margin-bottom: 25px;
+        }
+        
+        .ingredients-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 12px;
+        }
+        
+        .ingredient-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-color: #ffffff;
+            min-height: 60px;
+            touch-action: manipulation;
+        }
+        
+        .ingredient-item:hover {
+            border-color: #FF4500;
+            background-color: #f8f9fa;
+            transform: translateY(-2px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+        }
+        
+        .ingredient-item.selected {
+            border-color: #FF4500;
+            background-color: #fff5f2;
+            box-shadow: 0 0 10px rgba(255, 69, 0, 0.15);
+        }
+        
+        .ingredient-icon {
+            font-size: 1.3rem;
+            width: 36px;
+            text-align: center;
+            margin-right: 10px;
+            color: #FF4500;
+            flex-shrink: 0;
+        }
+        
+        .ingredient-name {
+            font-weight: 500;
+            color: #333333;
+            flex-grow: 1;
+            word-wrap: break-word;
+        }
+        
+        /* Notas especiales */
+        .notes-section {
+            margin-bottom: 20px;
+        }
+        
+        .notes-textarea {
+            width: 100%;
+            min-height: 80px;
+            background-color: #ffffff;
+            color: #333;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 8px;
+            font-family: inherit;
+            resize: vertical;
+            font-size: 0.95rem;
+        }
+        
+        .notes-textarea:focus {
+            outline: none;
+            border-color: #FF4500;
+            box-shadow: 0 0 0 2px rgba(255, 69, 0, 0.2);
+        }
+        
+        .notes-example {
+            font-size: 0.8rem;
+            color: #95a5a6;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        
+        /* Tabla de confirmación del pedido - RESPONSIVA */
+        .confirmation-section {
+            display: none;
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+            border: 1px solid #e0e0e0;
+            max-width: 100%;
+            overflow: hidden;
+        }
+        
+        .order-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            display: block;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .order-table th {
+            background-color: #f8f9fa;
+            color: #2c3e50;
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid #FF4500;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .order-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+            min-width: 100px;
+        }
+        
+        .order-table tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .order-table .product-cell {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .order-table .product-cell img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #FF4500;
+        }
+        
+        .product-details {
+            flex-grow: 1;
+            min-width: 200px;
+        }
+        
+        .ingredients-detail {
+            background-color: #f8f9fa;
+            padding: 6px 10px;
+            border-radius: 6px;
+            margin-top: 6px;
+            border-left: 3px solid #FF4500;
+        }
+        
+        .ingredients-list {
+            color: #555;
+            font-size: 0.85rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        
+        .ingredient-tag {
+            background-color: #ecf0f1;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            color: #555;
+            white-space: nowrap;
+        }
+        
+        .special-instructions {
+            color: #7f8c8d;
+            font-style: italic;
+            margin-top: 5px;
+            font-size: 0.8rem;
+            word-wrap: break-word;
+        }
+        
+        .quantity-cell {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .quantity-cell button {
+            width: 28px;
+            height: 28px;
+            background-color: #f8f9fa;
+            color: #333;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.9rem;
+            touch-action: manipulation;
+        }
+        
+        .quantity-cell button:hover {
+            background-color: #e9ecef;
+        }
+        
+        .quantity-cell span {
+            min-width: 25px;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .price-cell {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .remove-cell button {
+            background-color: #FF4500;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            min-height: 36px;
+            touch-action: manipulation;
+        }
+        
+        .remove-cell button:hover {
+            background-color: #e63900;
+        }
+        
+        .order-summary {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e0e0e0;
+            margin-top: 15px;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed #e0e0e0;
+            color: #555;
+            flex-wrap: wrap;
+        }
+        
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.3rem;
+            font-weight: 300;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #FF4500;
+            color: #2c3e50;
+            flex-wrap: wrap;
+        }
+        
+        .total-price {
+            color: #FF4500;
+            font-weight: 600;
+        }
+        
+        /* Botones de acción responsivos */
+        .customization-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .prev-unit-btn, .next-unit-btn, .finish-customization-btn {
+            padding: 14px 20px;
+            font-size: 1rem;
+            font-weight: 500;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            border: 1px solid #ddd;
+            min-height: 50px;
+            touch-action: manipulation;
+        }
+        
+        .prev-unit-btn, .next-unit-btn {
+            background-color: #ffffff;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+        
+        .prev-unit-btn:hover, .next-unit-btn:hover {
+            background-color: #f8f9fa;
+            border-color: #FF4500;
+        }
+        
+        .finish-customization-btn {
+            background: #FF4500;
+            color: white;
+            border: none;
+        }
+        
+        .finish-customization-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(255, 69, 0, 0.3);
+            background: #ff5722;
+        }
+        
+        .next-unit-btn.auto-proceed {
+            background: #27ae60;
+            color: white;
+            border: none;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 3px 8px rgba(39, 174, 96, 0.3); }
+            50% { transform: scale(1.02); box-shadow: 0 5px 12px rgba(39, 174, 96, 0.4); }
+            100% { transform: scale(1); box-shadow: 0 3px 8px rgba(39, 174, 96, 0.3); }
+        }
+        
+        .order-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .add-another-btn, .order-btn {
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: 500;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            min-height: 50px;
+            touch-action: manipulation;
+        }
+        
+        .add-another-btn {
+            background-color: #ffffff;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+        
+        .add-another-btn:hover {
+            background-color: #f8f9fa;
+            border-color: #FF4500;
+        }
+        
+        .order-btn {
+            background: #FF4500;
+            color: white;
+            border: none;
+        }
+        
+        .order-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(255, 69, 0, 0.3);
+            background: #ff5722;
+        }
+        
+        .info-text {
+            color: #7f8c8d;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            word-wrap: break-word;
+        }
+        
+        /* ============================================
+           SECCIÓN DE PAGO - OPTIMIZADA PARA MÓVIL
+           ============================================ */
+        
+        /* Contenedor unificado del resumen de pago */
+        .order-summary-container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e0e0;
+            margin-bottom: 25px;
+            max-width: 100%;
+            overflow: hidden;
+        }
+        
+        /* Sección de datos del cliente */
+        .customer-data-section {
+            margin-bottom: 25px;
+        }
+        
+        .customer-data-inline {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        .customer-data-title {
+            color: #FF4500;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            word-wrap: break-word;
+        }
+        
+        .inline-contact-form {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-top: 8px;
+        }
+        
+        .form-group-inline {
+            margin-bottom: 0;
+        }
+        
+        .form-label-inline {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #2c3e50;
+            font-size: 0.9rem;
+        }
+        
+        .form-input-inline {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            -webkit-appearance: none;
+        }
+        
+        .form-input-inline:focus {
+            outline: none;
+            border-color: #FF4500;
+            box-shadow: 0 0 0 2px rgba(255, 69, 0, 0.2);
+        }
+        
+        .form-input-inline.error {
+            border-color: #FF4500;
+            background-color: #ffe6e6;
+        }
+        
+        .validation-error-inline {
+            color: #FF4500;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        /* Sección de detalles de productos */
+        .products-detail-section {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+        }
+        
+        .product-detail-item {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            max-width: 100%;
+            overflow: hidden;
+        }
+        
+        .product-detail-item:hover {
+            border-color: #FF4500;
+            box-shadow: 0 5px 15px rgba(255, 69, 0, 0.1);
+        }
+        
+        .product-detail-header {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed #e0e0e0;
+        }
+        
+        .product-detail-name {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1.1rem;
+            word-wrap: break-word;
+        }
+        
+        .product-detail-price {
+            font-weight: 700;
+            color: #FF4500;
+            font-size: 1.2rem;
+        }
+        
+        .product-detail-info {
+            margin-top: 8px;
+        }
+        
+        .detail-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+            color: #555;
+            flex-wrap: wrap;
+        }
+        
+        .detail-icon {
+            width: 22px;
+            color: #FF4500;
+            margin-right: 8px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        
+        .ingredients-list-detail {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+        
+        .ingredient-tag-detail {
+            background: #fff5f2;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: #FF4500;
+            border: 1px solid #ffe0d6;
+            white-space: nowrap;
+        }
+        
+        /* Sección de pago */
+        .payment-section {
+            margin-top: 25px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            max-width: 100%;
+            overflow: hidden;
+        }
+        
+        .payment-options {
+            margin-top: 25px;
+        }
+        
+        .payment-methods-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .payment-method-card {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+            touch-action: manipulation;
+        }
+        
+        .payment-method-card:hover {
+            border-color: #FF4500;
+            background-color: #f8f9fa;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .payment-method-card.selected {
+            border-color: #FF4500;
+            background-color: #fff5f2;
+            box-shadow: 0 0 15px rgba(255, 69, 0, 0.15);
+        }
+        
+        .payment-icon {
+            font-size: 2.5rem;
+            color: #FF4500;
+            margin-bottom: 12px;
+        }
+        
+        .payment-method-card h3 {
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+        
+        .payment-method-card p {
+            color: #7f8c8d;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+        
+        /* Logo de Mercado Pago */
+        .mercado-pago-logo {
+            color: #009ee3;
+            font-size: 2.2rem;
+            margin-bottom: 12px;
+        }
+        
+        .cash-logo {
+            color: #333333;
+        }
+        
+        /* Formulario de tarjeta Mercado Pago */
+        .mercado-pago-card-form {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            margin-top: 15px;
+            display: none;
+            max-width: 100%;
+            overflow: hidden;
+        }
+        
+        .mercado-pago-card-form.active {
+            display: block;
+        }
+        
+        .card-form-title {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 600;
+            border-bottom: 2px solid #009ee3;
+            padding-bottom: 8px;
+            word-wrap: break-word;
+        }
+        
+        .mp-card-fields-container {
+            margin: 15px 0;
+        }
+        
+        .mp-card-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        
+        .mp-field {
+            margin-bottom: 15px;
+        }
+        
+        .mp-field label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #2c3e50;
+            font-size: 0.9rem;
+        }
+        
+        .mp-field .card-input-container {
+            position: relative;
+        }
+        
+        .mp-card-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            padding-right: 40px;
+        }
+        
+        .mp-card-input:focus {
+            outline: none;
+            border-color: #009ee3;
+            box-shadow: 0 0 0 2px rgba(0, 158, 227, 0.2);
+        }
+        
+        .card-input-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #7f8c8d;
+        }
+        
+        .mp-card-errors {
+            color: #FF4500;
+            padding: 12px;
+            background: #ffe6e6;
+            border-radius: 8px;
+            margin: 12px 0;
+            display: none;
+            font-size: 0.85rem;
+            border-left: 3px solid #FF4500;
+            word-wrap: break-word;
+        }
+        
+        .mp-card-success {
+            color: #27ae60;
+            padding: 12px;
+            background: #e6ffed;
+            border-radius: 8px;
+            margin: 12px 0;
+            display: none;
+            font-size: 0.85rem;
+            border-left: 3px solid #27ae60;
+            word-wrap: break-word;
+        }
+        
+        .card-processing {
+            display: none;
+            text-align: center;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .card-brand-logos {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .card-brand-logo {
+            width: 36px;
+            height: 22px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #7f8c8d;
+            font-size: 1.3rem;
+            border: 1px solid #e0e0e0;
+            flex-shrink: 0;
+        }
+        
+        .card-installments-container {
+            margin-top: 12px;
+        }
+        
+        .installment-option {
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            touch-action: manipulation;
+        }
+        
+        .installment-option:hover {
+            border-color: #009ee3;
+            background: #f0f9ff;
+        }
+        
+        .installment-option.selected {
+            border-color: #009ee3;
+            background: #e6f4ff;
+        }
+        
+        .installment-details {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        
+        .installment-count {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .installment-amount {
+            color: #27ae60;
+            font-weight: 600;
+        }
+        
+        .installment-total {
+            color: #7f8c8d;
+            font-size: 0.85rem;
+        }
+        
+        .security-notice {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            border: 1px solid #e0e0e0;
+            word-wrap: break-word;
+        }
+        
+        /* Estilos para el formulario de pago embebido de Mercado Pago */
+        #cardPaymentBrick_container {
+            margin: 15px 0;
+            min-height: 180px;
+            width: 100%;
+        }
+        
+        .mp-payment-button {
+            background: #009ee3;
+            color: white;
+            border: none;
+            padding: 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 50px;
+            touch-action: manipulation;
+        }
+        
+        .mp-payment-button:hover {
+            background: #0088cc;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 158, 227, 0.3);
+        }
+        
+        .mp-payment-button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        /* Pago en efectivo */
+        .payment-details {
+            margin-top: 15px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+            display: none;
+        }
+        
+        .payment-details.active {
+            display: block;
+        }
+        
+        .stripe-form-title {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 600;
+            border-bottom: 2px solid #FF4500;
+            padding-bottom: 8px;
+        }
+        
+        .stripe-errors {
+            color: #FF4500;
+            padding: 12px;
+            background: #ffe6e6;
+            border-radius: 8px;
+            margin: 12px 0;
+            display: none;
+            font-size: 0.85rem;
+            border-left: 3px solid #FF4500;
+            word-wrap: break-word;
+        }
+        
+        .stripe-success {
+            color: #27ae60;
+            padding: 12px;
+            background: #e6ffed;
+            border-radius: 8px;
+            margin: 12px 0;
+            display: none;
+            font-size: 0.85rem;
+            border-left: 3px solid #27ae60;
+            word-wrap: break-word;
+        }
+        
+        .payment-processing {
+            display: none;
+            text-align: center;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #FF4500;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 12px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .process-payment-btn {
+            background: #FF4500;
+            color: white;
+            border: none;
+            padding: 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 50px;
+            touch-action: manipulation;
+        }
+        
+        .process-payment-btn:hover {
+            background: #ff5722;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 69, 0, 0.3);
+        }
+        
+        .process-payment-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        /* Pantalla de confirmación después del pago exitoso */
+        .confirmation-success-section {
+            display: none;
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+            border: 1px solid #e0e0e0;
+            text-align: center;
+            max-width: 100%;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+        
+        .confirmation-success-icon {
+            font-size: 4rem;
+            color: #27ae60;
+            margin-bottom: 15px;
+        }
+        
+        .confirmation-success-title {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 12px;
+            font-weight: 700;
+            word-wrap: break-word;
+        }
+        
+        .confirmation-success-subtitle {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            margin-bottom: 25px;
+            word-wrap: break-word;
+        }
+        
+        .order-details-card {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid #e0e0e0;
+            text-align: left;
+        }
+        
+        .order-details-row {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .order-details-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .order-details-label {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 0.95rem;
+        }
+        
+        .order-details-value {
+            color: #FF4500;
+            font-weight: 700;
+            font-size: 1.1rem;
+            word-wrap: break-word;
+        }
+        
+        .whatsapp-share-btn {
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 14px 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 15px 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            min-height: 50px;
+            width: 100%;
+            max-width: 300px;
+            touch-action: manipulation;
+        }
+        
+        .whatsapp-share-btn:hover {
+            background: #1da851;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+        }
+        
+        .back-to-home-btn {
+            background: #FF4500;
+            color: white;
+            border: none;
+            padding: 14px 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 10px 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            min-height: 50px;
+            width: 100%;
+            max-width: 300px;
+            touch-action: manipulation;
+        }
+        
+        .back-to-home-btn:hover {
+            background: #ff5722;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 69, 0, 0.3);
+        }
+        
+        .bank-info {
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 12px;
+            border-left: 3px solid #FF4500;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .bank-details {
+            margin-top: 8px;
+        }
+        
+        .bank-detail-row {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .bank-detail-row:last-child {
+            border-bottom: none;
+        }
+        
+        .bank-detail-label {
+            font-weight: 500;
+            color: #555;
+            font-size: 0.9rem;
+        }
+        
+        .bank-detail-value {
+            color: #333;
+            font-weight: 500;
+            font-size: 1rem;
+            word-wrap: break-word;
+        }
+        
+        .copy-btn {
+            background-color: #ecf0f1;
+            color: #333;
+            border: 1px solid #ddd;
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 5px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            align-self: flex-start;
+            touch-action: manipulation;
+        }
+        
+        .copy-btn:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .payment-instructions {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: #555;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .payment-instructions ol {
+            margin-left: 20px;
+            margin-top: 8px;
+        }
+        
+        .payment-instructions li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        
+        .required {
+            color: #FF4500;
+        }
+        
+        /* Validación de campos */
+        .validation-error {
+            color: #FF4500;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .form-input.error {
+            border-color: #FF4500;
+            background-color: #ffe6e6;
+        }
+        
+        /* Notificación */
+        .notification {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            left: 15px;
+            background-color: #FF4500;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: none;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+            max-width: 100%;
+            word-wrap: break-word;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        /* Mensaje de pedido vacío */
+        .empty-order {
+            text-align: center;
+            padding: 30px 15px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            border: 2px dashed #e0e0e0;
+            margin: 15px 0;
+        }
+        
+        .empty-order i {
+            font-size: 2.5rem;
+            color: #bdc3c7;
+            margin-bottom: 12px;
+        }
+        
+        .empty-order p {
+            color: #95a5a6;
+            font-size: 1rem;
+        }
+        
+        .unit-progress {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1rem;
+            color: #FF4500;
+            font-weight: 500;
+        }
+        
+        .auto-proceed-info {
+            text-align: center;
+            margin-top: 12px;
+            padding: 10px;
+            background-color: #fff5f2;
+            border-radius: 8px;
+            color: #FF4500;
+            font-size: 0.85rem;
+            border-left: 3px solid #27ae60;
+            word-wrap: break-word;
+        }
+        
+        #estado {
+            text-align: center;
+            margin-top: 12px;
+            font-weight: 500;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        
+        /* Indicador de proceso de confirmación */
+        .confirmation-process-steps {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .confirmation-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 120px;
+            flex: 1;
+            min-width: 100px;
+        }
+        
+        .confirmation-step-icon {
+            width: 50px;
+            height: 50px;
+            background: #f8f9fa;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+            border: 2px solid #e0e0e0;
+            color: #7f8c8d;
+        }
+        
+        .confirmation-step.active .confirmation-step-icon {
+            background: #FF4500;
+            color: white;
+            border-color: #FF4500;
+        }
+        
+        .confirmation-step.completed .confirmation-step-icon {
+            background: #27ae60;
+            color: white;
+            border-color: #27ae60;
+        }
+        
+        .confirmation-step-label {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            font-weight: 500;
+            word-wrap: break-word;
+        }
+        
+        .confirmation-step.active .confirmation-step-label {
+            color: #FF4500;
+            font-weight: 600;
+        }
+        
+        .confirmation-step.completed .confirmation-step-label {
+            color: #27ae60;
+        }
+        
+        /* Información de transacción Mercado Pago */
+        .transaction-info {
+            margin-top: 15px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            word-wrap: break-word;
+        }
+        
+        /* ============================================
+           MEDIA QUERIES PARA DISPOSITIVOS MÓVILES
+           ============================================ */
+        
+        /* Tablets y móviles grandes */
+        @media (min-width: 576px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .welcome-title {
+                font-size: 2.5rem;
+            }
+            
+            .welcome-title span {
+                font-size: 3rem;
+            }
+            
+            .welcome-subtitle {
+                font-size: 1.3rem;
+            }
+            
+            .start-button {
+                padding: 20px 50px;
+                font-size: 1.3rem;
+                width: auto;
+                max-width: 400px;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .ingredients-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .inline-contact-form {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .order-details-row {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+            
+            .bank-detail-row {
+                flex-direction: row;
+                align-items: center;
+            }
+            
+            .copy-btn {
+                margin-top: 0;
+                margin-left: 10px;
+            }
+            
+            .notification {
+                left: auto;
+                right: 15px;
+                max-width: 350px;
+            }
+            
+            .customization-actions,
+            .order-actions {
+                flex-direction: row;
+            }
+            
+            .add-another-btn,
+            .order-btn {
+                flex: 1;
+            }
+        }
+        
+        /* Tablets en landscape */
+        @media (min-width: 768px) {
+            .container {
+                max-width: 720px;
+                padding: 20px;
+            }
+            
+            .welcome-content {
+                max-width: 700px;
+                padding: 40px;
+            }
+            
+            .welcome-title {
+                font-size: 3rem;
+            }
+            
+            .welcome-title span {
+                font-size: 3.5rem;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .ingredients-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .quantity-layout {
+                flex-direction: row;
+            }
+            
+            .quantity-image-container {
+                flex: 1;
+                min-width: 200px;
+            }
+            
+            .quantity-controls-container {
+                flex: 2;
+                min-width: 300px;
+            }
+            
+            .products-intro {
+                flex-direction: row;
+                text-align: left;
+            }
+            
+            .products-intro-image {
+                margin-right: 25px;
+                margin-bottom: 0;
+            }
+            
+            .mp-card-row {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .payment-methods-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* Desktop */
+        @media (min-width: 992px) {
+            .container {
+                max-width: 960px;
+            }
+            
+            .welcome-content {
+                max-width: 900px;
+            }
+            
+            .welcome-title {
+                font-size: 3.5rem;
+            }
+            
+            .welcome-title span {
+                font-size: 4rem;
+            }
+            
+            .welcome-subtitle {
+                font-size: 1.6rem;
+            }
+            
+            .start-button {
+                padding: 22px 60px;
+                font-size: 1.4rem;
+            }
+        }
+        
+        /* Desktop grande */
+        @media (min-width: 1200px) {
+            .container {
+                max-width: 1140px;
+            }
+        }
+        
+        /* Animación de entrada */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .welcome-title {
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+        
+        .welcome-subtitle {
+            animation: fadeInUp 1s ease-out 0.9s both;
+        }
+        
+        .start-button {
+            animation: fadeInUp 1s ease-out 1.2s both;
+        }
+        
+        /* Prevenir zoom en inputs en iOS */
+        @media screen and (max-width: 767px) {
+            input[type="text"],
+            input[type="tel"],
+            input[type="email"],
+            input[type="number"],
+            textarea {
+                font-size: 16px !important;
+            }
+        }
+        
+        /* Mejorar scroll en iOS */
+        * {
+            -webkit-overflow-scrolling: touch;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sistema principal de personalización -->
+    <div class="container" id="main-system" style="display: none;">
+        <!-- SECCIÓN DE BIENVENIDA - COMPLETA PANTALLA -->
+        <section class="welcome-section" id="welcome-section">
+            <div class="welcome-content">
+                <h1 class="welcome-title">
+                    <i class="fas fa-utensils"></i> SABOR EXPRESS
+                    <span>ALTA COCINA A TU MEDIDA</span>
+                </h1>
+                
+                <p class="welcome-subtitle">
+                    Personaliza cada detalle de tu comida con ingredientes seleccionados. 
+                    Del restaurante a tu mesa, con la calidad que mereces.
+                </p>
+                
+                <button class="start-button" id="start-button">
+                    <i class="fas fa-play-circle"></i> COMENZAR A PERSONALIZAR
+                </button>
+            </div>
+        </section>
+        
+        <!-- Pasos del proceso -->
+        <div class="steps" id="steps-section" style="display: none;">
+            <div class="step active" id="step1">
+                <span class="step-number">1</span>
+                <span>Selecciona Productos</span>
+            </div>
+            <div class="step" id="step2">
+                <span class="step-number">2</span>
+                <span>Cantidad</span>
+            </div>
+            <div class="step" id="step3">
+                <span class="step-number">3</span>
+                <span>Personaliza Cada Unidad</span>
+            </div>
+            <div class="step" id="step4">
+                <span class="step-number">4</span>
+                <span>Confirma y Paga</span>
+            </div>
+        </div>
+        
+        <!-- Sección de productos -->
+        <section class="products-section" id="products-section">
+            <!-- Mini descripción con imagen antes de productos -->
+            <div class="products-intro">
+                <div class="products-intro-image">
+                    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Personaliza tu comida">
+                </div>
+                <div class="products-intro-content">
+                    <h2 class="products-intro-title">¡Crea tu comida perfecta!</h2>
+                    <p class="products-intro-subtitle">
+                        En Sabor Express, creemos que cada paladar es único. Por eso te ofrecemos la posibilidad 
+                        de personalizar completamente tu pedido, eligiendo los ingredientes que más te gustan 
+                        y adaptando cada plato a tus preferencias.
+                    </p>
+                    <div class="products-intro-description">
+                        <p>
+                            <i class="fas fa-check-circle" style="color: #FF4500; margin-right: 8px;"></i>
+                            <strong>¿Cómo funciona?</strong> Selecciona cualquier producto y podrás elegir hasta 9 ingredientes 
+                            extra por unidad, agregar notas especiales para el chef y decidir exactamente cuántas 
+                            unidades deseas. ¡Tú tienes el control total!
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <h2 class="section-title"><i class="fas fa-hamburger"></i> ELIGE TUS PLATOS FAVORITOS</h2>
+            
+            <!-- Subtítulo con estilo descriptivo -->
+            <p class="products-subtitle">
+                <i class="fas fa-mouse-pointer" style="margin-right: 10px;"></i>
+                Haz clic en cualquier producto para personalizarlo según tus gustos
+            </p>
+            
+            <div class="products-grid" id="products-grid">
+                <!-- Los productos se generarán con JavaScript -->
+            </div>
+        </section>
+        
+        <!-- Sección de cantidad -->
+        <section class="quantity-section" id="quantity-section">
+            <div class="quantity-header">
+                <button class="back-to-products" id="back-to-products-from-quantity">
+                    <i class="fas fa-arrow-left"></i> Cambiar Producto
+                </button>
+                <h2 class="section-title"><i class="fas fa-sort-amount-up"></i> ¿CUÁNTAS UNIDADES DESEAS?</h2>
+            </div>
+            
+            <div class="quantity-layout">
+                <div class="quantity-image-container">
+                    <img src="" alt="" class="selected-product-image" id="quantity-product-image">
+                </div>
+                
+                <div class="quantity-controls-container">
+                    <div class="selected-product-info" id="selected-product-info">
+                        <!-- La info del producto se generará aquí -->
+                    </div>
+                    
+                    <div class="quantity-minimalist-control">
+                        <p class="info-text">Cada unidad se personalizará de forma independiente con diferentes ingredientes.</p>
+                        
+                        <div class="minimalist-quantity-selector">
+                            <div class="quantity-control-minimal">
+                                <button class="quantity-btn-minimal" id="decrease-quantity-minimal">-</button>
+                                <div class="quantity-display-minimal">
+                                    <div class="quantity-number" id="quantity-display-minimal">1</div>
+                                    <div class="quantity-label-minimal">unidades</div>
+                                </div>
+                                <button class="quantity-btn-minimal" id="increase-quantity-minimal">+</button>
+                            </div>
+                            
+                            <!-- BOTÓN MÁS... -->
+                            <button class="quick-quantity-more" id="more-quantity-btn">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="order-btn" id="proceed-to-customization" style="margin-top: 20px; display: block; width: 100%;">
+                <i class="fas fa-arrow-right"></i> PERSONALIZAR CADA UNIDAD
+            </button>
+        </section>
+        
+        <!-- Sección de personalización -->
+        <section class="customization-section" id="customization-section">
+            <div class="customization-header">
+                <div class="selected-product-info" id="customization-product-info"></div>
+                <button class="back-to-products" id="back-to-quantity">
+                    <i class="fas fa-arrow-left"></i> Cambiar Cantidad
+                </button>
+            </div>
+            
+            <div class="unit-progress" id="unit-progress"></div>
+            
+            <div class="product-unit-info" id="product-unit-info"></div>
+            
+            <div class="ingredients-section">
+                <h3 class="section-title"><i class="fas fa-plus-circle"></i> PERSONALIZA ESTA UNIDAD</h3>
+                <p class="info-text">Selecciona los ingredientes para esta unidad (máximo 9).</p>
+                <div class="ingredients-grid" id="ingredients-grid"></div>
+            </div>
+            
+            <div class="notes-section">
+                <h3 class="section-title"><i class="fas fa-edit"></i> NOTAS ESPECIALES PARA ESTA UNIDAD (OPCIONAL)</h3>
+                <textarea class="notes-textarea" id="special-notes" placeholder="Ej: Sin cebolla, poco picante, bien cocido..."></textarea>
+                <p class="notes-example">Ejemplo: "Con salsa extra aparte" o "Bien dorado por fuera"</p>
+            </div>
+            
+            <div id="auto-proceed-info" class="auto-proceed-info" style="display: none;">
+                <i class="fas fa-info-circle"></i> Cuando termines con esta unidad, automáticamente pasarás a la siguiente.
+            </div>
+            
+            <div class="customization-actions">
+                <button class="prev-unit-btn" id="prev-unit-btn">
+                    <i class="fas fa-arrow-left"></i> Unidad Anterior
+                </button>
+                <button class="finish-customization-btn" id="finish-customization-btn">
+                    <i class="fas fa-check"></i> Terminar Personalización
+                </button>
+                <button class="next-unit-btn" id="next-unit-btn">
+                    <i class="fas fa-forward"></i> Siguiente Unidad
+                </button>
+            </div>
+        </section>
+        
+        <!-- Sección de confirmación -->
+        <section class="confirmation-section" id="confirmation-section">
+            <h2 class="section-title"><i class="fas fa-clipboard-check"></i> RESUMEN DE TU PEDIDO PERSONALIZADO</h2>
+            
+            <div id="order-table-container">
+                <div class="empty-order" id="empty-order-message">
+                    <i class="fas fa-shopping-cart"></i>
+                    <p>Tu pedido está vacío. Selecciona productos para comenzar.</p>
+                </div>
+                
+                <table class="order-table" id="order-table" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Unidad</th>
+                            <th>Ingredientes Seleccionados</th>
+                            <th>Precio</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody id="order-table-body"></tbody>
+                </table>
+            </div>
+            
+            <div class="order-summary" id="order-summary" style="display: none;">
+                <div class="summary-row">
+                    <span>Total de unidades:</span>
+                    <span id="total-units">0</span>
+                </div>
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span id="subtotal-price">$0.00 MXN</span>
+                </div>
+                <div class="summary-row">
+                    <span>Ingredientes extras:</span>
+                    <span id="ingredients-summary">INCLUIDOS</span>
+                </div>
+                <div class="total-row">
+                    <span>TOTAL A PAGAR:</span>
+                    <span class="total-price" id="total-price">$0.00 MXN</span>
+                </div>
+                
+                <div class="order-actions">
+                    <button class="add-another-btn" id="add-another-btn">
+                        <i class="fas fa-plus"></i> Añadir Más Productos
+                    </button>
+                    <button class="order-btn" id="proceed-to-payment">
+                        <i class="fas fa-credit-card"></i> Proceder al Pago
+                    </button>
+                </div>
+            </div>
+            
+            <!-- SECCIÓN DE PAGO CON MERCADO PAGO MARKETPLACE -->
+            <div class="payment-section" id="payment-section" style="display: none;">
+                <div class="payment-flow-container">
+                    <!-- CONTENEDOR UNIFICADO DEL RESUMEN DEL PEDIDO -->
+                    <div class="order-summary-container">
+                        <!-- FORMULARIO DE DATOS DEL CLIENTE -->
+                        <div class="customer-data-section">
+                            <h4 class="section-title"><i class="fas fa-user-circle"></i> COMPLETA TUS DATOS</h4>
+                            <p class="info-text">Ingresa tus datos para proceder con el pago:</p>
+                            
+                            <div class="customer-data-inline">
+                                <div class="customer-data-title">
+                                    <i class="fas fa-info-circle"></i> Información de contacto
+                                </div>
+                                
+                                <div class="inline-contact-form">
+                                    <div class="form-group-inline">
+                                        <label class="form-label-inline">Nombre completo <span class="required">*</span></label>
+                                        <input type="text" class="form-input-inline" id="customer-name" placeholder="Tu nombre completo" required>
+                                        <div class="validation-error-inline" id="customer-name-error"></div>
+                                    </div>
+                                    
+                                    <div class="form-group-inline">
+                                        <label class="form-label-inline">Teléfono <span class="required">*</span></label>
+                                        <input type="tel" class="form-input-inline" id="customer-phone" placeholder="Ej: +52 55 1234 5678" required>
+                                        <div class="validation-error-inline" id="customer-phone-error"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="info-text" style="margin-top: 12px; font-size: 0.85rem;">
+                                    <i class="fas fa-lock"></i> Tus datos están protegidos y solo se usarán para procesar tu pedido.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- DETALLES DE PRODUCTOS -->
+                        <div class="products-detail-section">
+                            <h4 class="section-title"><i class="fas fa-list-alt"></i> DETALLE DE PRODUCTOS</h4>
+                            <p class="info-text">Revisa los detalles de cada producto en tu pedido:</p>
+                            
+                            <div id="detailed-products-list">
+                                <!-- Los productos se generarán aquí -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- MÉTODO DE PAGO -->
+                    <div class="payment-options">
+                        <h3 class="section-title"><i class="fas fa-credit-card"></i> MÉTODO DE PAGO</h3>
+                        <p class="info-text">Selecciona tu método de pago preferido:</p>
+                        
+                        <div class="payment-methods-grid">
+                            <div class="payment-method-card selected" data-method="mercado-pago-card" id="mercado-pago-card-payment">
+                                <div class="payment-logo mercado-pago-logo">
+                                    <i class="fas fa-credit-card"></i>
+                                </div>
+                                <h3>Pagar con Tarjeta</h3>
+                                <p>Pago seguro con tarjeta de crédito o débito directamente en la página.</p>
+                                <div style="margin-top: 8px; font-size: 0.8rem; color: #009ee3;">
+                                    <i class="fas fa-shield-alt"></i> Pago 100% Seguro
+                                </div>
+                            </div>
+                            
+                            <div class="payment-method-card" data-method="cash">
+                                <div class="payment-logo cash-logo">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                </div>
+                                <h3>Pago en Efectivo</h3>
+                                <p>Paga en efectivo al recibir tu pedido. Aceptamos efectivo con cambio exacto.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- FORMULARIO DE PAGO CON TARJETA MERCADO PAGO MARKETPLACE -->
+                        <div class="mercado-pago-card-form" id="mercado-pago-card-form">
+                            <h3 class="card-form-title"><i class="fas fa-credit-card"></i> Pago con Tarjeta - Mercado Pago</h3>
+                            <p class="info-text" style="margin-bottom: 15px;">
+                                Proceso seguro mediante Mercado Pago Marketplace.
+                            </p>
+                            
+                            <!-- Contenedor para el Card Payment Brick de Mercado Pago -->
+                            <div id="cardPaymentBrick_container"></div>
+                            
+                            <!-- Información de la transacción -->
+                            <div class="transaction-info">
+                                <h4 style="color: #2c3e50; margin-bottom: 8px;">
+                                    <i class="fas fa-info-circle"></i> Información de la Transacción
+                                </h4>
+                                <div style="font-size: 0.85rem; color: #555;">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                        <span>Total a pagar:</span>
+                                        <span style="font-weight: 700; color: #27ae60;" id="mp-total-amount">$0.00 MXN</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Botón para iniciar pago con tarjeta (se reemplazará por el Brick) -->
+                            <div class="security-notice">
+                                <i class="fas fa-shield-alt"></i>
+                                <strong>Pago 100% seguro:</strong> Tus datos de tarjeta nunca pasan por nuestros servidores.
+                                Son procesados directamente por Mercado Pago.
+                            </div>
+                        </div>
+                        
+                        <!-- Pago en efectivo -->
+                        <div class="payment-details" id="cash-payment-details">
+                            <h3><i class="fas fa-money-bill-wave"></i> Pago en Efectivo</h3>
+                            <p class="info-text">Prepara el monto exacto para pagar al recibir tu pedido:</p>
+                            <div class="payment-instructions">
+                                <h4><i class="fas fa-list-ol"></i> Instrucciones:</h4>
+                                <ol>
+                                    <li>Prepara el monto exacto en efectivo.</li>
+                                    <li>Nuestro repartidor llevará cambio limitado.</li>
+                                    <li>Paga al recibir tu pedido verificando que esté completo.</li>
+                                    <li>Solicita tu comprobante de pago si lo necesitas.</li>
+                                </ol>
+                            </div>
+                            
+                            <button class="process-payment-btn" id="process-cash-btn">
+                                <i class="fas fa-check"></i> Confirmar Pedido (Pago en Efectivo)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="order-actions" style="margin-top: 20px;">
+                    <button class="add-another-btn" id="back-to-order-summary">
+                        <i class="fas fa-arrow-left"></i> Volver al Resumen
+                    </button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Sección de confirmación después del pago exitoso -->
+        <section class="confirmation-success-section" id="confirmation-success-section" style="display: none;">
+            <div class="confirmation-success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            
+            <h2 class="confirmation-success-title">¡PEDIDO CONFIRMADO!</h2>
+            <p class="confirmation-success-subtitle">Tu pedido ha sido procesado exitosamente. Gracias por tu compra.</p>
+            
+            <!-- Indicador de proceso de confirmación -->
+            <div class="confirmation-process-steps">
+                <div class="confirmation-step completed" id="step-save">
+                    <div class="confirmation-step-icon">
+                        <i class="fas fa-save"></i>
+                    </div>
+                    <div class="confirmation-step-label">Pedido Guardado</div>
+                </div>
+                
+                <div class="confirmation-step completed" id="step-whatsapp">
+                    <div class="confirmation-step-icon">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <div class="confirmation-step-label">WhatsApp Enviado</div>
+                </div>
+                
+                <div class="confirmation-step active" id="step-confirmation">
+                    <div class="confirmation-step-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="confirmation-step-label">Confirmación Lista</div>
+                </div>
+            </div>
+            
+            <div class="order-details-card">
+                <div class="order-details-row">
+                    <span class="order-details-label">Número de Pedido:</span>
+                    <span class="order-details-value" id="order-number-display">ORD-12345678</span>
+                </div>
+                
+                <div class="order-details-row">
+                    <span class="order-details-label">Nombre del Cliente:</span>
+                    <span class="order-details-value" id="customer-name-success">Juan Pérez</span>
+                </div>
+                
+                <div class="order-details-row">
+                    <span class="order-details-label">Teléfono:</span>
+                    <span class="order-details-value" id="customer-phone-success">+52 55 1234 5678</span>
+                </div>
+                
+                <div class="order-details-row">
+                    <span class="order-details-label">Productos:</span>
+                    <span class="order-details-value" id="order-products-summary">2 productos</span>
+                </div>
+                
+                <div class="order-details-row">
+                    <span class="order-details-label">Total Pagado:</span>
+                    <span class="order-details-value" id="order-total-success">$149.50 MXN</span>
+                </div>
+                
+                <div class="order-details-row">
+                    <span class="order-details-label">Fecha y Hora:</span>
+                    <span class="order-details-value" id="order-date-success">10/04/2024 15:30</span>
+                </div>
+            </div>
+            
+            <button class="whatsapp-share-btn" id="whatsapp-share-btn">
+                <i class="fab fa-whatsapp"></i> Compartir Pedido por WhatsApp
+            </button>
+            
+            <button class="back-to-home-btn" id="back-to-home-btn">
+                <i class="fas fa-home"></i> Volver al Inicio
+            </button>
+        </section>
+    </div>
+    
+    <!-- Notificación -->
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i> <span id="notification-text">¡Pedido confirmado!</span>
+    </div>
+    
+    <script>
+        // ============================================
+        // CONFIGURACIÓN PRINCIPAL - MERCADO PAGO MARKETPLACE
+        // ============================================
+        const CONFIG = {
+            mercadoPagoPublicKey: 'TEST-...TU_PUBLIC_KEY_DE_MERCADO_PAGO',
+            
+            marketplaceConfig: {
+                commissionPercentage: 0.20,
+                businessPercentage: 0.80,
+                businessId: 'BUSINESS_ACCOUNT_ID',
+                platformId: 'PLATFORM_ACCOUNT_ID'
+            },
+            
+            currency: 'MXN',
+            currencySymbol: '$',
+            
+            backendUrl: 'https://tu-backend.railway.app',
+            
+            businessName: 'Sabor Express',
+            businessWhatsApp: '525512345678',
+            
+            taxRate: 0.16,
+            
+            devMode: true,
+            
+            allowedPaymentMethods: ['credit_card', 'debit_card']
+        };
+
+        // ============================================
+        // DATOS DE PRODUCTOS
+        // ============================================
+        const PRODUCTS = [
+            { 
+                id: 1, 
+                name: "Pizza Personal Margarita", 
+                price: 129.99,
+                image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                description: "Deliciosa pizza artesanal con salsa de tomate, mozzarella fresca y albahaca.",
+                category: "Plato principal",
+                popular: true,
+                available: true,
+                ingredients: [
+                    { id: 101, name: "Queso Mozzarella Extra", price: 0, icon: "fas fa-cheese", available: true },
+                    { id: 102, name: "Pepperoni Italiano", price: 0, icon: "fas fa-bacon", available: true },
+                    { id: 103, name: "Aceitunas Negras", price: 0, icon: "fas fa-lemon", available: true },
+                    { id: 104, name: "Champiñones Portobello", price: 0, icon: "fas fa-mushroom", available: true },
+                    { id: 105, name: "Orégano Fresco", price: 0, icon: "fas fa-leaf", available: true },
+                    { id: 106, name: "Ajo Confitado", price: 0, icon: "fas fa-garlic", available: true },
+                    { id: 107, name: "Pimientos Asados", price: 0, icon: "fas fa-pepper-hot", available: true },
+                    { id: 108, name: "Queso Parmesano", price: 0, icon: "fas fa-cheese", available: true },
+                    { id: 109, name: "Albahaca Fresca", price: 0, icon: "fas fa-leaf", available: true }
+                ]
+            },
+            { 
+                id: 2, 
+                name: "Ensalada César Premium", 
+                price: 89.50,
+                image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                description: "Lechuga romana, crutones, parmesano y nuestro aderezo César secreto.",
+                category: "Plato principal",
+                popular: false,
+                available: true,
+                ingredients: [
+                    { id: 201, name: "Pollo a la Parrilla", price: 0, icon: "fas fa-drumstick-bite", available: true },
+                    { id: 202, name: "Aguacate Hass", price: 0, icon: "fas fa-lemon", available: true },
+                    { id: 203, name: "Nueces de la India", price: 0, icon: "fas fa-seedling", available: true },
+                    { id: 204, name: "Queso de Cabra", price: 0, icon: "fas fa-cheese", available: true },
+                    { id: 205, name: "Arándanos Secos", price: 0, icon: "fas fa-berry", available: true },
+                    { id: 206, name: "Cebolla Morada", price: 0, icon: "fas fa-onion", available: true },
+                    { id: 207, name: "Tomates Cherry", price: 0, icon: "fas fa-seedling", available: true },
+                    { id: 208, name: "Pepino", price: 0, icon: "fas fa-cucumber", available: true },
+                    { id: 209, name: "Aderezo Ranch", price: 0, icon: "fas fa-wine-bottle", available: true }
+                ]
+            },
+            { 
+                id: 3, 
+                name: "Alitas de Pollo BBQ (6 piezas)", 
+                price: 145.25,
+                image: "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                description: "Crujientes alitas bañadas en salsa BBQ casera, acompañadas de dip de ajo.",
+                category: "Plato principal",
+                popular: true,
+                available: true,
+                ingredients: [
+                    { id: 301, name: "Salsa Mango Habanero", price: 0, icon: "fas fa-pepper-hot", available: true },
+                    { id: 302, name: "Salsa Buffalo", price: 0, icon: "fas fa-fire", available: true },
+                    { id: 303, name: "Dip de Queso Azul", price: 0, icon: "fas fa-cheese", available: true },
+                    { id: 304, name: "Dip Ranch Extra", price: 0, icon: "fas fa-wine-bottle", available: true },
+                    { id: 305, name: "Apio Fresco", price: 0, icon: "fas fa-seedling", available: true },
+                    { id: 306, name: "Zanahoria Baby", price: 0, icon: "fas fa-carrot", available: true },
+                    { id: 307, name: "Sésamo Tostado", price: 0, icon: "fas fa-seedling", available: true },
+                    { id: 308, name: "Cilantro Fresco", price: 0, icon: "fas fa-leaf", available: true },
+                    { id: 309, name: "Limón", price: 0, icon: "fas fa-lemon", available: true }
+                ]
+            },
+            { 
+                id: 4, 
+                name: "Flan Casero con Caramelo", 
+                price: 49.90,
+                image: "https://images.unsplash.com/photo-1578985545060-4c4c55c9d1f1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                description: "Tradicional postre cremoso con caramelo líquido, hecho con receta familiar.",
+                category: "Postre",
+                popular: false,
+                available: true,
+                ingredients: [
+                    { id: 401, name: "Crema Chantilly", price: 0, icon: "fas fa-ice-cream", available: true },
+                    { id: 402, name: "Fresas Frescas", price: 0, icon: "fas fa-strawberry", available: true },
+                    { id: 403, name: "Menta Fresca", price: 0, icon: "fas fa-leaf", available: true },
+                    { id: 404, name: "Nueces Garapiñadas", price: 0, icon: "fas fa-seedling", available: true },
+                    { id: 405, name: "Caramelo Extra", price: 0, icon: "fas fa-candy-cane", available: true },
+                    { id: 406, name: "Canela en Polvo", price: 0, icon: "fas fa-mortar-pestle", available: true },
+                    { id: 407, name: "Coco Rallado", price: 0, icon: "fas fa-coconut", available: true },
+                    { id: 408, name: "Chocolate Derretido", price: 0, icon: "fas fa-candy", available: true },
+                    { id: 409, name: "Frutos Rojos", price: 0, icon: "fas fa-berries", available: true }
+                ]
+            },
+            { 
+                id: 5, 
+                name: "Smoothie Energético Tropical", 
+                price: 59.50,
+                image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                description: "Mezcla de frutas tropicales, yogurt natural y miel de abeja.",
+                category: "Bebida",
+                popular: false,
+                available: true,
+                ingredients: [
+                    { id: 501, name: "Proteína en Polvo", price: 0, icon: "fas fa-dumbbell", available: true },
+                    { id: 502, name: "Semillas de Chía", price: 0, icon: "fas fa-seedling", available: true },
+                    { id: 503, name: "Espinaca Fresca", price: 0, icon: "fas fa-leaf", available: true },
+                    { id: 504, name: "Jengibre Fresco", price: 0, icon: "fas fa-root", available: true },
+                    { id: 505, name: "Miel de Abeja", price: 0, icon: "fas fa-honey-pot", available: true },
+                    { id: 506, name: "Linaza Molida", price: 0, icon: "fas fa-seedling", available: true },
+                    { id: 507, name: "Polen de Abeja", price: 0, icon: "fas fa-bee", available: true },
+                    { id: 508, name: "Canela", price: 0, icon: "fas fa-mortar-pestle", available: true },
+                    { id: 509, name: "Vainilla", price: 0, icon: "fas fa-mortar-pestle", available: true }
+                ]
+            },
+            { 
+                id: 6, 
+                name: "Hamburguesa Clásica con Papas", 
+                price: 159.99,
+                image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                description: "Jugosa hamburguesa 100% carne de res con papas fritas doradas y ensalada.",
+                category: "Plato principal",
+                popular: true,
+                available: true,
+                ingredients: [
+                    { id: 601, name: "Queso Cheddar", price: 0, icon: "fas fa-cheese", available: true },
+                    { id: 602, name: "Tocino Crujiente", price: 0, icon: "fas fa-bacon", available: true },
+                    { id: 603, name: "Cebolla Caramelizada", price: 0, icon: "fas fa-onion", available: true },
+                    { id: 604, name: "Champiñones Salteados", price: 0, icon: "fas fa-mushroom", available: true },
+                    { id: 605, name: "Huevo Frito", price: 0, icon: "fas fa-egg", available: true },
+                    { id: 606, name: "Guacamole", price: 0, icon: "fas fa-lemon", available: true },
+                    { id: 607, name: "Jalapeños", price: 0, icon: "fas fa-pepper-hot", available: true },
+                    { id: 608, name: "Salsa BBQ", price: 0, icon: "fas fa-wine-bottle", available: true },
+                    { id: 609, name: "Mayonesa de Ajo", price: 0, icon: "fas fa-garlic", available: true }
+                ]
+            }
+        ];
+
+        // ============================================
+        // ESTADO GLOBAL DE LA APLICACIÓN
+        // ============================================
+        const appState = {
+            currentProduct: null,
+            currentQuantity: 1,
+            currentUnitIndex: 0,
+            selectedPaymentMethod: 'mercado-pago-card',
+            currentOrder: [],
+            unitsToCustomize: [],
+            customerData: {
+                name: "",
+                phone: ""
+            },
+            mercadoPagoBricksBuilder: null,
+            cardPaymentBrickController: null,
+            currentOrderId: null,
+            isProcessingPayment: false,
+            mercadoPagoInitialized: false
+        };
+
+        // ============================================
+        // FUNCIONES PRINCIPALES
+        // ============================================
+
+        // Inicializar la aplicación
+        function initApp() {
+            document.getElementById('welcome-section').style.display = 'flex';
+            document.getElementById('main-system').style.display = 'block';
+            
+            renderProducts();
+            setupEventListeners();
+            updateQuantityDisplayMinimal();
+            setupContactFormListeners();
+            
+            console.log('✅ Aplicación inicializada con Mercado Pago Marketplace');
+        }
+
+        // Inicializar Mercado Pago
+        async function initializeMercadoPago() {
+            if (appState.mercadoPagoInitialized) {
+                return true;
+            }
+            
+            if (!CONFIG.mercadoPagoPublicKey || CONFIG.mercadoPagoPublicKey.includes('TU_PUBLIC_KEY')) {
+                console.warn('⚠️ Public key de Mercado Pago no configurada');
+                return false;
+            }
+            
+            try {
+                const mp = new MercadoPago(CONFIG.mercadoPagoPublicKey, {
+                    locale: 'es-MX'
+                });
+                
+                appState.mercadoPagoBricksBuilder = mp.bricks();
+                
+                appState.mercadoPagoInitialized = true;
+                console.log('✅ Mercado Pago inicializado correctamente');
+                
+                return true;
+                
+            } catch (error) {
+                console.error('❌ Error al inicializar Mercado Pago:', error);
+                showNotification('Error al inicializar sistema de pago', 'error');
+                return false;
+            }
+        }
+
+        // Inicializar Card Payment Brick
+        async function initializeCardPaymentBrick() {
+            try {
+                if (!appState.mercadoPagoBricksBuilder) {
+                    const initialized = await initializeMercadoPago();
+                    if (!initialized) {
+                        throw new Error('Mercado Pago no está inicializado');
+                    }
+                }
+                
+                if (appState.cardPaymentBrickController) {
+                    appState.cardPaymentBrickController.unmount();
+                }
+                
+                const settings = {
+                    initialization: {
+                        amount: calculateOrderTotalWithTax(),
+                        payer: {
+                            email: 'cliente@ejemplo.com'
+                        }
+                    },
+                    customization: {
+                        visual: {
+                            style: {
+                                theme: 'default',
+                                customVariables: {
+                                    formBackgroundColor: '#ffffff',
+                                    baseColor: '#009ee3'
+                                }
+                            }
+                        },
+                        paymentMethods: {
+                            creditCard: 'all',
+                            debitCard: 'all',
+                            ticket: false,
+                            bankTransfer: false,
+                            mercadoPago: false,
+                            atm: false
+                        }
+                    },
+                    callbacks: {
+                        onReady: () => {
+                            console.log('✅ Card Payment Brick listo');
+                        },
+                        onSubmit: async (formData, additionalData) => {
+                            await processCardPayment(formData, additionalData);
+                        },
+                        onError: (error) => {
+                            console.error('❌ Error en Card Payment Brick:', error);
+                            showNotification('Error en el formulario de pago: ' + error.message, 'error');
+                        }
+                    }
+                };
+                
+                appState.cardPaymentBrickController = await appState.mercadoPagoBricksBuilder.create(
+                    'cardPayment',
+                    'cardPaymentBrick_container',
+                    settings
+                );
+                
+            } catch (error) {
+                console.error('❌ Error al inicializar Card Payment Brick:', error);
+                showNotification('Error al cargar formulario de pago', 'error');
+                
+                showSimplifiedFallbackCardForm();
+            }
+        }
+
+        // Mostrar formulario de tarjeta alternativo simplificado
+        function showSimplifiedFallbackCardForm() {
+            const brickContainer = document.getElementById('cardPaymentBrick_container');
+            brickContainer.innerHTML = `
+                <div class="mp-card-fields-container">
+                    <div class="mp-field">
+                        <label>Número de Tarjeta <span class="required">*</span></label>
+                        <div class="card-input-container">
+                            <input type="text" class="mp-card-input" id="card-number" placeholder="1234 5678 9012 3456" maxlength="19">
+                            <div class="card-input-icon"><i class="fas fa-credit-card"></i></div>
+                        </div>
+                    </div>
+                    
+                    <div class="mp-card-row">
+                        <div class="mp-field">
+                            <label>Fecha de Expiración <span class="required">*</span></label>
+                            <div class="card-input-container">
+                                <input type="text" class="mp-card-input" id="card-expiry" placeholder="MM/AA" maxlength="5">
+                                <div class="card-input-icon"><i class="fas fa-calendar-alt"></i></div>
+                            </div>
+                        </div>
+                        
+                        <div class="mp-field">
+                            <label>Código de Seguridad <span class="required">*</span></label>
+                            <div class="card-input-container">
+                                <input type="password" class="mp-card-input" id="card-cvv" placeholder="123" maxlength="4">
+                                <div class="card-input-icon"><i class="fas fa-lock"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mp-field">
+                        <label>Nombre en la Tarjeta <span class="required">*</span></label>
+                        <div class="card-input-container">
+                            <input type="text" class="mp-card-input" id="card-holder-name" placeholder="Como aparece en la tarjeta">
+                            <div class="card-input-icon"><i class="fas fa-user"></i></div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-brand-logos">
+                        <div class="card-brand-logo"><i class="fab fa-cc-visa"></i></div>
+                        <div class="card-brand-logo"><i class="fab fa-cc-mastercard"></i></div>
+                        <div class="card-brand-logo"><i class="fab fa-cc-amex"></i></div>
+                    </div>
+                </div>
+                
+                <button class="mp-payment-button" id="process-fallback-card">
+                    <i class="fas fa-lock"></i> Pagar ${formatPrice(calculateOrderTotalWithTax())}
+                </button>
+            `;
+            
+            document.getElementById('process-fallback-card').addEventListener('click', processFallbackCardPayment);
+            
+            document.getElementById('card-number').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                value = value.replace(/(.{4})/g, '$1 ').trim();
+                e.target.value = value.substring(0, 19);
+            });
+            
+            document.getElementById('card-expiry').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length >= 2) {
+                    value = value.substring(0, 2) + '/' + value.substring(2, 4);
+                }
+                e.target.value = value.substring(0, 5);
+            });
+        }
+
+        // Calcular split payments INTERNAMENTE
+        function calculateSplitPayment(totalAmount) {
+            const commission = totalAmount * CONFIG.marketplaceConfig.commissionPercentage;
+            const businessAmount = totalAmount * CONFIG.marketplaceConfig.businessPercentage;
+            
+            return {
+                total: totalAmount,
+                platformCommission: parseFloat(commission.toFixed(2)),
+                businessAmount: parseFloat(businessAmount.toFixed(2)),
+                platformPercentage: CONFIG.marketplaceConfig.commissionPercentage * 100,
+                businessPercentage: CONFIG.marketplaceConfig.businessPercentage * 100
+            };
+        }
+
+        // Actualizar display de split payments
+        function updateSplitPaymentDisplay() {
+            const totalAmount = calculateOrderTotalWithTax();
+            const split = calculateSplitPayment(totalAmount);
+            
+            document.getElementById('mp-total-amount').textContent = formatPrice(split.total);
+        }
+
+        // Procesar pago con tarjeta
+        async function processCardPayment(formData, additionalData) {
+            if (appState.isProcessingPayment) return;
+            
+            if (!validatePaymentForm()) {
+                return false;
+            }
+            
+            appState.isProcessingPayment = true;
+            
+            try {
+                let paymentResult;
+                
+                if (CONFIG.devMode) {
+                    paymentResult = await simulateCardPayment(formData);
+                } else {
+                    paymentResult = await processRealCardPayment(formData, additionalData);
+                }
+                
+                await processMercadoPagoSuccess(paymentResult);
+                
+                return true;
+                
+            } catch (error) {
+                console.error('❌ Error en el pago con tarjeta:', error);
+                
+                showNotification('Error en el pago: ' + error.message, 'error');
+                
+                appState.isProcessingPayment = false;
+                return false;
+            }
+        }
+
+        // Simular pago con tarjeta
+        async function simulateCardPayment(formData) {
+            return new Promise((resolve) => {
+                const processingHTML = `
+                    <div class="card-processing" id="card-processing" style="display: block;">
+                        <div class="spinner"></div>
+                        <p>Procesando tu pago simulado...</p>
+                        <p class="info-text">Modo desarrollo activado</p>
+                    </div>
+                `;
+                
+                const form = document.getElementById('mercado-pago-card-form');
+                const existingProcessing = document.getElementById('card-processing');
+                if (!existingProcessing) {
+                    form.insertAdjacentHTML('beforeend', processingHTML);
+                }
+                
+                setTimeout(() => {
+                    const processingElement = document.getElementById('card-processing');
+                    if (processingElement) processingElement.remove();
+                    
+                    const simulatedPayment = {
+                        id: 'mp_payment_' + Date.now(),
+                        status: 'approved',
+                        transaction_amount: calculateOrderTotalWithTax(),
+                        date_approved: new Date().toISOString(),
+                        payment_method_id: 'visa',
+                        payment_type_id: 'credit_card',
+                        card: {
+                            last_four_digits: formData.cardNumber ? formData.cardNumber.slice(-4) : '1234'
+                        }
+                    };
+                    
+                    resolve(simulatedPayment);
+                }, 3000);
+            });
+        }
+
+        // Procesar pago real con tarjeta
+        async function processRealCardPayment(formData, additionalData) {
+            if (!CONFIG.backendUrl || CONFIG.backendUrl.includes('tu-backend')) {
+                throw new Error('Backend no configurado. Configura CONFIG.backendUrl o usa devMode: true');
+            }
+            
+            const totalAmount = calculateOrderTotalWithTax();
+            const split = calculateSplitPayment(totalAmount);
+            
+            appState.currentOrderId = 'ORD-MP-' + Date.now().toString().slice(-8) + '-' + Math.floor(Math.random() * 1000);
+            
+            const response = await fetch(`${CONFIG.backendUrl}/process-card-payment`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    token: formData.token,
+                    issuer_id: formData.issuerId,
+                    payment_method_id: formData.paymentMethodId,
+                    transaction_amount: totalAmount,
+                    installments: parseInt(formData.installments),
+                    description: `Pedido ${appState.currentOrderId} - ${CONFIG.businessName}`,
+                    payer: {
+                        email: 'cliente@ejemplo.com',
+                        identification: {
+                            type: additionalData?.payer?.identification?.type || 'DNI',
+                            number: additionalData?.payer?.identification?.number || '12345678'
+                        },
+                        first_name: appState.customerData.name.split(' ')[0] || 'Cliente',
+                        last_name: appState.customerData.name.split(' ').slice(1).join(' ') || 'Anónimo'
+                    },
+                    marketplace: 'MP-MKT-' + CONFIG.marketplaceConfig.platformId,
+                    marketplace_fee: split.platformCommission,
+                    disbursements: [{
+                        collector_id: parseInt(CONFIG.marketplaceConfig.businessId),
+                        amount: split.businessAmount,
+                        external_reference: appState.currentOrderId + '_BUSINESS',
+                        marketplace_fee: 0
+                    }],
+                    metadata: {
+                        order_id: appState.currentOrderId,
+                        business_name: CONFIG.businessName,
+                        customer_name: appState.customerData.name,
+                        customer_phone: appState.customerData.phone,
+                        split_percentage: CONFIG.marketplaceConfig.commissionPercentage,
+                        platform_fee: split.platformCommission,
+                        source: 'card_payment_brick'
+                    }
+                })
+            });
+            
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || `Error en el servidor: ${response.status}`);
+            }
+            
+            return await response.json();
+        }
+
+        // Procesar pago con formulario de fallback
+        async function processFallbackCardPayment() {
+            if (appState.isProcessingPayment) return;
+            
+            if (!validatePaymentForm()) {
+                return;
+            }
+            
+            if (!validateFallbackCardForm()) {
+                return;
+            }
+            
+            appState.isProcessingPayment = true;
+            const processButton = document.getElementById('process-fallback-card');
+            
+            processButton.disabled = true;
+            processButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando pago...';
+            
+            try {
+                let paymentResult;
+                
+                if (CONFIG.devMode) {
+                    paymentResult = await simulateCardPayment({});
+                } else {
+                    throw new Error('Formulario de fallback requiere backend real');
+                }
+                
+                await processMercadoPagoSuccess(paymentResult);
+                
+            } catch (error) {
+                console.error('❌ Error en el pago con tarjeta (fallback):', error);
+                
+                processButton.disabled = false;
+                processButton.innerHTML = `<i class="fas fa-lock"></i> Pagar ${formatPrice(calculateOrderTotalWithTax())}`;
+                appState.isProcessingPayment = false;
+                
+                showNotification('Error en el pago: ' + error.message, 'error');
+            }
+        }
+
+        // Validar formulario de tarjeta de fallback
+        function validateFallbackCardForm() {
+            const cardNumber = document.getElementById('card-number').value.replace(/\D/g, '');
+            const cardExpiry = document.getElementById('card-expiry').value;
+            const cardCVV = document.getElementById('card-cvv').value;
+            const cardHolder = document.getElementById('card-holder-name').value.trim();
+            
+            let isValid = true;
+            const errors = [];
+            
+            if (!cardNumber || cardNumber.length < 13) {
+                isValid = false;
+                errors.push('Número de tarjeta inválido');
+                document.getElementById('card-number').classList.add('error');
+            } else {
+                document.getElementById('card-number').classList.remove('error');
+            }
+            
+            const expiryRegex = /^(0[1-9]|1[0-2])\/?([0-9]{2})$/;
+            if (!expiryRegex.test(cardExpiry)) {
+                isValid = false;
+                errors.push('Fecha de expiración inválida (MM/AA)');
+                document.getElementById('card-expiry').classList.add('error');
+            } else {
+                document.getElementById('card-expiry').classList.remove('error');
+            }
+            
+            if (!cardCVV || cardCVV.length < 3) {
+                isValid = false;
+                errors.push('CVV inválido (mínimo 3 dígitos)');
+                document.getElementById('card-cvv').classList.add('error');
+            } else {
+                document.getElementById('card-cvv').classList.remove('error');
+            }
+            
+            if (!cardHolder || cardHolder.length < 3) {
+                isValid = false;
+                errors.push('Nombre en tarjeta inválido');
+                document.getElementById('card-holder-name').classList.add('error');
+            } else {
+                document.getElementById('card-holder-name').classList.remove('error');
+            }
+            
+            if (!isValid) {
+                showNotification('Corrige los errores en el formulario de tarjeta: ' + errors.join(', '), 'error');
+            }
+            
+            return isValid;
+        }
+
+        // Procesar pago exitoso de Mercado Pago
+        async function processMercadoPagoSuccess(paymentData) {
+            try {
+                updateConfirmationSteps('save');
+                
+                const orderData = generateOrderJSON();
+                const split = calculateSplitPayment(paymentData.transaction_amount);
+                
+                orderData.payment = {
+                    mercadoPagoPaymentId: paymentData.id,
+                    status: paymentData.status,
+                    amount: paymentData.transaction_amount,
+                    currency: CONFIG.currency,
+                    date_approved: paymentData.date_approved,
+                    payment_method: paymentData.payment_method_id,
+                    payment_type: paymentData.payment_type_id,
+                    last_four_digits: paymentData.card?.last_four_digits,
+                    split_details: split
+                };
+                
+                orderData.metadata.orderId = appState.currentOrderId;
+                orderData.metadata.mercadoPagoPaymentId = paymentData.id;
+                orderData.metadata.split_applied = true;
+                orderData.metadata.split_percentage = CONFIG.marketplaceConfig.commissionPercentage;
+                
+                saveOrderToLocalStorage(orderData, paymentData.id);
+                
+                setTimeout(() => {
+                    updateConfirmationSteps('whatsapp');
+                }, 800);
+                
+                setTimeout(() => {
+                    sendToWhatsApp(orderData);
+                }, 1200);
+                
+                setTimeout(() => {
+                    updateConfirmationSteps('confirmation');
+                    showConfirmationSuccess(orderData);
+                }, 2000);
+                
+                showNotification('¡Pago exitoso! El pedido ha sido registrado correctamente.', 'success');
+                
+                appState.isProcessingPayment = false;
+                
+            } catch (error) {
+                console.error('Error en procesamiento post-pago:', error);
+                showNotification('Pago exitoso, pero hubo un error al guardar los detalles.', 'warning');
+                appState.isProcessingPayment = false;
+            }
+        }
+
+        // Validar formulario de pago
+        function validatePaymentForm() {
+            document.querySelectorAll('.validation-error-inline').forEach(error => {
+                error.style.display = 'none';
+                error.textContent = '';
+            });
+            
+            document.querySelectorAll('.form-input-inline').forEach(input => {
+                input.classList.remove('error');
+            });
+            
+            let isValid = true;
+            const missingFields = [];
+            
+            const customerName = document.getElementById('customer-name').value.trim();
+            const customerNameError = document.getElementById('customer-name-error');
+            if (!customerName) {
+                isValid = false;
+                missingFields.push('Nombre del cliente');
+                document.getElementById('customer-name').classList.add('error');
+                customerNameError.textContent = 'El nombre es obligatorio';
+                customerNameError.style.display = 'block';
+            } else if (customerName.length < 2) {
+                isValid = false;
+                document.getElementById('customer-name').classList.add('error');
+                customerNameError.textContent = 'El nombre debe tener al menos 2 caracteres';
+                customerNameError.style.display = 'block';
+            }
+            
+            const customerPhone = document.getElementById('customer-phone').value.trim();
+            const customerPhoneError = document.getElementById('customer-phone-error');
+            if (!customerPhone) {
+                isValid = false;
+                missingFields.push('Teléfono');
+                document.getElementById('customer-phone').classList.add('error');
+                customerPhoneError.textContent = 'El teléfono es obligatorio';
+                customerPhoneError.style.display = 'block';
+            } else if (!isValidPhone(customerPhone)) {
+                isValid = false;
+                document.getElementById('customer-phone').classList.add('error');
+                customerPhoneError.textContent = 'Ingresa un teléfono válido (ej: +52 55 1234 5678)';
+                customerPhoneError.style.display = 'block';
+            }
+            
+            if (missingFields.length > 0 && !isValid) {
+                showNotification(`Completa los siguientes campos obligatorios: ${missingFields.join(', ')}`, 'error');
+            }
+            
+            return isValid;
+        }
+
+        // Validar teléfono
+        function isValidPhone(phone) {
+            const phoneRegex = /^[\+]?[(]?[0-9]{1,4}[)]?[-\s\.]?[0-9]{2,3}[-\s\.]?[0-9]{3,4}[-\s\.]?[0-9]{3,4}$/;
+            return phoneRegex.test(phone);
+        }
+
+        // Calcular total con impuestos
+        function calculateOrderTotalWithTax() {
+            const subtotal = calculateOrderTotal();
+            const tax = subtotal * CONFIG.taxRate;
+            return subtotal + tax;
+        }
+
+        // Formatear precio
+        function formatPrice(price) {
+            return `${CONFIG.currencySymbol}${price.toFixed(2)} MXN`;
+        }
+
+        // ============================================
+        // FUNCIONES DE INTERFAZ Y NAVEGACIÓN
+        // ============================================
+
+        // Renderizar productos
+        function renderProducts() {
+            const grid = document.getElementById('products-grid');
+            grid.innerHTML = '';
+            
+            PRODUCTS.forEach(product => {
+                if (!product.available) return;
+                
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.dataset.id = product.id;
+                
+                const popularBadge = product.popular ? 
+                    '<div class="popular-badge"><i class="fas fa-star"></i> Más vendido</div>' : '';
+                
+                card.innerHTML = `
+                    <div class="product-image-container">
+                        <img src="${product.image}" alt="${product.name}" class="product-image">
+                        <div class="product-category">${product.category}</div>
+                        ${popularBadge}
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-description">${product.description}</div>
+                        <div class="product-price-container">
+                            <div class="product-price">${formatPrice(product.price)}</div>
+                            <div class="add-icon"><i class="fas fa-plus"></i></div>
+                        </div>
+                    </div>
+                `;
+                
+                card.addEventListener('click', () => selectProduct(product.id));
+                grid.appendChild(card);
+            });
+        }
+
+        // Iniciar proceso
+        function startProcess() {
+            document.getElementById('welcome-section').style.display = 'none';
+            document.getElementById('steps-section').style.display = 'flex';
+            document.getElementById('products-section').style.display = 'block';
+            updateSteps(1);
+        }
+
+        // Seleccionar producto
+        function selectProduct(productId) {
+            appState.currentProduct = PRODUCTS.find(p => p.id === productId);
+            
+            if (!appState.currentProduct || !appState.currentProduct.available) {
+                showNotification("Producto no disponible", "error");
+                return;
+            }
+            
+            appState.currentQuantity = 1;
+            
+            updateSelectedProductInfo();
+            updateQuantityDisplayMinimal();
+            
+            showSection('quantity-section');
+            updateSteps(2);
+        }
+
+        // Proceder a personalización
+        function proceedToCustomization() {
+            initializeUnitsToCustomize();
+            showSection('customization-section');
+            updateSteps(3);
+        }
+
+        // Terminar personalización
+        function finishCustomization() {
+            saveCurrentUnit();
+            
+            appState.unitsToCustomize.forEach(unit => {
+                appState.currentOrder.push({...unit});
+            });
+            
+            goToConfirmation();
+        }
+
+        // Ir a confirmación
+        function goToConfirmation() {
+            showSection('confirmation-section');
+            document.getElementById('payment-section').style.display = 'none';
+            updateSteps(4);
+            updateConfirmationTable();
+        }
+
+        // Proceder al pago
+        function proceedToPayment() {
+            if (appState.currentOrder.length === 0) {
+                showNotification("Tu pedido está vacío", "error");
+                return;
+            }
+            
+            document.getElementById('order-summary').style.display = 'none';
+            document.getElementById('payment-section').style.display = 'block';
+            
+            updatePaymentSummary();
+            updateSplitPaymentDisplay();
+        }
+
+        // Procesar pago en efectivo
+        async function processCashPayment() {
+            if (!validatePaymentForm()) {
+                return;
+            }
+            
+            const orderJSON = generateOrderJSON();
+            orderJSON.payment = { status: 'pending_cash' };
+            orderJSON.metadata.orderId = appState.currentOrderId = 'ORD-CASH-' + Date.now().toString().slice(-8) + '-' + Math.floor(Math.random() * 1000);
+            
+            updateConfirmationSteps('save');
+            
+            saveOrderToLocalStorage(orderJSON, 'cash_payment');
+            
+            setTimeout(() => {
+                updateConfirmationSteps('whatsapp');
+            }, 800);
+            
+            setTimeout(() => {
+                sendToWhatsApp(orderJSON);
+            }, 1200);
+            
+            setTimeout(() => {
+                updateConfirmationSteps('confirmation');
+                showConfirmationSuccess(orderJSON);
+            }, 2000);
+            
+            showNotification('Pedido registrado. Paga en efectivo al recibir.', 'success');
+        }
+
+        // Generar JSON del pedido
+        function generateOrderJSON() {
+            const subtotal = calculateOrderTotal();
+            const tax = subtotal * CONFIG.taxRate;
+            const total = subtotal + tax;
+            const split = calculateSplitPayment(total);
+            
+            const orderNumber = appState.currentOrderId || 'ORD-' + Date.now().toString().slice(-8) + '-' + Math.floor(Math.random() * 1000);
+            
+            const productGroups = {};
+            appState.currentOrder.forEach(item => {
+                const productId = item.product.id;
+                if (!productGroups[productId]) {
+                    productGroups[productId] = {
+                        producto_id: productId,
+                        nombre_producto: item.product.name,
+                        cantidad: 0,
+                        ingredientes_seleccionados: [],
+                        precio_base: item.product.price,
+                        extras: 0,
+                        subtotal: 0,
+                        unidades: []
+                    };
+                }
+                productGroups[productId].cantidad++;
+                productGroups[productId].subtotal = productGroups[productId].cantidad * item.product.price;
+                productGroups[productId].unidades.push(item.unitNumber);
+                
+                item.ingredients.forEach(ing => {
+                    if (!productGroups[productId].ingredientes_seleccionados.includes(ing.name)) {
+                        productGroups[productId].ingredientes_seleccionados.push(ing.name);
+                    }
+                });
+            });
+            
+            const productos = Object.values(productGroups);
+            
+            return {
+                metadata: {
+                    orderId: orderNumber,
+                    timestamp: new Date().toISOString(),
+                    source: "web_app_personalizado",
+                    version: "5.0",
+                    business: CONFIG.businessName,
+                    split_applied: true,
+                    split_percentage: CONFIG.marketplaceConfig.commissionPercentage
+                },
+                cliente: {
+                    nombre: appState.customerData.name,
+                    telefono: appState.customerData.phone
+                },
+                productos: productos,
+                resumen_pedido: {
+                    total_unidades: appState.currentOrder.length,
+                    subtotal: parseFloat(subtotal.toFixed(2)),
+                    impuesto: parseFloat(tax.toFixed(2)),
+                    total: parseFloat(total.toFixed(2)),
+                    metodo_pago: getPaymentMethodName(appState.selectedPaymentMethod),
+                    codigo_metodo_pago: appState.selectedPaymentMethod,
+                    estado_pago: "pending",
+                    fecha_estimada_entrega: new Date(Date.now() + 30 * 60000).toISOString()
+                },
+                split_payment: {
+                    total_cliente: split.total,
+                    comision_plataforma: split.platformCommission,
+                    porcentaje_comision: split.platformPercentage,
+                    monto_negocio: split.businessAmount,
+                    porcentaje_negocio: split.businessPercentage
+                },
+                unidades_detalladas: appState.currentOrder.map((item, index) => ({
+                    unidad_id: `UNIT-${orderNumber}-${index + 1}`,
+                    numero_unidad: item.unitNumber,
+                    producto: {
+                        id: item.product.id,
+                        nombre: item.product.name,
+                        precio: item.product.price
+                    },
+                    personalizacion: {
+                        ingredientes: item.ingredients.map(ing => ({
+                            id: ing.id,
+                            nombre: ing.name
+                        })),
+                        notas_especiales: item.specialNotes
+                    }
+                }))
+            };
+        }
+
+        // Calcular total del pedido
+        function calculateOrderTotal() {
+            return appState.currentOrder.reduce((sum, item) => sum + item.product.price, 0);
+        }
+
+        // Obtener nombre del método de pago
+        function getPaymentMethodName(method) {
+            switch(method) {
+                case 'mercado-pago-card': return 'Tarjeta - Mercado Pago Marketplace';
+                case 'cash': return 'Pago en Efectivo';
+                default: return 'No especificado';
+            }
+        }
+
+        // ============================================
+        // FUNCIONES AUXILIARES
+        // ============================================
+
+        function updateSelectedProductInfo() {
+            const productInfo = document.getElementById('selected-product-info');
+            const customizationProductInfo = document.getElementById('customization-product-info');
+            const quantityProductImage = document.getElementById('quantity-product-image');
+            
+            if (!appState.currentProduct) return;
+            
+            let popularBadge = '';
+            if (appState.currentProduct.popular) {
+                popularBadge = '<span style="color:#e67e22; font-size:0.8rem; margin-left:10px;"><i class="fas fa-star"></i> Popular</span>';
+            }
+            
+            const productHTML = `
+                <div class="selected-product-details">
+                    <h3>${appState.currentProduct.name} ${popularBadge}</h3>
+                    <p class="product-price">${formatPrice(appState.currentProduct.price)}</p>
+                    <p class="info-text">${appState.currentProduct.category}</p>
+                    <p class="info-text" style="margin-top: 10px;">${appState.currentProduct.description}</p>
+                </div>
+            `;
+            
+            if (quantityProductImage) {
+                quantityProductImage.src = appState.currentProduct.image;
+                quantityProductImage.alt = appState.currentProduct.name;
+            }
+            
+            if (productInfo) productInfo.innerHTML = productHTML;
+            if (customizationProductInfo) customizationProductInfo.innerHTML = productHTML;
+        }
+
+        function initializeUnitsToCustomize() {
+            appState.unitsToCustomize = [];
+            
+            for (let i = 0; i < appState.currentQuantity; i++) {
+                appState.unitsToCustomize.push({
+                    id: Date.now() + i,
+                    product: appState.currentProduct,
+                    ingredients: [],
+                    specialNotes: "",
+                    unitNumber: i + 1
+                });
+            }
+            
+            appState.currentUnitIndex = 0;
+            updateUnitInfo();
+            renderIngredientsForCurrentUnit();
+            updateUnitProgress();
+            updateNavigationButtons();
+            updateAutoProceedInfo();
+            document.getElementById('special-notes').value = "";
+        }
+
+        function renderIngredientsForCurrentUnit() {
+            const grid = document.getElementById('ingredients-grid');
+            grid.innerHTML = '';
+            
+            const currentProductIngredients = appState.currentProduct.ingredients || [];
+            
+            currentProductIngredients.forEach(ingredient => {
+                if (!ingredient.available) return;
+                
+                const item = document.createElement('div');
+                item.className = 'ingredient-item';
+                item.dataset.id = ingredient.id;
+                
+                const currentUnit = appState.unitsToCustomize[appState.currentUnitIndex];
+                const isSelected = currentUnit.ingredients.some(ing => ing.id === ingredient.id);
+                
+                if (isSelected) item.classList.add('selected');
+                
+                item.innerHTML = `
+                    <div class="ingredient-icon"><i class="${ingredient.icon}"></i></div>
+                    <div class="ingredient-name">${ingredient.name}</div>
+                `;
+                
+                item.addEventListener('click', () => toggleIngredientForCurrentUnit(ingredient.id));
+                grid.appendChild(item);
+            });
+        }
+
+        function toggleIngredientForCurrentUnit(ingredientId) {
+            const currentUnit = appState.unitsToCustomize[appState.currentUnitIndex];
+            const ingredient = appState.currentProduct.ingredients.find(ing => ing.id === ingredientId);
+            
+            if (!ingredient) return;
+            
+            const index = currentUnit.ingredients.findIndex(i => i.id === ingredientId);
+            
+            if (index === -1) {
+                if (currentUnit.ingredients.length < 9) {
+                    currentUnit.ingredients.push(ingredient);
+                } else {
+                    showNotification("Máximo 9 ingredientes por unidad", "error");
+                }
+            } else {
+                currentUnit.ingredients.splice(index, 1);
+            }
+            
+            renderIngredientsForCurrentUnit();
+        }
+
+        // ============================================
+        // FUNCIONES DE INTERFAZ
+        // ============================================
+
+        function showSection(sectionId) {
+            const sections = ['welcome-section', 'products-section', 'quantity-section', 'customization-section', 'confirmation-section', 'confirmation-success-section'];
+            sections.forEach(id => {
+                if (id === 'welcome-section') {
+                    document.getElementById(id).style.display = id === sectionId ? 'flex' : 'none';
+                } else if (id === 'confirmation-success-section') {
+                    document.getElementById(id).style.display = id === sectionId ? 'block' : 'none';
+                } else {
+                    document.getElementById(id).style.display = id === sectionId ? 'block' : 'none';
+                }
+            });
+            
+            if (sectionId === 'welcome-section' || sectionId === 'confirmation-success-section') {
+                document.getElementById('steps-section').style.display = 'none';
+            } else {
+                document.getElementById('steps-section').style.display = 'flex';
+            }
+        }
+
+        function updateSteps(activeStep) {
+            document.querySelectorAll('.step').forEach(step => {
+                step.classList.remove('active');
+            });
+            document.getElementById(`step${activeStep}`).classList.add('active');
+        }
+
+        function showNotification(message, type = "info") {
+            const notification = document.getElementById('notification');
+            const text = document.getElementById('notification-text');
+            
+            notification.style.backgroundColor = type === "error" ? "#FF4500" : 
+                                               type === "info" ? "#FF4500" : "#27ae60";
+            
+            text.innerHTML = `<i class="fas fa-${type === "error" ? "exclamation-circle" : type === "info" ? "info-circle" : "check-circle"}"></i> ${message}`;
+            notification.style.display = "block";
+            
+            setTimeout(() => {
+                notification.style.display = "none";
+            }, 3000);
+        }
+
+        // Actualizar resumen en la sección de pago
+        function updatePaymentSummary() {
+            const total = calculateOrderTotalWithTax();
+            
+            updateDetailedProductsList();
+            
+            document.getElementById('mp-total-amount').textContent = formatPrice(total);
+        }
+
+        // Actualizar lista detallada de productos
+        function updateDetailedProductsList() {
+            const container = document.getElementById('detailed-products-list');
+            container.innerHTML = '';
+            
+            const productGroups = {};
+            appState.currentOrder.forEach(item => {
+                const productId = item.product.id;
+                if (!productGroups[productId]) {
+                    productGroups[productId] = {
+                        product: item.product,
+                        count: 0,
+                        ingredients: new Set(),
+                        units: []
+                    };
+                }
+                productGroups[productId].count++;
+                item.ingredients.forEach(ing => productGroups[productId].ingredients.add(ing.name));
+                productGroups[productId].units.push(item.unitNumber);
+            });
+            
+            Object.values(productGroups).forEach(group => {
+                const productDiv = document.createElement('div');
+                productDiv.className = 'product-detail-item';
+                
+                const ingredientsList = Array.from(group.ingredients).map(ing => 
+                    `<span class="ingredient-tag-detail">${ing}</span>`
+                ).join('');
+                
+                productDiv.innerHTML = `
+                    <div class="product-detail-header">
+                        <div class="product-detail-name">${group.product.name}</div>
+                        <div class="product-detail-price">${formatPrice(group.product.price * group.count)}</div>
+                    </div>
+                    
+                    <div class="product-detail-info">
+                        <div class="detail-item">
+                            <div class="detail-icon"><i class="fas fa-hashtag"></i></div>
+                            <div>Cantidad: ${group.count} unidad${group.count > 1 ? 'es' : ''}</div>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <div class="detail-icon"><i class="fas fa-list-ol"></i></div>
+                            <div>Unidades: ${group.units.join(', ')}</div>
+                        </div>
+                        
+                        ${ingredientsList ? 
+                            `<div class="detail-item">
+                                <div class="detail-icon"><i class="fas fa-plus-circle"></i></div>
+                                <div>Ingredientes extra: ${Array.from(group.ingredients).join(', ')}</div>
+                            </div>
+                            <div class="ingredients-list-detail">
+                                ${ingredientsList}
+                            </div>` : 
+                            '<div class="detail-item"><div class="detail-icon"><i class="fas fa-minus-circle"></i></div><div>Sin ingredientes extra</div></div>'
+                        }
+                    </div>
+                `;
+                
+                container.appendChild(productDiv);
+            });
+        }
+
+        // ============================================
+        // EVENT LISTENERS Y CONFIGURACIÓN
+        // ============================================
+
+        function setupEventListeners() {
+            document.getElementById('start-button').addEventListener('click', startProcess);
+            
+            document.getElementById('back-to-products-from-quantity').addEventListener('click', goBackToProducts);
+            document.getElementById('back-to-quantity').addEventListener('click', goBackToQuantity);
+            document.getElementById('add-another-btn').addEventListener('click', goBackToProducts);
+            document.getElementById('back-to-order-summary').addEventListener('click', backToOrderSummary);
+            
+            document.getElementById('decrease-quantity-minimal').addEventListener('click', () => {
+                if (appState.currentQuantity > 1) {
+                    appState.currentQuantity--;
+                    updateQuantityDisplayMinimal();
+                }
+            });
+            
+            document.getElementById('increase-quantity-minimal').addEventListener('click', () => {
+                if (appState.currentQuantity < 99) {
+                    appState.currentQuantity++;
+                    updateQuantityDisplayMinimal();
+                } else {
+                    showNotification("La cantidad máxima es 99", "error");
+                }
+            });
+            
+            document.getElementById('more-quantity-btn').addEventListener('click', function() {
+                const inputQuantity = prompt("¿Cuántas unidades deseas? (Máximo 99)", appState.currentQuantity);
+                if (inputQuantity !== null) {
+                    let quantity = parseInt(inputQuantity);
+                    if (!isNaN(quantity) && quantity > 0 && quantity <= 99) {
+                        appState.currentQuantity = quantity;
+                        updateQuantityDisplayMinimal();
+                    } else {
+                        showNotification("Ingresa una cantidad válida entre 1 y 99", "error");
+                    }
+                }
+            });
+            
+            document.getElementById('proceed-to-customization').addEventListener('click', proceedToCustomization);
+            document.getElementById('finish-customization-btn').addEventListener('click', finishCustomization);
+            document.getElementById('proceed-to-payment').addEventListener('click', proceedToPayment);
+            
+            document.getElementById('prev-unit-btn').addEventListener('click', goToPreviousUnit);
+            document.getElementById('next-unit-btn').addEventListener('click', goToNextUnit);
+            
+            document.getElementById('special-notes').addEventListener('input', function() {
+                if (appState.unitsToCustomize[appState.currentUnitIndex]) {
+                    appState.unitsToCustomize[appState.currentUnitIndex].specialNotes = this.value;
+                }
+            });
+            
+            document.querySelectorAll('.payment-method-card').forEach(method => {
+                method.addEventListener('click', function() {
+                    selectPaymentMethod(this.dataset.method);
+                });
+            });
+            
+            document.getElementById('process-cash-btn').addEventListener('click', processCashPayment);
+            
+            document.getElementById('whatsapp-share-btn').addEventListener('click', function() {
+                const whatsappUrl = this.dataset.whatsappUrl;
+                if (whatsappUrl) {
+                    window.open(whatsappUrl, '_blank');
+                }
+            });
+            
+            document.getElementById('back-to-home-btn').addEventListener('click', function() {
+                resetOrder();
+                showSection('welcome-section');
+            });
+        }
+
+        function setupContactFormListeners() {
+            const inputs = document.querySelectorAll('.inline-contact-form input');
+            inputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    updateCustomerData();
+                    
+                    const errorElement = this.nextElementSibling;
+                    if (errorElement && errorElement.classList.contains('validation-error-inline')) {
+                        errorElement.style.display = 'none';
+                        this.classList.remove('error');
+                    }
+                });
+            });
+            
+            document.getElementById('customer-phone').addEventListener('blur', function() {
+                const phone = this.value.trim();
+                const errorElement = document.getElementById('customer-phone-error');
+                
+                if (phone && !isValidPhone(phone)) {
+                    this.classList.add('error');
+                    errorElement.textContent = 'Ingresa un teléfono válido (ej: +52 55 1234 5678)';
+                    errorElement.style.display = 'block';
+                }
+            });
+        }
+
+        function updateCustomerData() {
+            appState.customerData = {
+                name: document.getElementById('customer-name').value.trim(),
+                phone: document.getElementById('customer-phone').value.trim()
+            };
+        }
+
+        // ============================================
+        // FUNCIONES DE NAVEGACIÓN Y ESTADO
+        // ============================================
+
+        function goBackToProducts() {
+            showSection('products-section');
+            updateSteps(1);
+            appState.currentProduct = null;
+            appState.currentQuantity = 1;
+        }
+
+        function goBackToQuantity() {
+            showSection('quantity-section');
+            updateSteps(2);
+            updateQuantityDisplayMinimal();
+        }
+
+        function backToOrderSummary() {
+            document.getElementById('order-summary').style.display = 'block';
+            document.getElementById('payment-section').style.display = 'none';
+        }
+
+        function saveCurrentUnit() {
+            const currentUnit = appState.unitsToCustomize[appState.currentUnitIndex];
+            currentUnit.specialNotes = document.getElementById('special-notes').value;
+            return currentUnit;
+        }
+
+        function goToPreviousUnit() {
+            if (appState.currentUnitIndex > 0) {
+                saveCurrentUnit();
+                appState.currentUnitIndex--;
+                updateUnitInfo();
+                renderIngredientsForCurrentUnit();
+                updateNavigationButtons();
+                updateUnitProgress();
+            }
+        }
+
+        function goToNextUnit() {
+            if (appState.currentUnitIndex < appState.currentQuantity - 1) {
+                saveCurrentUnit();
+                showNotification(`Unidad ${appState.unitsToCustomize[appState.currentUnitIndex].unitNumber} guardada`, "success");
+                appState.currentUnitIndex++;
+                updateUnitInfo();
+                renderIngredientsForCurrentUnit();
+                updateNavigationButtons();
+                updateUnitProgress();
+            }
+        }
+
+        function selectPaymentMethod(method) {
+            appState.selectedPaymentMethod = method;
+            
+            document.querySelectorAll('.payment-method-card').forEach(methodElement => {
+                methodElement.classList.remove('selected');
+            });
+            
+            document.querySelectorAll('.payment-details').forEach(detail => {
+                detail.classList.remove('active');
+            });
+            
+            document.getElementById('mercado-pago-card-form').classList.remove('active');
+            document.getElementById('cash-payment-details').classList.remove('active');
+            
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.add('selected');
+            } else {
+                document.querySelector(`[data-method="${method}"]`).classList.add('selected');
+            }
+            
+            if (method === 'mercado-pago-card') {
+                document.getElementById('mercado-pago-card-form').classList.add('active');
+                
+                setTimeout(() => {
+                    initializeCardPaymentBrick();
+                }, 300);
+            } else if (method === 'cash') {
+                document.getElementById('cash-payment-details').classList.add('active');
+            }
+        }
+
+        function resetOrder() {
+            appState.currentOrder = [];
+            appState.selectedPaymentMethod = 'mercado-pago-card';
+            appState.currentProduct = null;
+            appState.currentQuantity = 1;
+            appState.currentUnitIndex = 0;
+            appState.unitsToCustomize = [];
+            appState.currentOrderId = null;
+            appState.isProcessingPayment = false;
+            appState.cardPaymentBrickController = null;
+            
+            document.getElementById('customer-name').value = '';
+            document.getElementById('customer-phone').value = '';
+            
+            document.querySelectorAll('.validation-error-inline').forEach(error => {
+                error.style.display = 'none';
+                error.textContent = '';
+            });
+            
+            document.querySelectorAll('.form-input-inline').forEach(input => {
+                input.classList.remove('error');
+            });
+            
+            document.getElementById('mercado-pago-card-form').classList.remove('active');
+            document.getElementById('cash-payment-details').classList.remove('active');
+            
+            document.querySelectorAll('.confirmation-step').forEach(step => {
+                step.classList.remove('completed', 'active');
+            });
+            document.getElementById('step-save').classList.add('active');
+            
+            document.querySelectorAll('.payment-method-card').forEach(method => {
+                method.classList.remove('selected');
+            });
+            document.getElementById('mercado-pago-card-payment').classList.add('selected');
+            
+            updateCustomerData();
+            updateConfirmationTable();
+            updateSplitPaymentDisplay();
+        }
+
+        // ============================================
+        // FUNCIONES DE ACTUALIZACIÓN DE UI
+        // ============================================
+
+        function updateQuantityDisplayMinimal() {
+            document.getElementById('quantity-display-minimal').textContent = appState.currentQuantity;
+        }
+
+        function updateUnitInfo() {
+            const unitInfo = document.getElementById('product-unit-info');
+            const currentUnit = appState.unitsToCustomize[appState.currentUnitIndex];
+            
+            unitInfo.innerHTML = `
+                <div class="unit-counter">Unidad ${currentUnit.unitNumber} de ${appState.currentQuantity}</div>
+                <div class="info-text">
+                    <i class="fas fa-info-circle"></i> Personaliza esta unidad independientemente de las otras.
+                </div>
+            `;
+            
+            document.getElementById('special-notes').value = currentUnit.specialNotes;
+        }
+
+        function updateUnitProgress() {
+            document.getElementById('unit-progress').innerHTML = 
+                `Personalizando unidad ${appState.currentUnitIndex + 1} de ${appState.currentQuantity}`;
+        }
+
+        function updateNavigationButtons() {
+            const prevBtn = document.getElementById('prev-unit-btn');
+            const nextBtn = document.getElementById('next-unit-btn');
+            const finishBtn = document.getElementById('finish-customization-btn');
+            
+            prevBtn.disabled = appState.currentUnitIndex === 0;
+            nextBtn.disabled = appState.currentUnitIndex === appState.currentQuantity - 1;
+            
+            if (appState.currentUnitIndex === appState.currentQuantity - 1) {
+                finishBtn.style.display = 'block';
+                nextBtn.style.display = 'none';
+            } else {
+                finishBtn.style.display = 'none';
+                nextBtn.style.display = 'block';
+            }
+            
+            prevBtn.style.opacity = prevBtn.disabled ? '0.5' : '1';
+            prevBtn.style.cursor = prevBtn.disabled ? 'not-allowed' : 'pointer';
+            
+            nextBtn.style.opacity = nextBtn.disabled ? '0.5' : '1';
+            nextBtn.style.cursor = nextBtn.disabled ? 'not-allowed' : 'pointer';
+            
+            updateAutoProceedInfo();
+        }
+
+        function updateAutoProceedInfo() {
+            const info = document.getElementById('auto-proceed-info');
+            const nextBtn = document.getElementById('next-unit-btn');
+            
+            if (appState.currentQuantity > 1 && appState.currentUnitIndex < appState.currentQuantity - 1) {
+                info.style.display = 'block';
+                nextBtn.classList.add('auto-proceed');
+                nextBtn.innerHTML = '<i class="fas fa-forward"></i> Siguiente Unidad (Avance Automático)';
+            } else {
+                info.style.display = 'none';
+                nextBtn.classList.remove('auto-proceed');
+                nextBtn.innerHTML = 'Siguiente Unidad <i class="fas fa-arrow-right"></i>';
+            }
+        }
+
+        function updateConfirmationTable() {
+            const tableBody = document.getElementById('order-table-body');
+            const emptyMessage = document.getElementById('empty-order-message');
+            const orderTable = document.getElementById('order-table');
+            const orderSummary = document.getElementById('order-summary');
+            const subtotalElement = document.getElementById('subtotal-price');
+            const totalElement = document.getElementById('total-price');
+            const totalUnitsElement = document.getElementById('total-units');
+            
+            tableBody.innerHTML = '';
+            
+            if (appState.currentOrder.length === 0) {
+                emptyMessage.style.display = 'block';
+                orderTable.style.display = 'none';
+                orderSummary.style.display = 'none';
+                return;
+            }
+            
+            emptyMessage.style.display = 'none';
+            orderTable.style.display = 'table';
+            orderSummary.style.display = 'block';
+            
+            let subtotal = 0;
+            
+            appState.currentOrder.forEach((item, index) => {
+                subtotal += item.product.price;
+                
+                let ingredientsHTML = '';
+                if (item.ingredients.length > 0) {
+                    const ingredientsList = item.ingredients.map(ing => 
+                        `<span class="ingredient-tag">${ing.name}</span>`
+                    ).join('');
+                    
+                    ingredientsHTML = `<div class="ingredients-detail">
+                        <div class="ingredients-list">${ingredientsList}</div>
+                    </div>`;
+                } else {
+                    ingredientsHTML = `<div class="ingredients-detail">
+                        <div class="ingredients-list"><span class="ingredient-tag">Sin ingredientes extra</span></div>
+                    </div>`;
+                }
+                
+                let notesHTML = '';
+                if (item.specialNotes && item.specialNotes.trim() !== '') {
+                    notesHTML = `<div class="special-instructions"><strong>Notas:</strong> ${item.specialNotes}</div>`;
+                }
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <div class="product-cell">
+                            <img src="${item.product.image}" alt="${item.product.name}">
+                            <div class="product-details">
+                                <strong>${item.product.name}</strong>
+                                ${ingredientsHTML}
+                                ${notesHTML}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="quantity-cell">
+                            <span>Unidad ${item.unitNumber}</span>
+                        </div>
+                    </td>
+                    <td>
+                        ${item.ingredients.length > 0 ? 
+                            `${item.ingredients.length} ingrediente${item.ingredients.length !== 1 ? 's' : ''} seleccionado${item.ingredients.length !== 1 ? 's' : ''}` : 
+                            'Sin ingredientes extra'}
+                    </td>
+                    <td class="price-cell">${formatPrice(item.product.price)}</td>
+                    <td class="remove-cell">
+                        <button class="remove-item" data-index="${index}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            document.querySelectorAll('.remove-item').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const index = parseInt(this.dataset.index);
+                    removeOrderItem(index);
+                });
+            });
+            
+            totalUnitsElement.textContent = appState.currentOrder.length;
+            subtotalElement.textContent = formatPrice(subtotal);
+            totalElement.textContent = formatPrice(subtotal);
+        }
+
+        function removeOrderItem(index) {
+            if (index >= 0 && index < appState.currentOrder.length) {
+                const removedItem = appState.currentOrder.splice(index, 1)[0];
+                
+                appState.currentOrder.forEach((item, i) => {
+                    item.unitNumber = i + 1;
+                });
+                
+                updateConfirmationTable();
+                showNotification(`Unidad de ${removedItem.product.name} eliminada`, "info");
+                
+                if (appState.currentOrder.length === 0) {
+                    goBackToProducts();
+                }
+            }
+        }
+
+        // ============================================
+        // FUNCIONES DE WHATSAPP Y CONFIRMACIÓN
+        // ============================================
+
+        function updateConfirmationSteps(completedStep) {
+            const steps = {
+                'save': document.getElementById('step-save'),
+                'whatsapp': document.getElementById('step-whatsapp'),
+                'confirmation': document.getElementById('step-confirmation')
+            };
+            
+            if (steps[completedStep]) {
+                steps[completedStep].classList.add('completed');
+                steps[completedStep].classList.remove('active');
+            }
+            
+            const stepOrder = ['save', 'whatsapp', 'confirmation'];
+            const currentIndex = stepOrder.indexOf(completedStep);
+            const nextIndex = currentIndex + 1;
+            
+            if (nextIndex < stepOrder.length && steps[stepOrder[nextIndex]]) {
+                steps[stepOrder[nextIndex]].classList.add('active');
+                steps[stepOrder[nextIndex]].classList.remove('completed');
+            }
+        }
+
+        function showConfirmationSuccess(orderData) {
+            document.querySelectorAll('.welcome-section, .products-section, .quantity-section, .customization-section, .confirmation-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            document.getElementById('confirmation-success-section').style.display = 'block';
+            
+            document.getElementById('order-number-display').textContent = orderData.metadata.orderId;
+            document.getElementById('customer-name-success').textContent = appState.customerData.name;
+            document.getElementById('customer-phone-success').textContent = appState.customerData.phone;
+            document.getElementById('order-products-summary').textContent = `${appState.currentOrder.length} unidad(es)`;
+            document.getElementById('order-total-success').textContent = formatPrice(orderData.resumen_pedido.total);
+            document.getElementById('order-date-success').textContent = new Date().toLocaleString('es-MX');
+            
+            const whatsappUrl = generateWhatsAppUrl(orderData);
+            document.getElementById('whatsapp-share-btn').dataset.whatsappUrl = whatsappUrl;
+            
+            document.getElementById('steps-section').style.display = 'none';
+        }
+
+        function sendToWhatsApp(orderData) {
+            try {
+                const whatsappUrl = generateWhatsAppUrl(orderData);
+                
+                document.getElementById('whatsapp-share-btn').dataset.whatsappUrl = whatsappUrl;
+                
+                setTimeout(() => {
+                    window.open(whatsappUrl, '_blank');
+                }, 500);
+                
+            } catch (error) {
+                console.error('Error al preparar mensaje de WhatsApp:', error);
+            }
+        }
+
+        function generateWhatsAppUrl(orderData) {
+            let productsDetails = '';
+            const productGroups = {};
+            
+            appState.currentOrder.forEach(item => {
+                const productId = item.product.id;
+                if (!productGroups[productId]) {
+                    productGroups[productId] = {
+                        product: item.product,
+                        count: 0,
+                        ingredients: new Set()
+                    };
+                }
+                productGroups[productId].count++;
+                item.ingredients.forEach(ing => productGroups[productId].ingredients.add(ing.name));
+            });
+            
+            Object.values(productGroups).forEach(group => {
+                productsDetails += `• ${group.product.name} (x${group.count}) - ${formatPrice(group.product.price)} c/u\n`;
+                if (group.ingredients.size > 0) {
+                    productsDetails += `  🧂 Ingredientes: ${Array.from(group.ingredients).join(', ')}\n`;
+                }
+            });
+            
+            const split = calculateSplitPayment(orderData.resumen_pedido.total);
+            
+            const message = `¡Hola ${CONFIG.businessName}! Soy *${appState.customerData.name}*. Acabo de realizar un pedido.\n\n` +
+                           `📋 *DETALLE DEL PEDIDO:*\n` +
+                           `Número: ${orderData.metadata.orderId}\n` +
+                           `Cliente: ${appState.customerData.name}\n` +
+                           `Teléfono: ${appState.customerData.phone}\n\n` +
+                           `🍽️ *PRODUCTOS:*\n` +
+                           `${productsDetails}\n` +
+                           `💰 *TOTAL: ${formatPrice(orderData.resumen_pedido.total)}*\n` +
+                           `¡Gracias!`;
+            
+            const encodedMessage = encodeURIComponent(message);
+            
+            return `https://wa.me/${CONFIG.businessWhatsApp}?text=${encodedMessage}`;
+        }
+
+        // Guardar pedido en localStorage
+        function saveOrderToLocalStorage(orderData, paymentId) {
+            try {
+                const backupOrder = {
+                    ...orderData,
+                    payment_id: paymentId,
+                    backup_date: new Date().toISOString(),
+                    customer_name: appState.customerData.name,
+                    customer_phone: appState.customerData.phone
+                };
+                
+                const backupKey = `order_backup_${orderData.metadata.orderId}`;
+                localStorage.setItem(backupKey, JSON.stringify(backupOrder));
+                
+                const ordersList = JSON.parse(localStorage.getItem('orders_list') || '[]');
+                ordersList.push({
+                    id: orderData.metadata.orderId,
+                    date: new Date().toISOString(),
+                    total: orderData.resumen_pedido.total,
+                    customer: appState.customerData.name,
+                    payment_method: orderData.resumen_pedido.metodo_pago
+                });
+                localStorage.setItem('orders_list', JSON.stringify(ordersList));
+                
+                console.log('✅ Pedido guardado en localStorage');
+                console.log('💰 Distribución interna:', orderData.split_payment);
+                
+            } catch (error) {
+                console.error('Error al guardar en localStorage:', error);
+            }
+        }
+
+        // ============================================
+        // INICIALIZACIÓN
+        // ============================================
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
