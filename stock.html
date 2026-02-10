@@ -1,0 +1,2147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio X LIFETIMES - Drops Exclusivos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Bebas+Neue&family=Oswald:wght@400;500;600&family=Raleway:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- SDK de Mercado Pago -->
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    <style>
+        /* ===== VARIABLES Y ESTILOS GENERALES ===== */
+        :root {
+            --bg: #000000;
+            --fg: #ffffff;
+            --muted: #a0a0a0;
+            --accent: #8b4513;
+            --accent-light: #a0522d;
+            --accent-2: #1a1a1a;
+            --ring: #ffffff33;
+            --success: #3dcf5e;
+            --primary: #ffffff;
+            --secondary: #d4d4d4;
+            --accent-color: #8b4513;
+            --light-bg: #111111;
+            --border: #333333;
+            --gradient-brown: linear-gradient(135deg, #8b4513 0%, #a0522d 100%);
+            --gradient-dark: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            --gradient-light-brown: linear-gradient(135deg, #a0522d 0%, #d2691e 100%);
+            --gradient-black: linear-gradient(135deg, #000000 0%, #2a2a2a 100%);
+            --shadow: 0 10px 30px rgba(139, 69, 19, 0.15);
+            --shadow-hover: 0 15px 40px rgba(139, 69, 19, 0.25);
+            --shadow-accent: 0 10px 25px rgba(139, 69, 19, 0.3);
+            --shadow-cart: 0 20px 60px rgba(0, 0, 0, 0.7);
+            --transition: all 0.3s ease;
+            --border-radius: 10px;
+            --border-radius-lg: 16px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', 'Raleway', sans-serif;
+            background-color: var(--bg);
+            color: var(--fg);
+            line-height: 1.6;
+            overflow-x: hidden;
+            font-size: 14px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin-inline: auto;
+            padding-inline: 15px;
+        }
+        
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+        
+        img {
+            max-width: 100%;
+            display: block;
+        }
+        
+        /* ===== CONTADOR DE DROP ===== */
+        .drop-counter {
+            background: var(--gradient-brown);
+            color: white;
+            padding: 12px 20px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .drop-counter i {
+            animation: pulse 1.5s infinite;
+        }
+        
+        /* ===== NAV ESTILO DROP ===== */
+        .nav {
+            position: sticky;
+            top: 44px;
+            background: var(--gradient-black);
+            backdrop-filter: saturate(180%) blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 50;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 70px;
+            padding: 0 10px;
+        }
+        
+        .logo {
+            font-weight: 900;
+            letter-spacing: 0.02em;
+            font-size: 1.4rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-family: 'Bebas Neue', sans-serif;
+            text-transform: uppercase;
+        }
+        
+        .logo span {
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0 6px;
+            border-radius: 4px;
+            margin: 0 3px;
+        }
+        
+        .catalog-link {
+            font-weight: 800;
+            color: white;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            position: relative;
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.1);
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .catalog-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            font-weight: 600;
+            position: relative;
+            font-size: 0.95rem;
+            color: white;
+            padding: 8px 0;
+        }
+        
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: white;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover:after {
+            width: 100%;
+        }
+        
+        .mobile-toggle {
+            display: none;
+            background: white;
+            color: var(--accent-color);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            .mobile-toggle {
+                display: inline-grid;
+                place-items: center;
+            }
+            .catalog-link {
+                display: none;
+            }
+            .nav {
+                top: 40px;
+            }
+            .nav-inner {
+                height: 60px;
+            }
+        }
+        
+        .mobile-menu {
+            position: fixed;
+            inset: 0 0 auto 0;
+            top: 114px;
+            background: var(--gradient-black);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 49;
+        }
+        
+        .mobile-menu.open {
+            display: block;
+        }
+        
+        .mobile-menu a {
+            display: block;
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-weight: 600;
+            font-size: 1rem;
+            transition: background 0.3s ease;
+            color: white;
+        }
+        
+        .mobile-menu a:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* ===== BOTÓN CARRITO ===== */
+        .cart-icon-btn {
+            background: var(--gradient-brown);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.4);
+            z-index: 100;
+        }
+        
+        .cart-icon-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(139, 69, 19, 0.6);
+            background: var(--accent);
+        }
+        
+        .cart-icon-btn i {
+            font-size: 1.3rem;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: white;
+            color: var(--accent-color);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 800;
+            border: 2px solid var(--accent-color);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* ===== HERO DROP ===== */
+        .hero {
+            position: relative;
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.9)), 
+                        url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80') no-repeat center center;
+            background-size: cover;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+            width: 100%;
+        }
+        
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(139, 69, 19, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(139, 69, 19, 0.5);
+            border-radius: 50px;
+            padding: 8px 16px;
+            margin-bottom: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: white;
+        }
+        
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 4rem);
+            line-height: 1;
+            margin: 0 0 20px;
+            font-weight: 900;
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        .hero h1 span {
+            color: var(--accent);
+            text-shadow: 0 0 20px rgba(139, 69, 19, 0.5);
+        }
+        
+        .hero-description {
+            font-size: 1rem;
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto 30px;
+            color: var(--muted);
+        }
+        
+        .hero-actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .hero-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .hero-btn.primary {
+            background: var(--gradient-brown);
+            color: white;
+            border: 2px solid transparent;
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.3);
+        }
+        
+        .hero-btn.primary:hover {
+            background: transparent;
+            border-color: var(--accent);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(139, 69, 19, 0.4);
+        }
+        
+        .hero-btn.secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+        
+        .hero-btn.secondary:hover {
+            background: white;
+            color: var(--bg);
+            transform: translateY(-3px);
+        }
+        
+        /* ===== FILTROS DROP ===== */
+        .filters-section {
+            padding: 30px 0;
+            background: var(--light-bg);
+            position: sticky;
+            top: 114px;
+            z-index: 40;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .filters-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--muted);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+        
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--gradient-brown);
+            color: white;
+            border-color: transparent;
+        }
+        
+        .filter-btn i {
+            margin-right: 5px;
+        }
+        
+        .sort-select {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-left: 10px;
+        }
+        
+        /* ===== PRODUCTOS DROP ESTILO ===== */
+        .featured-products {
+            padding: 40px 0 60px;
+            background: var(--bg);
+        }
+        
+        .products-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .products-header h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary);
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            position: relative;
+        }
+        
+        .products-header h2:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--accent);
+        }
+        
+        .products-count {
+            color: var(--muted);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        /* Grid optimizado para móvil y PC */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 20px;
+        }
+        
+        @media (min-width: 576px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (min-width: 992px) {
+            .products-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (min-width: 1200px) {
+            .products-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        @media (min-width: 1400px) {
+            .products-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+        
+        /* Tarjeta de producto optimizada */
+        .product-card {
+            background: var(--light-bg);
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(139, 69, 19, 0.15);
+            border-color: var(--accent);
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--gradient-brown);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 0.7rem;
+            z-index: 2;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 3px 10px rgba(139, 69, 19, 0.3);
+        }
+        
+        .product-image {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+            flex-shrink: 0;
+        }
+        
+        @media (min-width: 768px) {
+            .product-image {
+                height: 220px;
+            }
+        }
+        
+        @media (min-width: 1200px) {
+            .product-image {
+                height: 240px;
+            }
+        }
+        
+        .product-image:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.8));
+            z-index: 1;
+        }
+        
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+        
+        .product-card:hover .product-image img {
+            transform: scale(1.1);
+        }
+        
+        .product-content {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .product-category {
+            display: inline-block;
+            background: rgba(139, 69, 19, 0.1);
+            color: var(--accent);
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            border: 1px solid rgba(139, 69, 19, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            align-self: flex-start;
+        }
+        
+        .product-card h4 {
+            font-size: 1.1rem;
+            margin: 0 0 10px;
+            color: var(--primary);
+            line-height: 1.3;
+            font-weight: 700;
+            font-family: 'Oswald', sans-serif;
+            flex-grow: 1;
+        }
+        
+        .product-description {
+            color: var(--muted);
+            line-height: 1.5;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--primary);
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 0.5px;
+        }
+        
+        .product-price span {
+            font-size: 0.9rem;
+            color: var(--muted);
+            font-weight: 400;
+            text-decoration: line-through;
+            margin-left: 5px;
+        }
+        
+        .product-sizes {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .size-option {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .size-option:hover, .size-option.selected {
+            background: var(--gradient-brown);
+            color: white;
+            border-color: transparent;
+        }
+        
+        .size-option.sold-out {
+            background: rgba(255, 0, 0, 0.1);
+            color: #ff6b6b;
+            border-color: rgba(255, 0, 0, 0.2);
+            cursor: not-allowed;
+            text-decoration: line-through;
+        }
+        
+        .add-to-cart {
+            width: 100%;
+            padding: 12px;
+            background: var(--gradient-brown);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+            margin-top: auto;
+        }
+        
+        .add-to-cart:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .add-to-cart:hover:before {
+            left: 100%;
+        }
+        
+        .add-to-cart:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(139, 69, 19, 0.4);
+        }
+        
+        .add-to-cart.sold-out {
+            background: #333;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        .add-to-cart.sold-out:hover {
+            transform: none;
+            box-shadow: none;
+        }
+        
+        /* ===== CARRITO OPTIMIZADO ===== */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1999;
+            display: none;
+        }
+        
+        .overlay.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            max-width: 420px;
+            height: 100%;
+            background-color: var(--light-bg);
+            box-shadow: var(--shadow-cart);
+            transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .cart-sidebar {
+                max-width: 90%;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .cart-sidebar {
+                max-width: 100%;
+            }
+        }
+        
+        .cart-sidebar.active {
+            right: 0;
+        }
+        
+        .cart-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--gradient-black);
+            color: white;
+            position: relative;
+        }
+        
+        .cart-header h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .close-cart {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1rem;
+            cursor: pointer;
+            color: white;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .close-cart:hover {
+            background: white;
+            color: var(--accent);
+            transform: translateY(-50%) rotate(90deg);
+        }
+        
+        .cart-items {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: var(--bg);
+        }
+        
+        .cart-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: var(--light-bg);
+            border-radius: var(--border-radius);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .cart-item:hover {
+            box-shadow: 0 8px 25px rgba(139, 69, 19, 0.1);
+            transform: translateY(-2px);
+            border-color: var(--accent);
+        }
+        
+        .cart-item-img {
+            width: 70px;
+            height: 70px;
+            border-radius: 10px;
+            margin-right: 15px;
+            background: linear-gradient(135deg, rgba(139, 69, 19, 0.1), rgba(0, 0, 0, 0.3));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid rgba(139, 69, 19, 0.2);
+        }
+        
+        .cart-item-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .cart-item-details {
+            flex-grow: 1;
+            min-width: 0;
+        }
+        
+        .cart-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+        
+        .cart-item-title {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 0.95rem;
+            line-height: 1.3;
+            flex: 1;
+        }
+        
+        .cart-item-price {
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 1.1rem;
+            white-space: nowrap;
+            margin-left: 10px;
+        }
+        
+        .cart-item-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+        
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .cart-item-quantity button {
+            width: 28px;
+            height: 28px;
+            background: var(--light-bg);
+            border: none;
+            border-radius: 50%;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+        
+        .cart-item-quantity button:hover {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .cart-item-quantity input {
+            width: 35px;
+            height: 28px;
+            text-align: center;
+            margin: 0 6px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            padding: 5px;
+            font-weight: 600;
+            color: var(--primary);
+            background: rgba(0, 0, 0, 0.3);
+            font-size: 0.9rem;
+        }
+        
+        .cart-footer {
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--light-bg);
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .cart-summary {
+            margin-bottom: 20px;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+        
+        .summary-row.total {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .summary-row.shipping {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        .free-shipping {
+            background: linear-gradient(135deg, rgba(139, 69, 19, 0.1), rgba(139, 69, 19, 0.05));
+            border-radius: var(--border-radius);
+            padding: 12px;
+            margin: 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent);
+            font-weight: 600;
+            border: 1px solid rgba(139, 69, 19, 0.3);
+            font-size: 0.85rem;
+        }
+        
+        .cart-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .proceed-to-form-btn, .continue-shopping {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .proceed-to-form-btn {
+            background: var(--gradient-brown);
+            color: white;
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.2);
+        }
+        
+        .proceed-to-form-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(139, 69, 19, 0.3);
+        }
+        
+        .continue-shopping {
+            background: transparent;
+            color: var(--accent);
+            border: 2px solid var(--accent);
+        }
+        
+        .continue-shopping:hover {
+            background: var(--accent);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .empty-cart-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--muted);
+        }
+        
+        .empty-cart-state i {
+            font-size: 3rem;
+            color: rgba(255, 255, 255, 0.1);
+            margin-bottom: 15px;
+        }
+        
+        .empty-cart-state h4 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        /* ===== FORMULARIO DE PAGO ===== */
+        .payment-form-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 3000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+        }
+        
+        .payment-form-overlay.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .payment-form-container {
+            background: var(--light-bg);
+            border-radius: var(--border-radius-lg);
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-cart);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* ===== NOTIFICACIÓN ===== */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--gradient-brown);
+            color: white;
+            padding: 15px 20px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(139, 69, 19, 0.3);
+            z-index: 4000;
+            transform: translateX(150%);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-width: 300px;
+            display: flex;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .notification.active {
+            transform: translateX(0);
+        }
+        
+        /* ===== FINAL DE PÁGINA ===== */
+        .page-end {
+            text-align: center;
+            padding: 30px 0;
+            color: var(--muted);
+            font-size: 0.8rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--bg);
+        }
+        
+        /* ===== ANIMACIONES ===== */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        /* ===== LOADING ===== */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--muted);
+        }
+        
+        .loading-spinner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(5px);
+            z-index: 5000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: white;
+        }
+        
+        .loading-spinner.active {
+            display: flex;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--accent);
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 15px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* ===== BOTÓN FLOTANTE WHATSAPP ===== */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #25D366;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+            z-index: 1000;
+            transition: var(--transition);
+        }
+        
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
+        }
+        
+        /* ===== SCROLLBAR PERSONALIZADA ===== */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--light-bg);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-light);
+        }
+    </style>
+</head>
+<body>
+    <!-- Contador de Drop -->
+    <div class="drop-counter">
+        <i class="fas fa-bolt"></i>
+        <span>DROP EXCLUSIVO: Solo quedan <strong id="itemsLeft">12</strong> unidades disponibles</span>
+    </div>
+
+    <!-- Header principal -->
+    <header class="nav">
+        <div class="container nav-inner">
+            <button class="mobile-toggle" id="menuBtn" aria-label="Abrir menú">
+                <i class="fas fa-bars"></i>
+            </button>
+            <a class="logo" href="#" aria-label="Inicio" title="Inicio">
+                Studio<span>X</span> LIFETIMES
+            </a>
+            <nav class="nav-links" aria-label="Principal">
+                <a href="#inicio">Inicio</a>
+                <a href="#productos">Drops</a>
+                <a href="#colecciones">Colecciones</a>
+                <a href="catalogo.html" class="catalog-link">CATÁLOGO</a>
+            </nav>
+            <button class="cart-icon-btn" id="cartIcon">
+                <i class="fas fa-shopping-bag"></i>
+                <div class="cart-count" id="cartCount">0</div>
+            </button>
+        </div>
+        <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+            <a href="#inicio">Inicio</a>
+            <a href="#productos">Drops</a>
+            <a href="#colecciones">Colecciones</a>
+            <a href="catalogo.html">CATÁLOGO</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-crown"></i> DROP EXCLUSIVO OTOÑO/INVIERNO 2024
+            </div>
+            <h1>COLECCIÓN <span>LIMITADA</span> STUDIO X</h1>
+            <div class="hero-description">
+                <p>15 diseños únicos de suéteres oversize. Materiales premium, edición numerada. Una vez agotados, no habrá reposición.</p>
+            </div>
+            <div class="hero-actions">
+                <a href="#productos" class="hero-btn primary">VER DROPS <i class="fas fa-arrow-down"></i></a>
+                <a href="#colecciones" class="hero-btn secondary">COLECCIONES <i class="fas fa-star"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filtros -->
+    <section class="filters-section">
+        <div class="container">
+            <div class="filters-container">
+                <button class="filter-btn active" data-filter="all">
+                    <i class="fas fa-th"></i> Todos
+                </button>
+                <button class="filter-btn" data-filter="oversize">
+                    <i class="fas fa-expand-alt"></i> Oversize
+                </button>
+                <button class="filter-btn" data-filter="lana">
+                    <i class="fas fa-tshirt"></i> Lana Premium
+                </button>
+                <button class="filter-btn" data-filter="minimal">
+                    <i class="fas fa-minus"></i> Minimalistas
+                </button>
+                <button class="filter-btn" data-filter="limited">
+                    <i class="fas fa-crown"></i> Edición Limitada
+                </button>
+                <select class="sort-select" id="sortSelect">
+                    <option value="featured">Destacados</option>
+                    <option value="price-low">Precio: Menor a Mayor</option>
+                    <option value="price-high">Precio: Mayor a Menor</option>
+                    <option value="new">Más Nuevos</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <!-- Productos Destacados -->
+    <section class="featured-products" id="productos">
+        <div class="container">
+            <div class="products-header">
+                <h2>DROPS DISPONIBLES</h2>
+                <div class="products-count" id="productsCount">Mostrando 15 productos</div>
+            </div>
+            <div class="products-grid" id="productsContainer">
+                <!-- Los productos se cargarán dinámicamente con JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Carrito de Compras -->
+    <div class="overlay" id="overlay"></div>
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3><i class="fas fa-shopping-bag"></i> Tu Pedido</h3>
+            <button class="close-cart" id="closeCart">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <div class="empty-cart-state" id="emptyCartMessage">
+                <i class="fas fa-shopping-bag"></i>
+                <h4>Tu carrito está vacío</h4>
+                <p>Añade drops para comenzar tu compra</p>
+                <button class="continue-shopping" id="emptyCartBtn">
+                    <i class="fas fa-shopping-cart"></i> Ver Drops
+                </button>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-summary">
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span id="cartSubtotal">$0.00</span>
+                </div>
+                <div class="summary-row shipping">
+                    <span>Envío</span>
+                    <span id="shippingCost">$8.99</span>
+                </div>
+                <div id="freeShippingMessage" class="free-shipping" style="display: none;">
+                    <i class="fas fa-shipping-fast"></i>
+                    <span>¡Envío GRATIS en pedidos +$200!</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total</span>
+                    <span id="cartTotal">$0.00</span>
+                </div>
+            </div>
+            <div class="cart-actions">
+                <button class="proceed-to-form-btn" id="proceedToFormBtn">
+                    <i class="fas fa-credit-card"></i> Finalizar Compra
+                </button>
+                <button class="continue-shopping" id="continueShoppingBtn">
+                    <i class="fas fa-arrow-left"></i> Seguir Comprando
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón flotante WhatsApp -->
+    <a href="https://wa.me/5215512345678?text=Hola%20Studio%20X%20LIFETIMES,%20me%20interesan%20sus%20drops" 
+       class="whatsapp-float" target="_blank" aria-label="Contactar por WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Loading Spinner -->
+    <div class="loading-spinner" id="loadingSpinner">
+        <div class="spinner"></div>
+        <p>Procesando tu pedido...</p>
+    </div>
+
+    <!-- Notificación -->
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <div class="notification-content">
+            <h5 id="notificationTitle">Producto añadido</h5>
+            <p id="notificationMessage">El drop ha sido añadido al carrito</p>
+        </div>
+    </div>
+
+    <!-- Fin de página -->
+    <div class="page-end">
+        <p>© <span id="year"></span> Studio X LIFETIMES - Drops Exclusivos. Todos los derechos reservados.</p>
+    </div>
+
+    <script>
+        // ===== CONFIGURACIÓN =====
+        const CONFIG_NEGOCIO = {
+            id: "studio_x_drops",
+            nombre: "Studio X LIFETIMES Drops",
+            whatsapp: "5215512345678",
+            comision_plataforma: 20
+        };
+
+        const BACKEND_URL = "http://localhost:3000";
+        const MERCADO_PAGO_PUBLIC_KEY = "TEST-c6c7f1e3-25c8-4d3b-8a2d-5e9f8c1b2a3d";
+
+        // ===== 15 PRODUCTOS (DROPS) =====
+        const products = [
+            {
+                id: "drop_001",
+                name: "Suéter Oversize Merino Negro",
+                description: "Edición limitada oversize en lana merino 100%. Corte perfecto, ultra suave y cálido. Solo 50 unidades disponibles.",
+                price: 129.99,
+                oldPrice: 179.99,
+                category: "oversize",
+                badge: "AGOTÁNDOSE",
+                imageUrl: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                sizes: ["S", "M", "L", "XL"],
+                stock: 12,
+                color: "Negro",
+                featured: true
+            },
+            {
+                id: "drop_002",
+                name: "Suéter Alpaca Minimalista",
+                description: "Alpaca peruana de primera calidad. Diseño minimalista, extremadamente liviano con brillo natural.",
+                price: 189.99,
+                oldPrice: 249.99,
+                category: "minimal",
+                badge: "PREMIUM",
+                imageUrl: "https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                sizes: ["S", "M"],
+                stock: 8,
+                color: "Beige",
+                featured: true
+            },
+            {
+                id: "drop_003",
+                name: "Cable Knit Oversize Gris",
+                description: "Diseño cable knit tradicional reinterpretado en oversize. Tejido grueso para máximo calor.",
+                price: 99.99,
+                oldPrice: 139.99,
+                category: "oversize",
+                badge: "30% OFF",
+                imageUrl: "https://images.unsplash.com/photo-1574180045827-681f8a1a9622?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                sizes: ["M", "L", "XL"],
+                stock: 15,
+                color: "Gris",
+                featured: true
+            },
+            {
+                id: "drop_004",
+                name: "Cashmere Limited Edition",
+                description: "Cashmere 100% edición numerada. Solo 30 unidades mundialmente. Detalles bordados exclusivos.",
+                price: 299.99,
+                oldPrice: 399.99,
+                category: "limited",
+                badge: "EXCLUSIVO",
+                imageUrl: "https://images.unsplash.com/photo-1550614000-4895a10e1bfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                sizes: ["Única"],
+                stock: 5,
+                color: "Negro Ónix",
+                featured: true
+            },
+            {
+                id: "drop_005",
+                name: "Suéter Lana Reciclada Eco",
+                description: "Sostenible y fashion. Lana 100% reciclada, certificación de producción responsable.",
+                price: 89.99,
+                oldPrice: 119.99,
+                category: "lana",
+                badge: "ECO",
+                imageUrl: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                sizes: ["S", "M", "L", "XL"],
+                stock: 20,
+                color: "Verde",
+                featured: false
+            },
+            {
+                id: "drop_006",
+                name: "Texturizado Honeycomb",
+                description: "Oversize con textura honeycomb. Volumen controlado, peso ligero. Perfecto para capas.",
+                price: 109.99,
+                oldPrice: 149.99,
+                category: "oversize",
+                badge: "NUEVO",
+                imageUrl: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                sizes: ["S", "M", "L"],
+                stock: 18,
+                color: "Terracota",
+                featured: false
+            },
+            {
+                id: "drop_007",
+                name: "Suéter Merino Stripes",
+                description: "Rayas verticales en lana merino. Estética moderna, corte recto oversize.",
+                price: 139.99,
+                oldPrice: 189.99,
+                category: "oversize",
+                badge: "DESTACADO",
+                imageUrl: "https://images.unsplash.com/photo-1594032194506-155804b2f430?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                sizes: ["M", "L", "XL"],
+                stock: 10,
+                color: "Gris/Negro",
+                featured: true
+            },
+            {
+                id: "drop_008",
+                name: "Suéter Mohair Lightweight",
+                description: "Mohair premium ultra liviano. Brillo natural, calidez sin peso. Edición limitada.",
+                price: 159.99,
+                oldPrice: 209.99,
+                category: "lana",
+                badge: "LIGERO",
+                imageUrl: "https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                sizes: ["S", "M"],
+                stock: 7,
+                color: "Blanco",
+                featured: false
+            },
+            {
+                id: "drop_009",
+                name: "Oversize Cropped Wool",
+                description: "Corte cropped oversize. Lana premium, diseño urbano y moderno. Tendencias 2024.",
+                price: 119.99,
+                oldPrice: 159.99,
+                category: "oversize",
+                badge: "TREND",
+                imageUrl: "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                sizes: ["S", "M", "L"],
+                stock: 14,
+                color: "Azul Marino",
+                featured: false
+            },
+            {
+                id: "drop_010",
+                name: "Suéter Turtleneck Cashmere",
+                description: "Cuello tortuga en cashmere 100%. Elegancia máxima, confort superior. Edición numerada.",
+                price: 249.99,
+                oldPrice: 329.99,
+                category: "limited",
+                badge: "LUJO",
+                imageUrl: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                sizes: ["M", "L"],
+                stock: 6,
+                color: "Camel",
+                featured: true
+            },
+            {
+                id: "drop_011",
+                name: "Suéter Wool Blend Pattern",
+                description: "Mezcla de lanas premium con patrón geométrico. Diseño único, fabricación artesanal.",
+                price: 149.99,
+                oldPrice: 199.99,
+                category: "lana",
+                badge: "ARTESANAL",
+                imageUrl: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=70",
+                sizes: ["S", "M", "L", "XL"],
+                stock: 9,
+                color: "Gris/Beige",
+                featured: false
+            },
+            {
+                id: "drop_012",
+                name: "Minimalist Wool Cardigan",
+                description: "Cárdigan minimalista oversize. Lana premium, botones de madera. Versatilidad total.",
+                price: 169.99,
+                oldPrice: 219.99,
+                category: "minimal",
+                badge: "VERSÁTIL",
+                imageUrl: "https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=70",
+                sizes: ["M", "L", "XL"],
+                stock: 11,
+                color: "Crema",
+                featured: false
+            },
+            {
+                id: "drop_013",
+                name: "Oversize Faded Wool",
+                description: "Efecto faded vintage en lana premium. Oversize desestructurado, look urbano.",
+                price: 129.99,
+                oldPrice: 169.99,
+                category: "oversize",
+                badge: "VINTAGE",
+                imageUrl: "https://images.unsplash.com/photo-1574180045827-681f8a1a9622?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=70",
+                sizes: ["S", "M", "L"],
+                stock: 13,
+                color: "Gris Faded",
+                featured: false
+            },
+            {
+                id: "drop_014",
+                name: "Suéter Merino Ribbed",
+                description: "Costillas verticales en lana merino. Estética slim fit oversize, calidez máxima.",
+                price: 139.99,
+                oldPrice: 179.99,
+                category: "lana",
+                badge: "SLIM FIT",
+                imageUrl: "https://images.unsplash.com/photo-1550614000-4895a10e1bfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=70",
+                sizes: ["S", "M", "L"],
+                stock: 16,
+                color: "Burgundy",
+                featured: false
+            },
+            {
+                id: "drop_015",
+                name: "Limited Edition Artwork",
+                description: "Colaboración con artista urbano. Estampado exclusivo, numerado y firmado. Solo 25 unidades.",
+                price: 349.99,
+                oldPrice: 449.99,
+                category: "limited",
+                badge: "ART COLLAB",
+                imageUrl: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=70",
+                sizes: ["Única"],
+                stock: 3,
+                color: "Multicolor",
+                featured: true
+            }
+        ];
+
+        // ===== VARIABLES GLOBALES =====
+        let cart = [];
+        let currentFilter = 'all';
+        let currentSort = 'featured';
+        let mp = null;
+        let isProcessingPayment = false;
+
+        // ===== ELEMENTOS DEL DOM =====
+        const cartIcon = document.getElementById('cartIcon');
+        const cartCount = document.getElementById('cartCount');
+        const cartSidebar = document.getElementById('cartSidebar');
+        const closeCart = document.getElementById('closeCart');
+        const overlay = document.getElementById('overlay');
+        const cartItems = document.getElementById('cartItems');
+        const emptyCartMessage = document.getElementById('emptyCartMessage');
+        const cartSubtotal = document.getElementById('cartSubtotal');
+        const cartTotal = document.getElementById('cartTotal');
+        const productsContainer = document.getElementById('productsContainer');
+        const notification = document.getElementById('notification');
+        const notificationTitle = document.getElementById('notificationTitle');
+        const notificationMessage = document.getElementById('notificationMessage');
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const continueShoppingBtn = document.getElementById('continueShoppingBtn');
+        const emptyCartBtn = document.getElementById('emptyCartBtn');
+        const proceedToFormBtn = document.getElementById('proceedToFormBtn');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const sortSelect = document.getElementById('sortSelect');
+        const productsCount = document.getElementById('productsCount');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+
+        // ===== INICIALIZACIÓN =====
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProducts();
+            updateCart();
+            updateProductsCount();
+            
+            // Event listeners
+            cartIcon.addEventListener('click', openCart);
+            closeCart.addEventListener('click', closeCartSidebar);
+            overlay.addEventListener('click', closeCartSidebar);
+            continueShoppingBtn.addEventListener('click', closeCartSidebar);
+            emptyCartBtn.addEventListener('click', closeCartSidebar);
+            proceedToFormBtn.addEventListener('click', proceedToPaymentForm);
+            menuBtn.addEventListener('click', toggleMobileMenu);
+            
+            // Filtros
+            filterButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentFilter = btn.dataset.filter;
+                    renderProducts();
+                });
+            });
+            
+            // Ordenamiento
+            sortSelect.addEventListener('change', () => {
+                currentSort = sortSelect.value;
+                renderProducts();
+            });
+            
+            // Cerrar menú móvil al hacer clic en enlace
+            document.querySelectorAll('.mobile-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.remove('open');
+                    const icon = menuBtn.querySelector('i');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                });
+            });
+            
+            // Smooth scroll
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', smoothScroll);
+            });
+            
+            // Año actual
+            document.getElementById('year').textContent = new Date().getFullYear();
+            
+            // Actualizar contador de stock
+            updateStockCounter();
+        });
+
+        // ===== FUNCIONES DE PRODUCTOS =====
+        function renderProducts() {
+            // Filtrar productos
+            let filteredProducts = products;
+            if (currentFilter !== 'all') {
+                filteredProducts = products.filter(p => p.category === currentFilter);
+            }
+            
+            // Ordenar productos
+            filteredProducts = sortProducts(filteredProducts);
+            
+            // Renderizar
+            productsContainer.innerHTML = '';
+            filteredProducts.forEach(product => {
+                const productCard = createProductCard(product);
+                productsContainer.appendChild(productCard);
+            });
+            
+            updateProductsCount();
+        }
+
+        function sortProducts(productsArray) {
+            switch(currentSort) {
+                case 'price-low':
+                    return [...productsArray].sort((a, b) => a.price - b.price);
+                case 'price-high':
+                    return [...productsArray].sort((a, b) => b.price - a.price);
+                case 'new':
+                    return [...productsArray].filter(p => p.featured).concat(
+                        [...productsArray].filter(p => !p.featured)
+                    );
+                default: // featured
+                    return [...productsArray].sort((a, b) => {
+                        if (a.featured && !b.featured) return -1;
+                        if (!a.featured && b.featured) return 1;
+                        return 0;
+                    });
+            }
+        }
+
+        function createProductCard(product) {
+            const productCard = document.createElement('div');
+            productCard.className = 'product-card';
+            
+            const isLowStock = product.stock <= 5;
+            const isSoldOut = product.stock === 0;
+            
+            // Generar opciones de tallas
+            const sizeOptions = product.sizes.map(size => {
+                const isSizeSoldOut = Math.random() > 0.7; // Simulación
+                return `
+                    <div class="size-option ${isSizeSoldOut ? 'sold-out' : ''} ${size === 'M' ? 'selected' : ''}" 
+                         data-size="${size}" ${isSizeSoldOut ? 'title="Agotado"' : ''}>
+                        ${size}
+                    </div>
+                `;
+            }).join('');
+            
+            productCard.innerHTML = `
+                ${isLowStock && !isSoldOut ? `<div class="product-badge">¡ÚLTIMAS ${product.stock} UNIDADES!</div>` : ''}
+                ${isSoldOut ? `<div class="product-badge" style="background: #dc3545;">AGOTADO</div>` : ''}
+                ${product.badge && !isLowStock && !isSoldOut ? `<div class="product-badge">${product.badge}</div>` : ''}
+                
+                <div class="product-image">
+                    <img src="${product.imageUrl}" alt="${product.name}" loading="lazy">
+                </div>
+                <div class="product-content">
+                    <span class="product-category">${getCategoryName(product.category)}</span>
+                    <h4>${product.name}</h4>
+                    <p class="product-description">${product.description}</p>
+                    
+                    <div class="product-meta">
+                        <div class="product-price">
+                            $${product.price.toFixed(2)}
+                            <span>$${product.oldPrice.toFixed(2)}</span>
+                        </div>
+                        <div style="color: ${isSoldOut ? '#dc3545' : isLowStock ? '#ffc107' : '#3dcf5e'}; font-size: 0.8rem; font-weight: 600;">
+                            ${isSoldOut ? 'AGOTADO' : `${product.stock} disponibles`}
+                        </div>
+                    </div>
+                    
+                    <div class="product-sizes">
+                        ${sizeOptions}
+                    </div>
+                    
+                    <button class="add-to-cart ${isSoldOut ? 'sold-out' : ''}" 
+                            data-id="${product.id}" 
+                            ${isSoldOut ? 'disabled' : ''}>
+                        <i class="fas fa-${isSoldOut ? 'times' : 'cart-plus'}"></i> 
+                        ${isSoldOut ? 'AGOTADO' : 'AÑADIR AL DROP'}
+                    </button>
+                </div>
+            `;
+            
+            // Event listeners para las tallas
+            productCard.querySelectorAll('.size-option:not(.sold-out)').forEach(option => {
+                option.addEventListener('click', () => {
+                    productCard.querySelectorAll('.size-option').forEach(o => o.classList.remove('selected'));
+                    option.classList.add('selected');
+                });
+            });
+            
+            // Event listener para añadir al carrito
+            if (!isSoldOut) {
+                productCard.querySelector('.add-to-cart').addEventListener('click', (e) => {
+                    const selectedSize = productCard.querySelector('.size-option.selected')?.dataset.size || product.sizes[0];
+                    addToCart(product.id, selectedSize);
+                });
+            }
+            
+            return productCard;
+        }
+
+        function getCategoryName(category) {
+            const categories = {
+                'oversize': 'OVERSIZE',
+                'lana': 'LANA PREMIUM',
+                'minimal': 'MINIMALISTA',
+                'limited': 'EDICIÓN LIMITADA'
+            };
+            return categories[category] || category.toUpperCase();
+        }
+
+        function updateProductsCount() {
+            let filteredProducts = products;
+            if (currentFilter !== 'all') {
+                filteredProducts = products.filter(p => p.category === currentFilter);
+            }
+            productsCount.textContent = `Mostrando ${filteredProducts.length} de ${products.length} drops`;
+        }
+
+        function updateStockCounter() {
+            const totalStock = products.reduce((sum, p) => sum + p.stock, 0);
+            document.getElementById('itemsLeft').textContent = totalStock;
+        }
+
+        // ===== FUNCIONES DEL CARRITO =====
+        function addToCart(productId, size) {
+            const product = products.find(p => p.id === productId);
+            
+            if (!product || product.stock === 0) {
+                showNotification('Producto agotado', 'Este drop ya no está disponible');
+                return;
+            }
+            
+            const existingItem = cart.find(item => item.id === productId && item.size === size);
+            
+            if (existingItem) {
+                if (existingItem.quantity >= product.stock) {
+                    showNotification('Stock limitado', `Solo quedan ${product.stock} unidades disponibles`);
+                    return;
+                }
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    category: product.category,
+                    size: size,
+                    quantity: 1
+                });
+            }
+            
+            updateCart();
+            showNotification('¡Drop añadido!', `${product.name} - Talla ${size}`);
+            
+            // Animación del botón del carrito
+            cartIcon.style.transform = 'scale(1.2)';
+            setTimeout(() => {
+                cartIcon.style.transform = 'scale(1)';
+            }, 200);
+            
+            // Abrir carrito en móvil
+            if (window.innerWidth <= 768) {
+                openCart();
+            }
+        }
+
+        function updateCart() {
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const shipping = subtotal > 200 ? 0 : 8.99;
+            const total = subtotal + shipping;
+            
+            cartCount.textContent = totalItems;
+            cartItems.innerHTML = '';
+            
+            if (cart.length === 0) {
+                emptyCartMessage.style.display = 'block';
+                cartSubtotal.textContent = '$0.00';
+                cartTotal.textContent = '$0.00';
+                proceedToFormBtn.disabled = true;
+                proceedToFormBtn.style.opacity = '0.7';
+                document.getElementById('freeShippingMessage').style.display = 'none';
+                return;
+            }
+            
+            emptyCartMessage.style.display = 'none';
+            
+            cart.forEach((item, index) => {
+                const itemTotal = item.price * item.quantity;
+                const cartItem = document.createElement('div');
+                cartItem.className = 'cart-item';
+                cartItem.innerHTML = `
+                    <div class="cart-item-img">
+                        <img src="${products.find(p => p.id === item.id).imageUrl}" alt="${item.name}" loading="lazy">
+                    </div>
+                    <div class="cart-item-details">
+                        <div class="cart-item-header">
+                            <div class="cart-item-title">${item.name}</div>
+                            <div class="cart-item-price">$${item.price.toFixed(2)}</div>
+                        </div>
+                        <div style="color: var(--muted); font-size: 0.8rem; margin-bottom: 8px;">
+                            Talla: ${item.size}
+                        </div>
+                        <div class="cart-item-controls">
+                            <div class="cart-item-quantity">
+                                <button class="quantity-btn minus" data-index="${index}">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <input type="number" value="${item.quantity}" min="1" max="10" data-index="${index}">
+                                <button class="quantity-btn plus" data-index="${index}">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <div style="font-weight: 600; color: var(--primary);">
+                                $${itemTotal.toFixed(2)}
+                            </div>
+                            <button class="remove-item" data-index="${index}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                cartItems.appendChild(cartItem);
+            });
+            
+            cartSubtotal.textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('shippingCost').textContent = shipping === 0 ? 'GRATIS' : `$${shipping.toFixed(2)}`;
+            cartTotal.textContent = `$${total.toFixed(2)}`;
+            
+            const freeShippingMsg = document.getElementById('freeShippingMessage');
+            if (shipping === 0) {
+                freeShippingMsg.style.display = 'flex';
+            } else {
+                freeShippingMsg.style.display = 'none';
+            }
+            
+            proceedToFormBtn.disabled = false;
+            proceedToFormBtn.style.opacity = '1';
+            
+            // Event listeners para controles del carrito
+            document.querySelectorAll('.quantity-btn.minus').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = parseInt(e.target.closest('button').dataset.index);
+                    if (cart[index].quantity > 1) {
+                        cart[index].quantity--;
+                        updateCart();
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.quantity-btn.plus').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = parseInt(e.target.closest('button').dataset.index);
+                    const product = products.find(p => p.id === cart[index].id);
+                    if (cart[index].quantity < Math.min(product.stock, 10)) {
+                        cart[index].quantity++;
+                        updateCart();
+                    } else {
+                        showNotification('Stock limitado', `Máximo ${Math.min(product.stock, 10)} unidades por drop`);
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.cart-item-quantity input').forEach(input => {
+                input.addEventListener('change', (e) => {
+                    const index = parseInt(e.target.dataset.index);
+                    const newQuantity = parseInt(e.target.value);
+                    const product = products.find(p => p.id === cart[index].id);
+                    
+                    if (newQuantity >= 1 && newQuantity <= Math.min(product.stock, 10)) {
+                        cart[index].quantity = newQuantity;
+                        updateCart();
+                    } else {
+                        e.target.value = cart[index].quantity;
+                        showNotification('Cantidad no válida', `Máximo ${Math.min(product.stock, 10)} unidades`);
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.remove-item').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = parseInt(e.target.closest('button').dataset.index);
+                    const itemName = cart[index].name;
+                    cart.splice(index, 1);
+                    updateCart();
+                    showNotification('Drop eliminado', `${itemName} ha sido removido`);
+                });
+            });
+        }
+
+        function openCart() {
+            cartSidebar.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeCartSidebar() {
+            cartSidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function proceedToPaymentForm() {
+            if (cart.length === 0) return;
+            
+            loadingSpinner.classList.add('active');
+            
+            // Simular procesamiento
+            setTimeout(() => {
+                loadingSpinner.classList.remove('active');
+                showNotification('¡Drop reservado!', 'Te contactaremos para finalizar la compra');
+                cart = [];
+                updateCart();
+                closeCartSidebar();
+                
+                // Redirigir a WhatsApp
+                setTimeout(() => {
+                    const message = `Hola Studio X LIFETIMES, estoy interesado en los siguientes drops:\n\n${cart.map(item => `- ${item.name} (Talla: ${item.size}) x${item.quantity}`).join('\n')}\n\nTotal: $${cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}`;
+                    const encodedMessage = encodeURIComponent(message);
+                    window.open(`https://wa.me/${CONFIG_NEGOCIO.whatsapp}?text=${encodedMessage}`, '_blank');
+                }, 1000);
+            }, 1500);
+        }
+
+        // ===== FUNCIONES AUXILIARES =====
+        function showNotification(title, message) {
+            notificationTitle.textContent = title;
+            notificationMessage.textContent = message;
+            
+            notification.classList.add('active');
+            
+            setTimeout(() => {
+                notification.classList.remove('active');
+            }, 3000);
+        }
+
+        function toggleMobileMenu() {
+            mobileMenu.classList.toggle('open');
+            const icon = menuBtn.querySelector('i');
+            if (mobileMenu.classList.contains('open')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        }
+
+        function smoothScroll(e) {
+            const href = this.getAttribute('href');
+            if (href === "#") return;
+            
+            e.preventDefault();
+            const targetElement = document.querySelector(href);
+            if (targetElement) {
+                // Ajustar para el header sticky
+                const offsetTop = targetElement.offsetTop - 120;
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
+                });
+                
+                // Cerrar menú móvil si está abierto
+                if (mobileMenu.classList.contains('open')) {
+                    toggleMobileMenu();
+                }
+            }
+        }
+
+        // ===== FUNCIONES DE PRUEBA =====
+        window.simulateQuickBuy = function() {
+            // Añadir algunos productos al carrito
+            cart = [
+                {
+                    id: "drop_001",
+                    name: "Suéter Oversize Merino Negro",
+                    price: 129.99,
+                    category: "oversize",
+                    size: "M",
+                    quantity: 1
+                },
+                {
+                    id: "drop_003",
+                    name: "Cable Knit Oversize Gris",
+                    price: 99.99,
+                    category: "oversize",
+                    size: "L",
+                    quantity: 1
+                }
+            ];
+            updateCart();
+            openCart();
+            console.log('✅ Simulación: 2 drops añadidos al carrito');
+        };
+
+        window.viewAllProducts = function() {
+            currentFilter = 'all';
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            filterButtons[0].classList.add('active');
+            sortSelect.value = 'featured';
+            currentSort = 'featured';
+            renderProducts();
+            smoothScroll.call({getAttribute: () => '#productos'});
+        };
+    </script>
+</body>
+</html>
