@@ -1456,7 +1456,7 @@
                     { plataforma: "instagram", nombre: "Sabor Mexicano", usuario: "@sabormexicano", url: "https://instagram.com/sabormexicano" },
                     { plataforma: "tiktok", nombre: "Sabor Mexicano", usuario: "@sabormexicano", url: "https://tiktok.com/@sabormexicano" }
                 ],
-                url_ordenar: "Alitas la 21.html" 
+                url_ordenar: "Alitas la 21.html"  // MODIFICADO: Redirige a "Alitas la 21.html"
             },
             {
                 nombre: "Panadería Dulce Hogar - Destacado",
@@ -1492,7 +1492,7 @@
                     { plataforma: "facebook", nombre: "Panadería Dulce Hogar", usuario: "@PanaderiaDulceHogar", url: "https://facebook.com/PanaderiaDulceHogar" },
                     { plataforma: "instagram", nombre: "Panadería Dulce Hogar", usuario: "@panaderiadulcehogar", url: "https://instagram.com/panaderiadulcehogar" }
                 ],
-                url_ordenar: "Negocio 101.html"
+                url_ordenar: "Negocio 101.html"  // Mantenido como ejemplo, puedes cambiarlo
             },
             {
                 nombre: "Market Fresh - Destacado",
@@ -1529,7 +1529,7 @@
                     { plataforma: "instagram", nombre: "Market Fresh", usuario: "@marketfresh", url: "https://instagram.com/marketfresh" },
                     { plataforma: "tiktok", nombre: "Market Fresh", usuario: "@marketfresh", url: "https://tiktok.com/@marketfresh" }
                 ],
-                url_ordenar: "Negocio 101.html"
+                url_ordenar: "Negocio 101.html"  // Mantenido como ejemplo, puedes cambiarlo
             }
             
         ];
@@ -1740,8 +1740,9 @@
             tarjeta.className = 'negocio-card';
             tarjeta.style.animationDelay = `${index * 0.1}s`;
             
+            // MODIFICADO: Ahora el botón "Ordenar" usa href con la URL específica del negocio
             const botonOrdenarHTML = `
-                <a href="Negocio 101.html" class="btn-ordenar">
+                <a href="${negocio.url_ordenar}" class="btn-ordenar">
                     <i class="fas fa-shopping-cart"></i>
                     Ordenar
                 </a>`;
@@ -1964,5 +1965,4 @@
         });
     </script>
 </body>
-
 </html>
